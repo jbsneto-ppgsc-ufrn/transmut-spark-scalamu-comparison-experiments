@@ -1,0 +1,9 @@
+{
+  "id" : 170,
+  "originalProgramId" : 8,
+  "mutationOperator" : "UTS",
+  "mutationOperatorDescription" : "Unary Transformation Swap",
+  "mutantCode" : "def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n  val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)\n  val uniqueLogLines: RDD[String] = aggregatedLogLines.filter(line => isNotHeader(line))\n  val cleanLogLines: RDD[String] = uniqueLogLines.distinct()\n  cleanLogLines\n}",
+  "originalCode" : "def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n    val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)\n    val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()\n    val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))\n    cleanLogLines\n  }",
+  "status" : "Equivalent"
+}

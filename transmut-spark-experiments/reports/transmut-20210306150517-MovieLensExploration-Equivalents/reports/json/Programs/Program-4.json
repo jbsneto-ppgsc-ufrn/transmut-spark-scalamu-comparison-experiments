@@ -1,0 +1,581 @@
+{
+  "id" : 4,
+  "programSourceId" : 1,
+  "name" : "ratingsStatistics",
+  "code" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))\n    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))\n    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))\n    ratingsStats\n  }",
+  "datasets" : [
+    {
+      "id" : 17,
+      "name" : "movies",
+      "datasetType" : "RDD[Movie]",
+      "inputDataset" : true,
+      "outputDataset" : false
+    },
+    {
+      "id" : 18,
+      "name" : "ratings",
+      "datasetType" : "RDD[Rating]",
+      "inputDataset" : true,
+      "outputDataset" : false
+    },
+    {
+      "id" : 19,
+      "name" : "moviesIdKey",
+      "datasetType" : "RDD[(Int, Movie)]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 20,
+      "name" : "ratingsMovieIdKey",
+      "datasetType" : "RDD[(Int, Rating)]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 21,
+      "name" : "joinMoviesRatings",
+      "datasetType" : "RDD[(Int, (Movie, Rating))]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 22,
+      "name" : "moviesInfoCounts",
+      "datasetType" : "RDD[(Tuple3[Int, String, Int], Double)]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 23,
+      "name" : "groupByMoviesInfo",
+      "datasetType" : "RDD[(Tuple3[Int, String, Int], Iterable[Double])]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 24,
+      "name" : "ratingsStats",
+      "datasetType" : "RDD[(Tuple3[Int, String, Int], Tuple4[Int, Double, Double, Double])]",
+      "inputDataset" : false,
+      "outputDataset" : true
+    }
+  ],
+  "transformations" : [
+    {
+      "id" : 12,
+      "name" : "map",
+      "inputTypes" : [
+        "RDD[Movie]"
+      ],
+      "outputTypes" : [
+        "RDD[(Int, Movie)]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 13,
+      "name" : "map",
+      "inputTypes" : [
+        "RDD[Rating]"
+      ],
+      "outputTypes" : [
+        "RDD[(Int, Rating)]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 14,
+      "name" : "join",
+      "inputTypes" : [
+        "RDD[(Int, Movie)]",
+        "RDD[(Int, Rating)]"
+      ],
+      "outputTypes" : [
+        "RDD[(Int, (Movie, Rating))]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 15,
+      "name" : "map",
+      "inputTypes" : [
+        "RDD[(Int, (Movie, Rating))]"
+      ],
+      "outputTypes" : [
+        "RDD[(Tuple3[Int, String, Int], Double)]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 16,
+      "name" : "groupByKey",
+      "inputTypes" : [
+        "RDD[(Tuple3[Int, String, Int], Double)]"
+      ],
+      "outputTypes" : [
+        "RDD[(Tuple3[Int, String, Int], Iterable[Double])]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 17,
+      "name" : "map",
+      "inputTypes" : [
+        "RDD[(Tuple3[Int, String, Int], Iterable[Double])]"
+      ],
+      "outputTypes" : [
+        "RDD[(Tuple3[Int, String, Int], Tuple4[Int, Double, Double, Double])]"
+      ],
+      "loadTransformation" : false
+    }
+  ],
+  "edges" : [
+    {
+      "id" : 23,
+      "datasetId" : 17,
+      "transformationId" : 12,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 24,
+      "datasetId" : 19,
+      "transformationId" : 12,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 25,
+      "datasetId" : 18,
+      "transformationId" : 13,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 26,
+      "datasetId" : 20,
+      "transformationId" : 13,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 27,
+      "datasetId" : 19,
+      "transformationId" : 14,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 28,
+      "datasetId" : 20,
+      "transformationId" : 14,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 29,
+      "datasetId" : 21,
+      "transformationId" : 14,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 30,
+      "datasetId" : 21,
+      "transformationId" : 15,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 31,
+      "datasetId" : 22,
+      "transformationId" : 15,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 32,
+      "datasetId" : 22,
+      "transformationId" : 16,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 33,
+      "datasetId" : 23,
+      "transformationId" : 16,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 34,
+      "datasetId" : 23,
+      "transformationId" : 17,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 35,
+      "datasetId" : 24,
+      "transformationId" : 17,
+      "direction" : "TransformationToDataset"
+    }
+  ],
+  "mutants" : [
+    {
+      "id" : 90,
+      "originalProgramId" : 4,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (inputParameter: Movie) => {\n    val originalFunction = ((m: Movie) => (m.movieId, m))(_)\n    val originalValue = originalFunction(inputParameter)\n    (0, originalValue._2)\n  } }\n  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (r: Rating) => (r.movieId, r) }\n  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating) }\n  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }\n  ratingsStats\n}",
+      "originalCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))\n    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))\n    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))\n    ratingsStats\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 91,
+      "originalProgramId" : 4,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (inputParameter: Movie) => {\n    val originalFunction = ((m: Movie) => (m.movieId, m))(_)\n    val originalValue = originalFunction(inputParameter)\n    (1, originalValue._2)\n  } }\n  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (r: Rating) => (r.movieId, r) }\n  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating) }\n  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }\n  ratingsStats\n}",
+      "originalCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))\n    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))\n    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))\n    ratingsStats\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 92,
+      "originalProgramId" : 4,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (inputParameter: Movie) => {\n    val originalFunction = ((m: Movie) => (m.movieId, m))(_)\n    val originalValue = originalFunction(inputParameter)\n    (Int.MaxValue, originalValue._2)\n  } }\n  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (r: Rating) => (r.movieId, r) }\n  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating) }\n  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }\n  ratingsStats\n}",
+      "originalCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))\n    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))\n    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))\n    ratingsStats\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 93,
+      "originalProgramId" : 4,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (inputParameter: Movie) => {\n    val originalFunction = ((m: Movie) => (m.movieId, m))(_)\n    val originalValue = originalFunction(inputParameter)\n    (Int.MinValue, originalValue._2)\n  } }\n  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (r: Rating) => (r.movieId, r) }\n  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating) }\n  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }\n  ratingsStats\n}",
+      "originalCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))\n    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))\n    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))\n    ratingsStats\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 94,
+      "originalProgramId" : 4,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (inputParameter: Movie) => {\n    val originalFunction = ((m: Movie) => (m.movieId, m))(_)\n    val originalValue = originalFunction(inputParameter)\n    (-originalValue._1, originalValue._2)\n  } }\n  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (r: Rating) => (r.movieId, r) }\n  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating) }\n  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }\n  ratingsStats\n}",
+      "originalCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))\n    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))\n    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))\n    ratingsStats\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 95,
+      "originalProgramId" : 4,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (inputParameter: Movie) => {\n    val originalFunction = ((m: Movie) => (m.movieId, m))(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, null.asInstanceOf[Movie])\n  } }\n  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (r: Rating) => (r.movieId, r) }\n  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating) }\n  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }\n  ratingsStats\n}",
+      "originalCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))\n    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))\n    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))\n    ratingsStats\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 96,
+      "originalProgramId" : 4,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (inputParameter: Rating) => {\n    val originalFunction = ((r: Rating) => (r.movieId, r))(_)\n    val originalValue = originalFunction(inputParameter)\n    (0, originalValue._2)\n  } }\n  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating) }\n  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }\n  ratingsStats\n}",
+      "originalCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))\n    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))\n    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))\n    ratingsStats\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 97,
+      "originalProgramId" : 4,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (inputParameter: Rating) => {\n    val originalFunction = ((r: Rating) => (r.movieId, r))(_)\n    val originalValue = originalFunction(inputParameter)\n    (1, originalValue._2)\n  } }\n  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating) }\n  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }\n  ratingsStats\n}",
+      "originalCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))\n    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))\n    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))\n    ratingsStats\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 98,
+      "originalProgramId" : 4,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (inputParameter: Rating) => {\n    val originalFunction = ((r: Rating) => (r.movieId, r))(_)\n    val originalValue = originalFunction(inputParameter)\n    (Int.MaxValue, originalValue._2)\n  } }\n  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating) }\n  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }\n  ratingsStats\n}",
+      "originalCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))\n    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))\n    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))\n    ratingsStats\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 99,
+      "originalProgramId" : 4,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (inputParameter: Rating) => {\n    val originalFunction = ((r: Rating) => (r.movieId, r))(_)\n    val originalValue = originalFunction(inputParameter)\n    (Int.MinValue, originalValue._2)\n  } }\n  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating) }\n  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }\n  ratingsStats\n}",
+      "originalCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))\n    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))\n    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))\n    ratingsStats\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 100,
+      "originalProgramId" : 4,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (inputParameter: Rating) => {\n    val originalFunction = ((r: Rating) => (r.movieId, r))(_)\n    val originalValue = originalFunction(inputParameter)\n    (-originalValue._1, originalValue._2)\n  } }\n  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating) }\n  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }\n  ratingsStats\n}",
+      "originalCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))\n    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))\n    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))\n    ratingsStats\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 101,
+      "originalProgramId" : 4,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (inputParameter: Rating) => {\n    val originalFunction = ((r: Rating) => (r.movieId, r))(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, null.asInstanceOf[Rating])\n  } }\n  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating) }\n  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }\n  ratingsStats\n}",
+      "originalCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))\n    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))\n    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))\n    ratingsStats\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 102,
+      "originalProgramId" : 4,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (r: Rating) => (r.movieId, r) }\n  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (inputParameter: (Int, (Movie, Rating))) => {\n    val originalFunction = ((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, 0d)\n  } }\n  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }\n  ratingsStats\n}",
+      "originalCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))\n    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))\n    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))\n    ratingsStats\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 103,
+      "originalProgramId" : 4,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (r: Rating) => (r.movieId, r) }\n  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (inputParameter: (Int, (Movie, Rating))) => {\n    val originalFunction = ((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, 1d)\n  } }\n  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }\n  ratingsStats\n}",
+      "originalCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))\n    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))\n    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))\n    ratingsStats\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 104,
+      "originalProgramId" : 4,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (r: Rating) => (r.movieId, r) }\n  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (inputParameter: (Int, (Movie, Rating))) => {\n    val originalFunction = ((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, Double.MaxValue)\n  } }\n  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }\n  ratingsStats\n}",
+      "originalCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))\n    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))\n    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))\n    ratingsStats\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 105,
+      "originalProgramId" : 4,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (r: Rating) => (r.movieId, r) }\n  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (inputParameter: (Int, (Movie, Rating))) => {\n    val originalFunction = ((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, Double.MinValue)\n  } }\n  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }\n  ratingsStats\n}",
+      "originalCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))\n    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))\n    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))\n    ratingsStats\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 106,
+      "originalProgramId" : 4,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (r: Rating) => (r.movieId, r) }\n  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (inputParameter: (Int, (Movie, Rating))) => {\n    val originalFunction = ((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, -originalValue._2)\n  } }\n  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }\n  ratingsStats\n}",
+      "originalCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))\n    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))\n    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))\n    ratingsStats\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 107,
+      "originalProgramId" : 4,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }.distinct()\n  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (r: Rating) => (r.movieId, r) }\n  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating) }\n  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }\n  ratingsStats\n}",
+      "originalCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))\n    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))\n    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))\n    ratingsStats\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 108,
+      "originalProgramId" : 4,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (r: Rating) => (r.movieId, r) }.distinct()\n  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating) }\n  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }\n  ratingsStats\n}",
+      "originalCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))\n    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))\n    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))\n    ratingsStats\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 109,
+      "originalProgramId" : 4,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (r: Rating) => (r.movieId, r) }\n  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey).distinct()\n  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating) }\n  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }\n  ratingsStats\n}",
+      "originalCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))\n    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))\n    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))\n    ratingsStats\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 110,
+      "originalProgramId" : 4,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (r: Rating) => (r.movieId, r) }\n  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating) }.distinct()\n  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }\n  ratingsStats\n}",
+      "originalCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))\n    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))\n    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))\n    ratingsStats\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 111,
+      "originalProgramId" : 4,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (r: Rating) => (r.movieId, r) }\n  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating) }\n  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey().distinct()\n  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }\n  ratingsStats\n}",
+      "originalCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))\n    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))\n    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))\n    ratingsStats\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 112,
+      "originalProgramId" : 4,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (r: Rating) => (r.movieId, r) }\n  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating) }\n  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }.distinct()\n  ratingsStats\n}",
+      "originalCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))\n    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))\n    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))\n    ratingsStats\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 113,
+      "originalProgramId" : 4,
+      "mutationOperator" : "JTR",
+      "mutationOperatorDescription" : "Join Transformation Replacement",
+      "mutantCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (r: Rating) => (r.movieId, r) }\n  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.leftOuterJoin(ratingsMovieIdKey).map(tuple => (tuple._1, (tuple._2._1, tuple._2._2.getOrElse(null.asInstanceOf[Rating]))))\n  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating) }\n  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }\n  ratingsStats\n}",
+      "originalCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))\n    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))\n    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))\n    ratingsStats\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 114,
+      "originalProgramId" : 4,
+      "mutationOperator" : "JTR",
+      "mutationOperatorDescription" : "Join Transformation Replacement",
+      "mutantCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (r: Rating) => (r.movieId, r) }\n  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.rightOuterJoin(ratingsMovieIdKey).map(tuple => (tuple._1, (tuple._2._1.getOrElse(null.asInstanceOf[Movie]), tuple._2._2)))\n  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating) }\n  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }\n  ratingsStats\n}",
+      "originalCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))\n    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))\n    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))\n    ratingsStats\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 115,
+      "originalProgramId" : 4,
+      "mutationOperator" : "JTR",
+      "mutationOperatorDescription" : "Join Transformation Replacement",
+      "mutantCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (r: Rating) => (r.movieId, r) }\n  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.fullOuterJoin(ratingsMovieIdKey).map(tuple => (tuple._1, (tuple._2._1.getOrElse(null.asInstanceOf[Movie]), tuple._2._2.getOrElse(null.asInstanceOf[Rating]))))\n  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating) }\n  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }\n  ratingsStats\n}",
+      "originalCode" : "def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))\n    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)\n    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))\n    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()\n    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))\n    ratingsStats\n  }",
+      "status" : "Killed"
+    }
+  ],
+  "removedMutants" : [
+  ],
+  "mutationOperatorsMetrics" : {
+    "totalMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 3,
+      "UTR" : 0,
+      "MTR" : 17,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 6,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalKilledMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 3,
+      "UTR" : 0,
+      "MTR" : 17,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 4,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalLivedMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 0,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalEquivalentMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 0,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 2,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalErrorMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 0,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalRemovedMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 0,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "descriptionPerOperator" : {
+      "FTD" : "Filter Transformation Deletion",
+      "JTR" : "Join Transformation Replacement",
+      "UTR" : "Unary Transformation Replacement",
+      "MTR" : "Mapping Transformation Replacement",
+      "UTD" : "Unary Transformation Deletion",
+      "OTD" : "Order Transformation Deletion",
+      "BTR" : "Binary Transformation Replacement",
+      "STR" : "Set Transformation Replacement",
+      "BTS" : "Binary Transformation Swap",
+      "ATR" : "Aggregation Transformation Replacement",
+      "OTI" : "Order Transformation Inversion",
+      "DTI" : "Distinct Transformation Insertion",
+      "DTD" : "Distinct Transformation Deletion",
+      "NFTP" : "Negation of Filter Transformation Predicate",
+      "UTS" : "Unary Transformation Swap"
+    }
+  },
+  "totalDatasets" : 8,
+  "totalTransformations" : 6,
+  "totalMutants" : 26,
+  "totalKilledMutants" : 24,
+  "totalLivedMutants" : 0,
+  "totalEquivalentMutants" : 2,
+  "totalErrorMutants" : 0,
+  "totalRemovedMutants" : 0,
+  "mutationScore" : 1.0
+}

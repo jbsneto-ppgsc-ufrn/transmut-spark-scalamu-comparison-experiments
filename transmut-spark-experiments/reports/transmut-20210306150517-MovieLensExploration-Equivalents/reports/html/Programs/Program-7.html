@@ -1,0 +1,3027 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/scripts/shCore.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/scripts/shBrushScala.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/styles/shCoreEclipse.css" rel="stylesheet" type="text/css" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/styles/shThemeEclipse.min.css" rel="stylesheet" type="text/css" />
+<!-- Cytoscape -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/2.5.1/cytoscape.min.js"></script>
+<!-- DataTable -->
+<link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<style>
+#cy {
+  width: 1100px;
+  height: 300px;
+  background-color: white;
+}
+body {
+  padding-top: 5rem;
+}
+.starter-template {
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+.section-title {
+  padding-top: 3.5rem;
+}
+</style>
+<title>TRANSMUT-Spark Mutation Testing Report</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+<a class="navbar-brand" href="../index.html">TRANSMUT-Spark</a>
+<div class="collapse navbar-collapse" id="navbarNav">
+  <ul class="navbar-nav mr-auto">
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Section</a>
+      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <a class="dropdown-item" href="#metrics">Metrics</a>
+        <a class="dropdown-item" href="#code">Code</a>
+        <a class="dropdown-item" href="#dag">DAG</a>
+        <a class="dropdown-item" href="#datasets">Datasets</a>
+        <a class="dropdown-item" href="#transformations">Transformations</a>
+        <a class="dropdown-item" href="#mutants">Mutants</a>
+        <a class="dropdown-item" href="#removedMutants">Removed Mutants</a>
+        <a class="dropdown-item" href="#mutationOperators">Mutation Operators</a>
+      </div>
+    </li>
+  </ul>
+</div>
+</nav>
+<main role"main" class="container">  
+<div class="starter-template">
+  <h2><a href="../index.html" class="text-dark">Mutation Testing Report</a></h2>
+  <h3><a href="../ProgramSources/Program-Source-1.html" class="text-dark">Program Source: MovieLensExploration</a></h3>
+  <h4><a href="#" class="text-dark">Program ID: 7</a></h4>
+  <h4><a href="#" class="text-dark">Program: genresTagsCount</a></h4>
+</div>    
+<!-- Metrics -->
+<div class="row" id="metrics">
+<div class="col" >
+<h3 class="section-title">Metrics</h3>
+<hr class="my-4">
+<table class="table table-striped table-hover">
+<thead class="thead-dark"><tr><th scope="col">#</th><th scope="col">Total</th></tr></thead>
+<tbody>
+  <tr><th scope="row">Datasets</th><td>9</td></tr>
+  <tr><th scope="row">Transformations</th><td>7</td></tr>
+  <tr><th scope="row">Mutants</th><td>42</td></tr>
+  <tr><th scope="row">Killed Mutants</th><td>40</td></tr>
+  <tr><th scope="row">Lived Mutants</th><td>0</td></tr>
+  <tr><th scope="row">Equivalent Mutants</th><td>2</td></tr>
+  <tr><th scope="row">Error Mutants</th><td>0</td></tr>
+  <tr><th scope="row">Removed Mutants</th><td>0</td></tr>
+  <tr><th scope="row">Mutation Score</th>
+  <td>
+    <div class="progress">
+      <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 100.00%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><span class="font-weight-bold text-dark">1.00</span></div>
+    </div>
+  </td>
+  </tr>
+ </tbody>
+ <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+    <th scope="row"></th>
+    <td></td>
+    </tr>
+  </tfoot>
+</table>
+     
+<hr class="my-4">
+</div>
+</div>
+<!-- Code -->
+<div class="row" id="code">
+<div class="col">
+<h3 class="section-title">Code</h3>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false;">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))
+    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))
+    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)
+    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+    genresTagsCountSorted
+  }
+</pre>
+<hr class="my-4">
+</div>
+</div>
+<!-- DAG -->
+<div class="row" id="dag">
+<div class="col" >
+<h3 class="section-title">DAG</h3>
+<hr class="my-4">
+<figure class="figure">
+<div id="cy"></div>
+</figure>
+<hr class="my-4">
+</div> 
+</div>
+<!-- Datasets -->
+<div class="row" id="datasets">
+<div class="col" >
+<h3 class="section-title">Datasets</h3>
+<hr class="my-4">
+<table class="table table-striped table-hover">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Reference</th>
+      <th scope="col">Type</th>
+   </tr>
+  </thead>
+  <tbody>
+  <tr>
+  <th scope="row">33</th>
+  <td>movies</td>
+  <td>RDD[Movie]</td>
+</tr>
+<tr>
+  <th scope="row">34</th>
+  <td>tags</td>
+  <td>RDD[Tag]</td>
+</tr>
+<tr>
+  <th scope="row">35</th>
+  <td>moviesIdKey</td>
+  <td>RDD[(Int, Movie)]</td>
+</tr>
+<tr>
+  <th scope="row">36</th>
+  <td>tagsMovieIdKey</td>
+  <td>RDD[(Int, String)]</td>
+</tr>
+<tr>
+  <th scope="row">37</th>
+  <td>joinMoviesTags</td>
+  <td>RDD[(Int, (Movie, String))]</td>
+</tr>
+<tr>
+  <th scope="row">38</th>
+  <td>genresTags</td>
+  <td>RDD[((String, String), Int)]</td>
+</tr>
+<tr>
+  <th scope="row">39</th>
+  <td>genresTagsCounts</td>
+  <td>RDD[((String, String), Int)]</td>
+</tr>
+<tr>
+  <th scope="row">40</th>
+  <td>genresTagsCountMapped</td>
+  <td>RDD[(String, (String, Int))]</td>
+</tr>
+<tr>
+  <th scope="row">41</th>
+  <td>genresTagsCountSorted</td>
+  <td>RDD[(String, (String, Int))]</td>
+</tr>
+  </tbody>
+  <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+    <th scope="row" colspan="2">Total Datasets</th>
+    <td>9</td>
+    </tr>
+  </tfoot>
+</table>      
+    
+<hr class="my-4">
+</div>
+</div>
+<!-- Transformations -->
+<div class="row" id="transformations">
+<div class="col" >
+<h3 class="section-title" id="transformations">Transformations</h3>
+<hr class="my-4">
+<table class="table table-striped table-hover">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Name</th>
+      <th scope="col">Input Type</th>
+      <th scope="col">Output Type</th>
+   </tr>
+  </thead>
+  <tbody>
+  <tr>
+  <th scope="row">25</th>
+  <td>map</td>
+  <td>RDD[Movie]</td>
+  <td>RDD[(Int, Movie)]</td>
+</tr>
+<tr>
+  <th scope="row">26</th>
+  <td>map</td>
+  <td>RDD[Tag]</td>
+  <td>RDD[(Int, String)]</td>
+</tr>
+<tr>
+  <th scope="row">27</th>
+  <td>join</td>
+  <td>RDD[(Int, Movie)], RDD[(Int, String)]</td>
+  <td>RDD[(Int, (Movie, String))]</td>
+</tr>
+<tr>
+  <th scope="row">28</th>
+  <td>flatMap</td>
+  <td>RDD[(Int, (Movie, String))]</td>
+  <td>RDD[((String, String), Int)]</td>
+</tr>
+<tr>
+  <th scope="row">29</th>
+  <td>reduceByKey</td>
+  <td>RDD[((String, String), Int)]</td>
+  <td>RDD[((String, String), Int)]</td>
+</tr>
+<tr>
+  <th scope="row">30</th>
+  <td>map</td>
+  <td>RDD[((String, String), Int)]</td>
+  <td>RDD[(String, (String, Int))]</td>
+</tr>
+<tr>
+  <th scope="row">31</th>
+  <td>sortByKey</td>
+  <td>RDD[(String, (String, Int))]</td>
+  <td>RDD[(String, (String, Int))]</td>
+</tr>
+  </tbody>
+  <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+    <th scope="row" colspan="3">Total Transformations</th>
+    <td>7</td>
+    </tr>
+  </tfoot>
+</table>      
+    
+<hr class="my-4">   
+</div>
+</div>
+<!-- Mutants -->
+<div class="row" id="mutants">
+<div class="col">
+<h3 class="section-title">Mutants</h3>
+<hr class="my-4">
+<table class="display table table-striped table-hover" id="mutantsTable">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Mutation Operator</th>
+      <th scope="col">Status</th>
+      <th scope="col">Code</th>
+     </tr>
+  </thead>
+  <tbody>
+    <tr>
+  <th scope="row"><a href="../Mutants/Mutant-147.html" class="text-dark">147</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Deletion">UTD</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant147">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-148.html" class="text-dark">148</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Deletion">UTD</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant148">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-149.html" class="text-dark">149</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant149">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-150.html" class="text-dark">150</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant150">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-151.html" class="text-dark">151</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant151">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-152.html" class="text-dark">152</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant152">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-153.html" class="text-dark">153</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant153">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-154.html" class="text-dark">154</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant154">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-155.html" class="text-dark">155</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant155">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-156.html" class="text-dark">156</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant156">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-157.html" class="text-dark">157</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant157">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-158.html" class="text-dark">158</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant158">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-159.html" class="text-dark">159</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant159">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-160.html" class="text-dark">160</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant160">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-161.html" class="text-dark">161</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant161">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-162.html" class="text-dark">162</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant162">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-163.html" class="text-dark">163</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Equivalent</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant163">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-164.html" class="text-dark">164</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant164">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-165.html" class="text-dark">165</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant165">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-166.html" class="text-dark">166</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant166">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-167.html" class="text-dark">167</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant167">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-168.html" class="text-dark">168</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant168">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-169.html" class="text-dark">169</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant169">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-170.html" class="text-dark">170</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant170">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-171.html" class="text-dark">171</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant171">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-172.html" class="text-dark">172</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant172">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-173.html" class="text-dark">173</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant173">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-174.html" class="text-dark">174</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant174">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-175.html" class="text-dark">175</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant175">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-176.html" class="text-dark">176</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant176">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-177.html" class="text-dark">177</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant177">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-178.html" class="text-dark">178</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant178">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-179.html" class="text-dark">179</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant179">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-180.html" class="text-dark">180</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant180">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-181.html" class="text-dark">181</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant181">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-182.html" class="text-dark">182</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant182">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-183.html" class="text-dark">183</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></td>
+  <td>Equivalent</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant183">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-184.html" class="text-dark">184</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Join Transformation Replacement">JTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant184">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-185.html" class="text-dark">185</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Join Transformation Replacement">JTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant185">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-186.html" class="text-dark">186</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Join Transformation Replacement">JTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant186">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-187.html" class="text-dark">187</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Order Transformation Deletion">OTD</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant187">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-188.html" class="text-dark">188</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Order Transformation Inversion">OTI</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant188">Show</button></td>
+</tr>
+  </tbody>
+  <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+      <th scope="row" colspan="2">Mutation Score</th>
+      <td colspan="2">
+        <div class="progress">
+          <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 100.00%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><span class="font-weight-bold text-dark">1.00</span></div>
+        </div>
+      </td>
+    </tr>
+  </tfoot>
+</table>   
+   
+<hr class="my-4">
+</div>
+</div>
+<!-- Removed Mutants -->
+<div class="row" id="removedMutants">
+<div class="col">
+<h3 class="section-title">Removed Mutants</h3>
+<hr class="my-4">
+<table class="display table table-striped table-hover" id="removedMutantsTable">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Mutation Operator</th>
+      <th scope="col">Reduction Rule</th>
+      <th scope="col">Code</th>
+     </tr>
+  </thead>
+  <tbody>
+    
+  </tbody>
+  <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+      <th scope="row" colspan="2">Total Removed Mutants</th>
+      <td colspan="2">0</td>
+    </tr>
+  </tfoot>
+</table>   
+   
+<hr class="my-4">
+</div>
+</div>
+<!-- Mutation Operators -->
+<div class="row" id="mutationOperators">
+<div class="col">
+<h3 class="section-title">Mutation Operators</h3>
+<hr class="my-4">
+<table class="display table table-striped table-hover" id="programSourcesTable">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Mutation Operator</th>
+      <th scope="col">Mutants</th>
+      <th scope="col">Killed</th>
+      <th scope="col">Lived</th>
+      <th scope="col">Equivalent</th>
+      <th scope="col">Error</th>
+      <th scope="col">Removed</th>
+      </tr>
+  </thead>
+  <tbody>
+    <tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></th>
+  <td>7</td>
+  <td>7</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+<tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Order Transformation Inversion">OTI</a></th>
+  <td>1</td>
+  <td>1</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+<tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></th>
+  <td>23</td>
+  <td>22</td>
+  <td>0</td>
+  <td>1</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+<tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Order Transformation Deletion">OTD</a></th>
+  <td>1</td>
+  <td>1</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+<tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Join Transformation Replacement">JTR</a></th>
+  <td>3</td>
+  <td>3</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+<tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Deletion">UTD</a></th>
+  <td>2</td>
+  <td>2</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+<tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></th>
+  <td>5</td>
+  <td>4</td>
+  <td>0</td>
+  <td>1</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+  </tbody>
+  <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+      <th scope="row">Total</th>
+      <td>42</td>
+      <td>40</td>
+      <td>0</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+  </tfoot>
+</table>   
+   
+<hr class="my-4">
+</div>
+</div>
+<!-- Mutant Modals -->
+<div class="modal fade" id="modalMutant147" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel147" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-147.html" class="text-dark">147</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Deletion">UTD</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [6]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))
+    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))
+    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)
+    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+    genresTagsCountSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [6]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }
+  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }
+  val genresTagsCounts: RDD[((String, String), Int)] = genresTags
+  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+  genresTagsCountSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant148" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel148" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-148.html" class="text-dark">148</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Deletion">UTD</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [8]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))
+    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))
+    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)
+    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+    genresTagsCountSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [8]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }
+  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }
+  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }
+  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped
+  genresTagsCountSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant149" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel149" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-149.html" class="text-dark">149</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))
+    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))
+    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)
+    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+    genresTagsCountSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2, 3, 4, 5, 6]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (inputParameter: Movie) => {
+    val originalFunction = ((m: Movie) => (m.movieId, m))(_)
+    val originalValue = originalFunction(inputParameter)
+    (0, originalValue._2)
+  } }
+  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }
+  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }
+  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }
+  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+  genresTagsCountSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant150" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel150" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-150.html" class="text-dark">150</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))
+    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))
+    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)
+    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+    genresTagsCountSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2, 3, 4, 5, 6]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (inputParameter: Movie) => {
+    val originalFunction = ((m: Movie) => (m.movieId, m))(_)
+    val originalValue = originalFunction(inputParameter)
+    (1, originalValue._2)
+  } }
+  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }
+  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }
+  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }
+  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+  genresTagsCountSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant151" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel151" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-151.html" class="text-dark">151</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))
+    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))
+    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)
+    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+    genresTagsCountSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2, 3, 4, 5, 6]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (inputParameter: Movie) => {
+    val originalFunction = ((m: Movie) => (m.movieId, m))(_)
+    val originalValue = originalFunction(inputParameter)
+    (Int.MaxValue, originalValue._2)
+  } }
+  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }
+  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }
+  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }
+  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+  genresTagsCountSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant152" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel152" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-152.html" class="text-dark">152</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))
+    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))
+    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)
+    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+    genresTagsCountSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2, 3, 4, 5, 6]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (inputParameter: Movie) => {
+    val originalFunction = ((m: Movie) => (m.movieId, m))(_)
+    val originalValue = originalFunction(inputParameter)
+    (Int.MinValue, originalValue._2)
+  } }
+  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }
+  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }
+  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }
+  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+  genresTagsCountSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant153" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel153" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-153.html" class="text-dark">153</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))
+    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))
+    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)
+    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+    genresTagsCountSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2, 3, 4, 5, 6]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (inputParameter: Movie) => {
+    val originalFunction = ((m: Movie) => (m.movieId, m))(_)
+    val originalValue = originalFunction(inputParameter)
+    (-originalValue._1, originalValue._2)
+  } }
+  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }
+  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }
+  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }
+  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+  genresTagsCountSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant154" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel154" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-154.html" class="text-dark">154</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))
+    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))
+    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)
+    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+    genresTagsCountSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2, 3, 4, 5, 6]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (inputParameter: Movie) => {
+    val originalFunction = ((m: Movie) => (m.movieId, m))(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, null.asInstanceOf[Movie])
+  } }
+  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }
+  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }
+  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }
+  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+  genresTagsCountSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant155" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel155" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-155.html" class="text-dark">155</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))
+    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))
+    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)
+    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+    genresTagsCountSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3, 4, 5, 6, 7]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (inputParameter: Tag) => {
+    val originalFunction = ((t: Tag) => (t.movieId, t.tag))(_)
+    val originalValue = originalFunction(inputParameter)
+    (0, originalValue._2)
+  } }
+  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }
+  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }
+  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+  genresTagsCountSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant156" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel156" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-156.html" class="text-dark">156</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))
+    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))
+    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)
+    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+    genresTagsCountSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3, 4, 5, 6, 7]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (inputParameter: Tag) => {
+    val originalFunction = ((t: Tag) => (t.movieId, t.tag))(_)
+    val originalValue = originalFunction(inputParameter)
+    (1, originalValue._2)
+  } }
+  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }
+  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }
+  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+  genresTagsCountSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant157" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel157" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-157.html" class="text-dark">157</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))
+    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))
+    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)
+    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+    genresTagsCountSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3, 4, 5, 6, 7]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (inputParameter: Tag) => {
+    val originalFunction = ((t: Tag) => (t.movieId, t.tag))(_)
+    val originalValue = originalFunction(inputParameter)
+    (Int.MaxValue, originalValue._2)
+  } }
+  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }
+  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }
+  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+  genresTagsCountSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant158" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel158" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-158.html" class="text-dark">158</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))
+    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))
+    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)
+    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+    genresTagsCountSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3, 4, 5, 6, 7]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (inputParameter: Tag) => {
+    val originalFunction = ((t: Tag) => (t.movieId, t.tag))(_)
+    val originalValue = originalFunction(inputParameter)
+    (Int.MinValue, originalValue._2)
+  } }
+  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }
+  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }
+  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+  genresTagsCountSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant159" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel159" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-159.html" class="text-dark">159</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))
+    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))
+    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)
+    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+    genresTagsCountSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3, 4, 5, 6, 7]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (inputParameter: Tag) => {
+    val originalFunction = ((t: Tag) => (t.movieId, t.tag))(_)
+    val originalValue = originalFunction(inputParameter)
+    (-originalValue._1, originalValue._2)
+  } }
+  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }
+  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }
+  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+  genresTagsCountSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant160" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel160" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-160.html" class="text-dark">160</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))
+    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))
+    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)
+    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+    genresTagsCountSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3, 4, 5, 6, 7]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (inputParameter: Tag) => {
+    val originalFunction = ((t: Tag) => (t.movieId, t.tag))(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, "")
+  } }
+  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }
+  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }
+  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+  genresTagsCountSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant161" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel161" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-161.html" class="text-dark">161</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))
+    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))
+    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)
+    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+    genresTagsCountSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5, 6, 7, 8, 9]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }
+  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (inputParameter: (Int, (Movie, String))) => {
+    val originalFunction = ((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))(_)
+    val originalValue = originalFunction(inputParameter)
+    originalValue.headOption
+  } }
+  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }
+  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+  genresTagsCountSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant162" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel162" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-162.html" class="text-dark">162</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))
+    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))
+    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)
+    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+    genresTagsCountSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5, 6, 7, 8, 9]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }
+  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (inputParameter: (Int, (Movie, String))) => {
+    val originalFunction = ((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))(_)
+    val originalValue = originalFunction(inputParameter)
+    originalValue.toList.tail
+  } }
+  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }
+  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+  genresTagsCountSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant163" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel163" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-163.html" class="text-dark">163</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Equivalent</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))
+    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))
+    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)
+    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+    genresTagsCountSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5, 6, 7, 8, 9]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }
+  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (inputParameter: (Int, (Movie, String))) => {
+    val originalFunction = ((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))(_)
+    val originalValue = originalFunction(inputParameter)
+    originalValue.toList.reverse
+  } }
+  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }
+  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+  genresTagsCountSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant164" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel164" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-164.html" class="text-dark">164</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))
+    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))
+    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)
+    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+    genresTagsCountSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5, 6, 7, 8, 9]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }
+  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (inputParameter: (Int, (Movie, String))) => {
+    val originalFunction = ((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))(_)
+    val originalValue = originalFunction(inputParameter)
+    List[((String, String), Int)]()
+  } }
+  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }
+  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+  genresTagsCountSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant165" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel165" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-165.html" class="text-dark">165</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [7]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))
+    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))
+    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)
+    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+    genresTagsCountSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [7, 8, 9, 10, 11]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }
+  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }
+  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }
+  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (inputParameter: ((String, String), Int)) => {
+    val originalFunction = ((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))(_)
+    val originalValue = originalFunction(inputParameter)
+    ("", originalValue._2)
+  } }
+  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+  genresTagsCountSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant166" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel166" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-166.html" class="text-dark">166</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [7]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))
+    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))
+    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)
+    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+    genresTagsCountSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [7, 8, 9, 10, 11]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }
+  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }
+  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }
+  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (inputParameter: ((String, String), Int)) => {
+    val originalFunction = ((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, ("", originalValue._2._2))
+  } }
+  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+  genresTagsCountSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant167" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel167" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-167.html" class="text-dark">167</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [7]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))
+    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))
+    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)
+    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+    genresTagsCountSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [7, 8, 9, 10, 11]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }
+  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }
+  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }
+  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (inputParameter: ((String, String), Int)) => {
+    val originalFunction = ((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, (originalValue._2._1, 0))
+  } }
+  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+  genresTagsCountSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant168" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel168" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-168.html" class="text-dark">168</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [7]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))
+    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))
+    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)
+    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+    genresTagsCountSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [7, 8, 9, 10, 11]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }
+  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }
+  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }
+  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (inputParameter: ((String, String), Int)) => {
+    val originalFunction = ((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, (originalValue._2._1, 1))
+  } }
+  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+  genresTagsCountSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant169" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel169" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-169.html" class="text-dark">169</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [7]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))
+    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))
+    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)
+    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+    genresTagsCountSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [7, 8, 9, 10, 11]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }
+  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }
+  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }
+  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (inputParameter: ((String, String), Int)) => {
+    val originalFunction = ((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, (originalValue._2._1, Int.MaxValue))
+  } }
+  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+  genresTagsCountSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant170" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel170" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-170.html" class="text-dark">170</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [7]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))
+    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))
+    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)
+    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+    genresTagsCountSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [7, 8, 9, 10, 11]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }
+  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }
+  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }
+  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (inputParameter: ((String, String), Int)) => {
+    val originalFunction = ((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, (originalValue._2._1, Int.MinValue))
+  } }
+  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+  genresTagsCountSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant171" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel171" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-171.html" class="text-dark">171</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [7]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))
+    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))
+    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)
+    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+    genresTagsCountSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [7, 8, 9, 10, 11]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }
+  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }
+  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }
+  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (inputParameter: ((String, String), Int)) => {
+    val originalFunction = ((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, (originalValue._2._1, -originalValue._2._2))
+  } }
+  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+  genresTagsCountSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant172" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel172" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-172.html" class="text-dark">172</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))
+    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))
+    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)
+    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+    genresTagsCountSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }.distinct()
+  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }
+  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }
+  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }
+  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+  genresTagsCountSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant173" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel173" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-173.html" class="text-dark">173</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))
+    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))
+    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)
+    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+    genresTagsCountSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }.distinct()
+  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }
+  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }
+  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+  genresTagsCountSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant174" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel174" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-174.html" class="text-dark">174</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))
+    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))
+    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)
+    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+    genresTagsCountSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }
+  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey).distinct()
+  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }
+  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }
+  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+  genresTagsCountSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant175" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel175" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-175.html" class="text-dark">175</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))
+    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))
+    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)
+    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+    genresTagsCountSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }
+  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }.distinct()
+  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }
+  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+  genresTagsCountSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant176" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel176" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-176.html" class="text-dark">176</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [6]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))
+    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))
+    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)
+    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+    genresTagsCountSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [6]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }
+  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }
+  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }.distinct()
+  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+  genresTagsCountSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant177" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel177" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-177.html" class="text-dark">177</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [7]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))
+    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))
+    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)
+    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+    genresTagsCountSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [7]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }
+  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }
+  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }
+  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }.distinct()
+  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+  genresTagsCountSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant178" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel178" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-178.html" class="text-dark">178</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [8]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))
+    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))
+    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)
+    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+    genresTagsCountSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [8]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }
+  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }
+  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }
+  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true).distinct()
+  genresTagsCountSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant179" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel179" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-179.html" class="text-dark">179</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [6]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))
+    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))
+    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)
+    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+    genresTagsCountSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [6]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }
+  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }
+  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (firstParameter: Int, secondParameter: Int) => firstParameter }
+  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+  genresTagsCountSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant180" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel180" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-180.html" class="text-dark">180</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [6]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))
+    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))
+    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)
+    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+    genresTagsCountSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [6]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }
+  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }
+  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (firstParameter: Int, secondParameter: Int) => secondParameter }
+  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+  genresTagsCountSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant181" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel181" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-181.html" class="text-dark">181</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [6]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))
+    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))
+    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)
+    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+    genresTagsCountSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [6, 7, 8, 9]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }
+  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }
+  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (firstParameter: Int, secondParameter: Int) => {
+    val originalFunction = ((w: Int, z: Int) => w + z)(_, _)
+    originalFunction(firstParameter, firstParameter)
+  } }
+  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+  genresTagsCountSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant182" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel182" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-182.html" class="text-dark">182</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [6]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))
+    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))
+    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)
+    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+    genresTagsCountSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [6, 7, 8, 9]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }
+  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }
+  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (firstParameter: Int, secondParameter: Int) => {
+    val originalFunction = ((w: Int, z: Int) => w + z)(_, _)
+    originalFunction(secondParameter, secondParameter)
+  } }
+  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+  genresTagsCountSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant183" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel183" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-183.html" class="text-dark">183</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></h5>
+<h5>Status: Equivalent</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [6]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))
+    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))
+    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)
+    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+    genresTagsCountSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [6, 7, 8, 9]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }
+  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }
+  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (firstParameter: Int, secondParameter: Int) => {
+    val originalFunction = ((w: Int, z: Int) => w + z)(_, _)
+    originalFunction(secondParameter, firstParameter)
+  } }
+  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+  genresTagsCountSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant184" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel184" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-184.html" class="text-dark">184</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Join Transformation Replacement">JTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))
+    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))
+    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)
+    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+    genresTagsCountSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }
+  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.leftOuterJoin(tagsMovieIdKey).map(tuple => (tuple._1, (tuple._2._1, tuple._2._2.getOrElse(""))))
+  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }
+  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }
+  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+  genresTagsCountSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant185" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel185" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-185.html" class="text-dark">185</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Join Transformation Replacement">JTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))
+    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))
+    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)
+    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+    genresTagsCountSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }
+  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.rightOuterJoin(tagsMovieIdKey).map(tuple => (tuple._1, (tuple._2._1.getOrElse(null.asInstanceOf[Movie]), tuple._2._2)))
+  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }
+  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }
+  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+  genresTagsCountSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant186" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel186" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-186.html" class="text-dark">186</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Join Transformation Replacement">JTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))
+    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))
+    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)
+    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+    genresTagsCountSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }
+  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.fullOuterJoin(tagsMovieIdKey).map(tuple => (tuple._1, (tuple._2._1.getOrElse(null.asInstanceOf[Movie]), tuple._2._2.getOrElse(""))))
+  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }
+  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }
+  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+  genresTagsCountSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant187" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel187" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-187.html" class="text-dark">187</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Order Transformation Deletion">OTD</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [8]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))
+    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))
+    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)
+    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+    genresTagsCountSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [8]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }
+  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }
+  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }
+  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped
+  genresTagsCountSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant188" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel188" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-188.html" class="text-dark">188</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Order Transformation Inversion">OTI</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [8]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))
+    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))
+    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)
+    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)
+    genresTagsCountSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [8]">
+def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }
+  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)
+  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }
+  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }
+  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(false)
+  genresTagsCountSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Removed Mutant Modals -->
+
+</main>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+<script type="text/javascript">
+ SyntaxHighlighter.all()
+</script>
+<script >
+$(document).ready(function() {
+  $('table.display').DataTable( {
+    fixedHeader: {
+      header: true,
+      footer: true
+    },
+    "lengthMenu": [[5, 10, 20, -1], [5, 10, 20, "All"]]
+  } );
+} );
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+});
+</script>
+
+<script >
+  var cy = cytoscape({
+    container: document.getElementById('cy'), // container to render in
+    elements: [ // list of graph elements to start with
+      { // dataset node 33
+  data: { id: 'dataset_33' , name : 'movies' , dataset : 'true' , inputDataset: 'true'  }
+}, 
+{ // transformation node 25
+  data: { id: 'transformation_25' , name : 'map' , transformation : 'true'  }
+}, 
+{ // edge node 49
+  data: { id: 'edge_49' , source: 'dataset_33', target: 'transformation_25'  }
+}, 
+{ // dataset node 35
+  data: { id: 'dataset_35' , name : 'moviesIdKey' , dataset : 'true'   }
+}, 
+{ // edge node 50
+  data: { id: 'edge_50'  , target: 'dataset_35', source: 'transformation_25' }
+}, 
+{ // dataset node 34
+  data: { id: 'dataset_34' , name : 'tags' , dataset : 'true' , inputDataset: 'true'  }
+}, 
+{ // transformation node 26
+  data: { id: 'transformation_26' , name : 'map' , transformation : 'true'  }
+}, 
+{ // edge node 51
+  data: { id: 'edge_51' , source: 'dataset_34', target: 'transformation_26'  }
+}, 
+{ // dataset node 36
+  data: { id: 'dataset_36' , name : 'tagsMovieIdKey' , dataset : 'true'   }
+}, 
+{ // edge node 52
+  data: { id: 'edge_52'  , target: 'dataset_36', source: 'transformation_26' }
+}, 
+{ // transformation node 27
+  data: { id: 'transformation_27' , name : 'join' , transformation : 'true'  }
+}, 
+{ // edge node 53
+  data: { id: 'edge_53' , source: 'dataset_35', target: 'transformation_27'  }
+}, 
+{ // edge node 54
+  data: { id: 'edge_54' , source: 'dataset_36', target: 'transformation_27'  }
+}, 
+{ // dataset node 37
+  data: { id: 'dataset_37' , name : 'joinMoviesTags' , dataset : 'true'   }
+}, 
+{ // edge node 55
+  data: { id: 'edge_55'  , target: 'dataset_37', source: 'transformation_27' }
+}, 
+{ // transformation node 28
+  data: { id: 'transformation_28' , name : 'flatMap' , transformation : 'true'  }
+}, 
+{ // edge node 56
+  data: { id: 'edge_56' , source: 'dataset_37', target: 'transformation_28'  }
+}, 
+{ // dataset node 38
+  data: { id: 'dataset_38' , name : 'genresTags' , dataset : 'true'   }
+}, 
+{ // edge node 57
+  data: { id: 'edge_57'  , target: 'dataset_38', source: 'transformation_28' }
+}, 
+{ // transformation node 29
+  data: { id: 'transformation_29' , name : 'reduceByKey' , transformation : 'true'  }
+}, 
+{ // edge node 58
+  data: { id: 'edge_58' , source: 'dataset_38', target: 'transformation_29'  }
+}, 
+{ // dataset node 39
+  data: { id: 'dataset_39' , name : 'genresTagsCounts' , dataset : 'true'   }
+}, 
+{ // edge node 59
+  data: { id: 'edge_59'  , target: 'dataset_39', source: 'transformation_29' }
+}, 
+{ // transformation node 30
+  data: { id: 'transformation_30' , name : 'map' , transformation : 'true'  }
+}, 
+{ // edge node 60
+  data: { id: 'edge_60' , source: 'dataset_39', target: 'transformation_30'  }
+}, 
+{ // dataset node 40
+  data: { id: 'dataset_40' , name : 'genresTagsCountMapped' , dataset : 'true'   }
+}, 
+{ // edge node 61
+  data: { id: 'edge_61'  , target: 'dataset_40', source: 'transformation_30' }
+}, 
+{ // transformation node 31
+  data: { id: 'transformation_31' , name : 'sortByKey' , transformation : 'true'  }
+}, 
+{ // edge node 62
+  data: { id: 'edge_62' , source: 'dataset_40', target: 'transformation_31'  }
+}, 
+{ // dataset node 41
+  data: { id: 'dataset_41' , name : 'genresTagsCountSorted' , dataset : 'true'  , outputDataset: 'true' }
+}, 
+{ // edge node 63
+  data: { id: 'edge_63'  , target: 'dataset_41', source: 'transformation_31' }
+}
+    ],
+   style: [ // the stylesheet for the graph
+   {
+     selector: 'node',
+     style: {
+       'label': 'data(name)'
+     }
+   },
+   {
+     selector: 'edge',
+     style: {
+     'width': 3,
+     'line-color': '#ccc',
+     'target-arrow-color': '#ccc',
+     'target-arrow-shape': 'triangle',
+     }
+   },
+   {
+      selector: '[transformation]',
+      style: {
+        'background-color': 'black',
+        'shape': 'rectangle'
+       }
+   },
+   {
+      selector: '[dataset]',
+      style: {
+        'background-color': 'gray',
+        'shape': 'ellipse'
+      }
+   },
+   {
+      selector: '[inputDataset]',
+      style: {
+        'background-color': 'green',
+        'shape': 'ellipse'
+       }
+   },
+   {
+     selector: '[outputDataset]',
+     style: {
+       'background-color': 'red',
+       'shape': 'ellipse'
+      }
+   },
+   {
+      selector: '[loadTransformation]',
+      style: {
+        'background-color': 'red',
+        'shape': 'rectangle'
+       }
+   }
+  ],
+  layout: {
+    name: 'grid',
+    rows: 1
+  }
+});
+</script>
+    
+</body>
+</html>
+    

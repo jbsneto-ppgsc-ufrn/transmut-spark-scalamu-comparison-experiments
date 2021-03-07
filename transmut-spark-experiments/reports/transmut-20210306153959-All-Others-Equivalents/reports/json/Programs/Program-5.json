@@ -1,0 +1,730 @@
+{
+  "id" : 5,
+  "programSourceId" : 5,
+  "name" : "moviesSimilaritiesTable",
+  "code" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n\n    val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n\n    val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n\n    val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n\n    val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n\n    val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n\n    val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n\n    val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n\n    sortedMoviesSimilarities\n  }",
+  "datasets" : [
+    {
+      "id" : 29,
+      "name" : "inputRDD",
+      "datasetType" : "RDD[String]",
+      "inputDataset" : true,
+      "outputDataset" : false
+    },
+    {
+      "id" : 30,
+      "name" : "ratings",
+      "datasetType" : "RDD[(Int, (Int, Double))]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 31,
+      "name" : "selfJoinRatings",
+      "datasetType" : "RDD[(Int, ((Int, Double), (Int, Double)))]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 32,
+      "name" : "filteredSelfJoinRatings",
+      "datasetType" : "RDD[(Int, ((Int, Double), (Int, Double)))]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 33,
+      "name" : "correlatedMovies",
+      "datasetType" : "RDD[((Int, Int), (Double, Double))]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 34,
+      "name" : "correlatedMoviesGroupedRatings",
+      "datasetType" : "RDD[((Int, Int), Iterable[(Double, Double)])]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 35,
+      "name" : "moviesSimilarities",
+      "datasetType" : "RDD[((Int, Int), (Double, Int))]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 36,
+      "name" : "sortedMoviesSimilarities",
+      "datasetType" : "RDD[((Int, Int), (Double, Int))]",
+      "inputDataset" : false,
+      "outputDataset" : true
+    }
+  ],
+  "transformations" : [
+    {
+      "id" : 24,
+      "name" : "flatMap",
+      "inputTypes" : [
+        "RDD[String]"
+      ],
+      "outputTypes" : [
+        "RDD[(Int, (Int, Double))]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 25,
+      "name" : "join",
+      "inputTypes" : [
+        "RDD[(Int, (Int, Double))]",
+        "RDD[(Int, (Int, Double))]"
+      ],
+      "outputTypes" : [
+        "RDD[(Int, ((Int, Double), (Int, Double)))]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 26,
+      "name" : "filter",
+      "inputTypes" : [
+        "RDD[(Int, ((Int, Double), (Int, Double)))]"
+      ],
+      "outputTypes" : [
+        "RDD[(Int, ((Int, Double), (Int, Double)))]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 27,
+      "name" : "map",
+      "inputTypes" : [
+        "RDD[(Int, ((Int, Double), (Int, Double)))]"
+      ],
+      "outputTypes" : [
+        "RDD[((Int, Int), (Double, Double))]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 28,
+      "name" : "groupByKey",
+      "inputTypes" : [
+        "RDD[((Int, Int), (Double, Double))]"
+      ],
+      "outputTypes" : [
+        "RDD[((Int, Int), Iterable[(Double, Double)])]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 29,
+      "name" : "mapValues",
+      "inputTypes" : [
+        "RDD[((Int, Int), Iterable[(Double, Double)])]"
+      ],
+      "outputTypes" : [
+        "RDD[((Int, Int), (Double, Int))]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 30,
+      "name" : "sortByKey",
+      "inputTypes" : [
+        "RDD[((Int, Int), (Double, Int))]"
+      ],
+      "outputTypes" : [
+        "RDD[((Int, Int), (Double, Int))]"
+      ],
+      "loadTransformation" : false
+    }
+  ],
+  "edges" : [
+    {
+      "id" : 48,
+      "datasetId" : 29,
+      "transformationId" : 24,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 49,
+      "datasetId" : 30,
+      "transformationId" : 24,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 50,
+      "datasetId" : 30,
+      "transformationId" : 25,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 51,
+      "datasetId" : 30,
+      "transformationId" : 25,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 52,
+      "datasetId" : 31,
+      "transformationId" : 25,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 53,
+      "datasetId" : 31,
+      "transformationId" : 26,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 54,
+      "datasetId" : 32,
+      "transformationId" : 26,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 55,
+      "datasetId" : 32,
+      "transformationId" : 27,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 56,
+      "datasetId" : 33,
+      "transformationId" : 27,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 57,
+      "datasetId" : 33,
+      "transformationId" : 28,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 58,
+      "datasetId" : 34,
+      "transformationId" : 28,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 59,
+      "datasetId" : 34,
+      "transformationId" : 29,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 60,
+      "datasetId" : 35,
+      "transformationId" : 29,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 61,
+      "datasetId" : 35,
+      "transformationId" : 30,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 62,
+      "datasetId" : 36,
+      "transformationId" : 30,
+      "direction" : "TransformationToDataset"
+    }
+  ],
+  "mutants" : [
+    {
+      "id" : 90,
+      "originalProgramId" : 5,
+      "mutationOperator" : "UTD",
+      "mutationOperatorDescription" : "Unary Transformation Deletion",
+      "mutantCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n  val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n  val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n  val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings\n  val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n  val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n  val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n  val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n  sortedMoviesSimilarities\n}",
+      "originalCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n\n    val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n\n    val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n\n    val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n\n    val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n\n    val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n\n    val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n\n    val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n\n    sortedMoviesSimilarities\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 91,
+      "originalProgramId" : 5,
+      "mutationOperator" : "UTD",
+      "mutationOperatorDescription" : "Unary Transformation Deletion",
+      "mutantCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n  val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n  val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n  val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n  val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n  val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n  val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n  val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities\n  sortedMoviesSimilarities\n}",
+      "originalCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n\n    val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n\n    val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n\n    val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n\n    val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n\n    val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n\n    val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n\n    val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n\n    sortedMoviesSimilarities\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 92,
+      "originalProgramId" : 5,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n  val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap { (inputParameter: String) => {\n    val originalFunction = parseRatings(_)\n    val originalValue = originalFunction(inputParameter)\n    originalValue.headOption\n  } }\n  val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n  val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n  val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n  val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n  val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n  val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n  sortedMoviesSimilarities\n}",
+      "originalCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n\n    val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n\n    val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n\n    val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n\n    val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n\n    val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n\n    val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n\n    val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n\n    sortedMoviesSimilarities\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 93,
+      "originalProgramId" : 5,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n  val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap { (inputParameter: String) => {\n    val originalFunction = parseRatings(_)\n    val originalValue = originalFunction(inputParameter)\n    originalValue.toList.tail\n  } }\n  val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n  val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n  val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n  val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n  val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n  val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n  sortedMoviesSimilarities\n}",
+      "originalCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n\n    val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n\n    val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n\n    val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n\n    val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n\n    val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n\n    val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n\n    val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n\n    sortedMoviesSimilarities\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 94,
+      "originalProgramId" : 5,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n  val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap { (inputParameter: String) => {\n    val originalFunction = parseRatings(_)\n    val originalValue = originalFunction(inputParameter)\n    originalValue.toList.reverse\n  } }\n  val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n  val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n  val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n  val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n  val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n  val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n  sortedMoviesSimilarities\n}",
+      "originalCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n\n    val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n\n    val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n\n    val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n\n    val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n\n    val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n\n    val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n\n    val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n\n    sortedMoviesSimilarities\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 95,
+      "originalProgramId" : 5,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n  val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap { (inputParameter: String) => {\n    val originalFunction = parseRatings(_)\n    val originalValue = originalFunction(inputParameter)\n    List[(Int, (Int, Double))]()\n  } }\n  val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n  val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n  val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n  val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n  val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n  val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n  sortedMoviesSimilarities\n}",
+      "originalCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n\n    val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n\n    val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n\n    val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n\n    val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n\n    val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n\n    val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n\n    val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n\n    sortedMoviesSimilarities\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 96,
+      "originalProgramId" : 5,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n  val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n  val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n  val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n  val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map { (inputParameter: (Int, ((Int, Double), (Int, Double)))) => {\n    val originalFunction = makeCorrelatedMoviesPairs(_)\n    val originalValue = originalFunction(inputParameter)\n    ((0, originalValue._1._2), originalValue._2)\n  } }\n  val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n  val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n  val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n  sortedMoviesSimilarities\n}",
+      "originalCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n\n    val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n\n    val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n\n    val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n\n    val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n\n    val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n\n    val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n\n    val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n\n    sortedMoviesSimilarities\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 97,
+      "originalProgramId" : 5,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n  val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n  val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n  val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n  val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map { (inputParameter: (Int, ((Int, Double), (Int, Double)))) => {\n    val originalFunction = makeCorrelatedMoviesPairs(_)\n    val originalValue = originalFunction(inputParameter)\n    ((1, originalValue._1._2), originalValue._2)\n  } }\n  val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n  val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n  val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n  sortedMoviesSimilarities\n}",
+      "originalCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n\n    val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n\n    val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n\n    val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n\n    val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n\n    val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n\n    val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n\n    val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n\n    sortedMoviesSimilarities\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 98,
+      "originalProgramId" : 5,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n  val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n  val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n  val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n  val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map { (inputParameter: (Int, ((Int, Double), (Int, Double)))) => {\n    val originalFunction = makeCorrelatedMoviesPairs(_)\n    val originalValue = originalFunction(inputParameter)\n    ((Int.MaxValue, originalValue._1._2), originalValue._2)\n  } }\n  val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n  val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n  val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n  sortedMoviesSimilarities\n}",
+      "originalCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n\n    val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n\n    val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n\n    val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n\n    val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n\n    val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n\n    val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n\n    val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n\n    sortedMoviesSimilarities\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 99,
+      "originalProgramId" : 5,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n  val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n  val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n  val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n  val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map { (inputParameter: (Int, ((Int, Double), (Int, Double)))) => {\n    val originalFunction = makeCorrelatedMoviesPairs(_)\n    val originalValue = originalFunction(inputParameter)\n    ((Int.MinValue, originalValue._1._2), originalValue._2)\n  } }\n  val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n  val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n  val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n  sortedMoviesSimilarities\n}",
+      "originalCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n\n    val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n\n    val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n\n    val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n\n    val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n\n    val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n\n    val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n\n    val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n\n    sortedMoviesSimilarities\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 100,
+      "originalProgramId" : 5,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n  val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n  val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n  val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n  val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map { (inputParameter: (Int, ((Int, Double), (Int, Double)))) => {\n    val originalFunction = makeCorrelatedMoviesPairs(_)\n    val originalValue = originalFunction(inputParameter)\n    ((-originalValue._1._1, originalValue._1._2), originalValue._2)\n  } }\n  val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n  val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n  val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n  sortedMoviesSimilarities\n}",
+      "originalCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n\n    val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n\n    val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n\n    val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n\n    val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n\n    val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n\n    val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n\n    val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n\n    sortedMoviesSimilarities\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 101,
+      "originalProgramId" : 5,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n  val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n  val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n  val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n  val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map { (inputParameter: (Int, ((Int, Double), (Int, Double)))) => {\n    val originalFunction = makeCorrelatedMoviesPairs(_)\n    val originalValue = originalFunction(inputParameter)\n    ((originalValue._1._1, 0), originalValue._2)\n  } }\n  val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n  val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n  val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n  sortedMoviesSimilarities\n}",
+      "originalCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n\n    val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n\n    val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n\n    val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n\n    val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n\n    val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n\n    val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n\n    val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n\n    sortedMoviesSimilarities\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 102,
+      "originalProgramId" : 5,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n  val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n  val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n  val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n  val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map { (inputParameter: (Int, ((Int, Double), (Int, Double)))) => {\n    val originalFunction = makeCorrelatedMoviesPairs(_)\n    val originalValue = originalFunction(inputParameter)\n    ((originalValue._1._1, 1), originalValue._2)\n  } }\n  val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n  val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n  val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n  sortedMoviesSimilarities\n}",
+      "originalCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n\n    val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n\n    val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n\n    val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n\n    val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n\n    val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n\n    val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n\n    val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n\n    sortedMoviesSimilarities\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 103,
+      "originalProgramId" : 5,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n  val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n  val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n  val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n  val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map { (inputParameter: (Int, ((Int, Double), (Int, Double)))) => {\n    val originalFunction = makeCorrelatedMoviesPairs(_)\n    val originalValue = originalFunction(inputParameter)\n    ((originalValue._1._1, Int.MaxValue), originalValue._2)\n  } }\n  val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n  val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n  val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n  sortedMoviesSimilarities\n}",
+      "originalCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n\n    val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n\n    val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n\n    val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n\n    val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n\n    val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n\n    val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n\n    val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n\n    sortedMoviesSimilarities\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 104,
+      "originalProgramId" : 5,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n  val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n  val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n  val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n  val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map { (inputParameter: (Int, ((Int, Double), (Int, Double)))) => {\n    val originalFunction = makeCorrelatedMoviesPairs(_)\n    val originalValue = originalFunction(inputParameter)\n    ((originalValue._1._1, Int.MinValue), originalValue._2)\n  } }\n  val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n  val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n  val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n  sortedMoviesSimilarities\n}",
+      "originalCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n\n    val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n\n    val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n\n    val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n\n    val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n\n    val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n\n    val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n\n    val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n\n    sortedMoviesSimilarities\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 105,
+      "originalProgramId" : 5,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n  val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n  val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n  val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n  val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map { (inputParameter: (Int, ((Int, Double), (Int, Double)))) => {\n    val originalFunction = makeCorrelatedMoviesPairs(_)\n    val originalValue = originalFunction(inputParameter)\n    ((originalValue._1._1, -originalValue._1._2), originalValue._2)\n  } }\n  val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n  val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n  val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n  sortedMoviesSimilarities\n}",
+      "originalCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n\n    val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n\n    val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n\n    val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n\n    val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n\n    val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n\n    val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n\n    val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n\n    sortedMoviesSimilarities\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 106,
+      "originalProgramId" : 5,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n  val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n  val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n  val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n  val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map { (inputParameter: (Int, ((Int, Double), (Int, Double)))) => {\n    val originalFunction = makeCorrelatedMoviesPairs(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, (0d, originalValue._2._2))\n  } }\n  val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n  val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n  val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n  sortedMoviesSimilarities\n}",
+      "originalCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n\n    val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n\n    val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n\n    val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n\n    val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n\n    val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n\n    val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n\n    val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n\n    sortedMoviesSimilarities\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 107,
+      "originalProgramId" : 5,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n  val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n  val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n  val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n  val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map { (inputParameter: (Int, ((Int, Double), (Int, Double)))) => {\n    val originalFunction = makeCorrelatedMoviesPairs(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, (1d, originalValue._2._2))\n  } }\n  val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n  val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n  val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n  sortedMoviesSimilarities\n}",
+      "originalCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n\n    val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n\n    val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n\n    val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n\n    val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n\n    val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n\n    val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n\n    val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n\n    sortedMoviesSimilarities\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 108,
+      "originalProgramId" : 5,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n  val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n  val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n  val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n  val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map { (inputParameter: (Int, ((Int, Double), (Int, Double)))) => {\n    val originalFunction = makeCorrelatedMoviesPairs(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, (Double.MaxValue, originalValue._2._2))\n  } }\n  val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n  val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n  val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n  sortedMoviesSimilarities\n}",
+      "originalCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n\n    val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n\n    val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n\n    val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n\n    val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n\n    val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n\n    val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n\n    val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n\n    sortedMoviesSimilarities\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 109,
+      "originalProgramId" : 5,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n  val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n  val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n  val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n  val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map { (inputParameter: (Int, ((Int, Double), (Int, Double)))) => {\n    val originalFunction = makeCorrelatedMoviesPairs(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, (Double.MinValue, originalValue._2._2))\n  } }\n  val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n  val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n  val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n  sortedMoviesSimilarities\n}",
+      "originalCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n\n    val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n\n    val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n\n    val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n\n    val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n\n    val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n\n    val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n\n    val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n\n    sortedMoviesSimilarities\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 110,
+      "originalProgramId" : 5,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n  val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n  val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n  val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n  val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map { (inputParameter: (Int, ((Int, Double), (Int, Double)))) => {\n    val originalFunction = makeCorrelatedMoviesPairs(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, (-originalValue._2._1, originalValue._2._2))\n  } }\n  val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n  val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n  val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n  sortedMoviesSimilarities\n}",
+      "originalCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n\n    val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n\n    val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n\n    val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n\n    val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n\n    val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n\n    val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n\n    val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n\n    sortedMoviesSimilarities\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 111,
+      "originalProgramId" : 5,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n  val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n  val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n  val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n  val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map { (inputParameter: (Int, ((Int, Double), (Int, Double)))) => {\n    val originalFunction = makeCorrelatedMoviesPairs(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, (originalValue._2._1, 0d))\n  } }\n  val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n  val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n  val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n  sortedMoviesSimilarities\n}",
+      "originalCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n\n    val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n\n    val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n\n    val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n\n    val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n\n    val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n\n    val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n\n    val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n\n    sortedMoviesSimilarities\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 112,
+      "originalProgramId" : 5,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n  val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n  val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n  val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n  val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map { (inputParameter: (Int, ((Int, Double), (Int, Double)))) => {\n    val originalFunction = makeCorrelatedMoviesPairs(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, (originalValue._2._1, 1d))\n  } }\n  val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n  val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n  val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n  sortedMoviesSimilarities\n}",
+      "originalCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n\n    val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n\n    val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n\n    val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n\n    val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n\n    val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n\n    val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n\n    val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n\n    sortedMoviesSimilarities\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 113,
+      "originalProgramId" : 5,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n  val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n  val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n  val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n  val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map { (inputParameter: (Int, ((Int, Double), (Int, Double)))) => {\n    val originalFunction = makeCorrelatedMoviesPairs(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, (originalValue._2._1, Double.MaxValue))\n  } }\n  val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n  val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n  val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n  sortedMoviesSimilarities\n}",
+      "originalCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n\n    val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n\n    val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n\n    val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n\n    val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n\n    val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n\n    val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n\n    val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n\n    sortedMoviesSimilarities\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 114,
+      "originalProgramId" : 5,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n  val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n  val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n  val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n  val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map { (inputParameter: (Int, ((Int, Double), (Int, Double)))) => {\n    val originalFunction = makeCorrelatedMoviesPairs(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, (originalValue._2._1, Double.MinValue))\n  } }\n  val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n  val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n  val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n  sortedMoviesSimilarities\n}",
+      "originalCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n\n    val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n\n    val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n\n    val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n\n    val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n\n    val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n\n    val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n\n    val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n\n    sortedMoviesSimilarities\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 115,
+      "originalProgramId" : 5,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n  val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n  val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n  val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n  val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map { (inputParameter: (Int, ((Int, Double), (Int, Double)))) => {\n    val originalFunction = makeCorrelatedMoviesPairs(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, (originalValue._2._1, -originalValue._2._2))\n  } }\n  val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n  val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n  val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n  sortedMoviesSimilarities\n}",
+      "originalCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n\n    val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n\n    val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n\n    val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n\n    val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n\n    val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n\n    val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n\n    val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n\n    sortedMoviesSimilarities\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 116,
+      "originalProgramId" : 5,
+      "mutationOperator" : "FTD",
+      "mutationOperatorDescription" : "Filter Transformation Deletion",
+      "mutantCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n  val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n  val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n  val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings\n  val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n  val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n  val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n  val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n  sortedMoviesSimilarities\n}",
+      "originalCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n\n    val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n\n    val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n\n    val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n\n    val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n\n    val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n\n    val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n\n    val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n\n    sortedMoviesSimilarities\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 117,
+      "originalProgramId" : 5,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n  val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings).distinct()\n  val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n  val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n  val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n  val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n  val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n  val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n  sortedMoviesSimilarities\n}",
+      "originalCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n\n    val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n\n    val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n\n    val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n\n    val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n\n    val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n\n    val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n\n    val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n\n    sortedMoviesSimilarities\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 118,
+      "originalProgramId" : 5,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n  val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n  val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings).distinct()\n  val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n  val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n  val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n  val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n  val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n  sortedMoviesSimilarities\n}",
+      "originalCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n\n    val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n\n    val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n\n    val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n\n    val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n\n    val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n\n    val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n\n    val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n\n    sortedMoviesSimilarities\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 119,
+      "originalProgramId" : 5,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n  val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n  val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n  val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates).distinct()\n  val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n  val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n  val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n  val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n  sortedMoviesSimilarities\n}",
+      "originalCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n\n    val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n\n    val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n\n    val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n\n    val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n\n    val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n\n    val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n\n    val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n\n    sortedMoviesSimilarities\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 120,
+      "originalProgramId" : 5,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n  val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n  val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n  val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n  val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs).distinct()\n  val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n  val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n  val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n  sortedMoviesSimilarities\n}",
+      "originalCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n\n    val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n\n    val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n\n    val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n\n    val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n\n    val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n\n    val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n\n    val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n\n    sortedMoviesSimilarities\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 121,
+      "originalProgramId" : 5,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n  val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n  val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n  val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n  val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n  val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey().distinct()\n  val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n  val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n  sortedMoviesSimilarities\n}",
+      "originalCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n\n    val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n\n    val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n\n    val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n\n    val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n\n    val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n\n    val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n\n    val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n\n    sortedMoviesSimilarities\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 122,
+      "originalProgramId" : 5,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n  val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n  val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n  val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n  val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n  val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n  val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity).distinct()\n  val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n  sortedMoviesSimilarities\n}",
+      "originalCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n\n    val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n\n    val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n\n    val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n\n    val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n\n    val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n\n    val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n\n    val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n\n    sortedMoviesSimilarities\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 123,
+      "originalProgramId" : 5,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n  val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n  val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n  val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n  val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n  val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n  val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n  val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey().distinct()\n  sortedMoviesSimilarities\n}",
+      "originalCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n\n    val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n\n    val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n\n    val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n\n    val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n\n    val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n\n    val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n\n    val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n\n    sortedMoviesSimilarities\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 124,
+      "originalProgramId" : 5,
+      "mutationOperator" : "JTR",
+      "mutationOperatorDescription" : "Join Transformation Replacement",
+      "mutantCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n  val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n  val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.leftOuterJoin(ratings).map(tuple => (tuple._1, (tuple._2._1, tuple._2._2.getOrElse((0, 0d)))))\n  val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n  val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n  val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n  val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n  val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n  sortedMoviesSimilarities\n}",
+      "originalCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n\n    val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n\n    val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n\n    val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n\n    val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n\n    val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n\n    val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n\n    val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n\n    sortedMoviesSimilarities\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 125,
+      "originalProgramId" : 5,
+      "mutationOperator" : "JTR",
+      "mutationOperatorDescription" : "Join Transformation Replacement",
+      "mutantCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n  val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n  val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.rightOuterJoin(ratings).map(tuple => (tuple._1, (tuple._2._1.getOrElse((0, 0d)), tuple._2._2)))\n  val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n  val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n  val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n  val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n  val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n  sortedMoviesSimilarities\n}",
+      "originalCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n\n    val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n\n    val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n\n    val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n\n    val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n\n    val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n\n    val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n\n    val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n\n    sortedMoviesSimilarities\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 126,
+      "originalProgramId" : 5,
+      "mutationOperator" : "JTR",
+      "mutationOperatorDescription" : "Join Transformation Replacement",
+      "mutantCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n  val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n  val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.fullOuterJoin(ratings).map(tuple => (tuple._1, (tuple._2._1.getOrElse((0, 0d)), tuple._2._2.getOrElse((0, 0d)))))\n  val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n  val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n  val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n  val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n  val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n  sortedMoviesSimilarities\n}",
+      "originalCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n\n    val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n\n    val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n\n    val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n\n    val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n\n    val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n\n    val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n\n    val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n\n    sortedMoviesSimilarities\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 127,
+      "originalProgramId" : 5,
+      "mutationOperator" : "OTD",
+      "mutationOperatorDescription" : "Order Transformation Deletion",
+      "mutantCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n  val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n  val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n  val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n  val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n  val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n  val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n  val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities\n  sortedMoviesSimilarities\n}",
+      "originalCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n\n    val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n\n    val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n\n    val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n\n    val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n\n    val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n\n    val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n\n    val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n\n    sortedMoviesSimilarities\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 128,
+      "originalProgramId" : 5,
+      "mutationOperator" : "NFTP",
+      "mutationOperatorDescription" : "Negation of Filter Transformation Predicate",
+      "mutantCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n  val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n  val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n  val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter { (inputParameter: (Int, ((Int, Double), (Int, Double)))) => {\n    val originalFunction = removeDuplicates(_)\n    val originalValue = originalFunction(inputParameter)\n    !originalValue\n  } }\n  val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n  val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n  val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n  val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n  sortedMoviesSimilarities\n}",
+      "originalCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n\n    val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n\n    val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n\n    val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n\n    val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n\n    val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n\n    val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n\n    val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n\n    sortedMoviesSimilarities\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 129,
+      "originalProgramId" : 5,
+      "mutationOperator" : "OTI",
+      "mutationOperatorDescription" : "Order Transformation Inversion",
+      "mutantCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n  val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n  val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n  val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n  val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n  val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n  val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n  val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey(false)\n  sortedMoviesSimilarities\n}",
+      "originalCode" : "def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = {\n\n    val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings)\n\n    val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings)\n\n    val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates)\n\n    val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs)\n\n    val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey()\n\n    val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity)\n\n    val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey()\n\n    sortedMoviesSimilarities\n  }",
+      "status" : "Killed"
+    }
+  ],
+  "removedMutants" : [
+  ],
+  "mutationOperatorsMetrics" : {
+    "totalMutantsPerOperator" : {
+      "FTD" : 1,
+      "JTR" : 3,
+      "UTR" : 0,
+      "MTR" : 24,
+      "UTD" : 2,
+      "OTD" : 1,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 1,
+      "DTI" : 7,
+      "DTD" : 0,
+      "NFTP" : 1,
+      "UTS" : 0
+    },
+    "totalKilledMutantsPerOperator" : {
+      "FTD" : 1,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 22,
+      "UTD" : 2,
+      "OTD" : 1,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 1,
+      "DTI" : 2,
+      "DTD" : 0,
+      "NFTP" : 1,
+      "UTS" : 0
+    },
+    "totalLivedMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 0,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalEquivalentMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 3,
+      "UTR" : 0,
+      "MTR" : 2,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 5,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalErrorMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 0,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalRemovedMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 0,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "descriptionPerOperator" : {
+      "FTD" : "Filter Transformation Deletion",
+      "JTR" : "Join Transformation Replacement",
+      "UTR" : "Unary Transformation Replacement",
+      "MTR" : "Mapping Transformation Replacement",
+      "UTD" : "Unary Transformation Deletion",
+      "OTD" : "Order Transformation Deletion",
+      "BTR" : "Binary Transformation Replacement",
+      "STR" : "Set Transformation Replacement",
+      "BTS" : "Binary Transformation Swap",
+      "ATR" : "Aggregation Transformation Replacement",
+      "OTI" : "Order Transformation Inversion",
+      "DTI" : "Distinct Transformation Insertion",
+      "DTD" : "Distinct Transformation Deletion",
+      "NFTP" : "Negation of Filter Transformation Predicate",
+      "UTS" : "Unary Transformation Swap"
+    }
+  },
+  "totalDatasets" : 8,
+  "totalTransformations" : 7,
+  "totalMutants" : 40,
+  "totalKilledMutants" : 30,
+  "totalLivedMutants" : 0,
+  "totalEquivalentMutants" : 10,
+  "totalErrorMutants" : 0,
+  "totalRemovedMutants" : 0,
+  "mutationScore" : 1.0
+}

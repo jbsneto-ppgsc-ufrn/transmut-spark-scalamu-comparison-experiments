@@ -1,0 +1,2103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/scripts/shCore.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/scripts/shBrushScala.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/styles/shCoreEclipse.css" rel="stylesheet" type="text/css" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/styles/shThemeEclipse.min.css" rel="stylesheet" type="text/css" />
+<!-- Cytoscape -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/2.5.1/cytoscape.min.js"></script>
+<!-- DataTable -->
+<link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<style>
+#cy {
+  width: 1100px;
+  height: 300px;
+  background-color: white;
+}
+body {
+  padding-top: 5rem;
+}
+.starter-template {
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+.section-title {
+  padding-top: 3.5rem;
+}
+</style>
+<title>TRANSMUT-Spark Mutation Testing Report</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+<a class="navbar-brand" href="../index.html">TRANSMUT-Spark</a>
+<div class="collapse navbar-collapse" id="navbarNav">
+  <ul class="navbar-nav mr-auto">
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Section</a>
+      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <a class="dropdown-item" href="#metrics">Metrics</a>
+        <a class="dropdown-item" href="#code">Code</a>
+        <a class="dropdown-item" href="#dag">DAG</a>
+        <a class="dropdown-item" href="#datasets">Datasets</a>
+        <a class="dropdown-item" href="#transformations">Transformations</a>
+        <a class="dropdown-item" href="#mutants">Mutants</a>
+        <a class="dropdown-item" href="#removedMutants">Removed Mutants</a>
+        <a class="dropdown-item" href="#mutationOperators">Mutation Operators</a>
+      </div>
+    </li>
+  </ul>
+</div>
+</nav>
+<main role"main" class="container">  
+<div class="starter-template">
+  <h2><a href="../index.html" class="text-dark">Mutation Testing Report</a></h2>
+  <h3><a href="../ProgramSources/Program-Source-1.html" class="text-dark">Program Source: MovieLensExploration</a></h3>
+  <h4><a href="#" class="text-dark">Program ID: 3</a></h4>
+  <h4><a href="#" class="text-dark">Program: mostPopularGenresByYear</a></h4>
+</div>    
+<!-- Metrics -->
+<div class="row" id="metrics">
+<div class="col" >
+<h3 class="section-title">Metrics</h3>
+<hr class="my-4">
+<table class="table table-striped table-hover">
+<thead class="thead-dark"><tr><th scope="col">#</th><th scope="col">Total</th></tr></thead>
+<tbody>
+  <tr><th scope="row">Datasets</th><td>5</td></tr>
+  <tr><th scope="row">Transformations</th><td>4</td></tr>
+  <tr><th scope="row">Mutants</th><td>31</td></tr>
+  <tr><th scope="row">Killed Mutants</th><td>25</td></tr>
+  <tr><th scope="row">Lived Mutants</th><td>3</td></tr>
+  <tr><th scope="row">Equivalent Mutants</th><td>3</td></tr>
+  <tr><th scope="row">Error Mutants</th><td>0</td></tr>
+  <tr><th scope="row">Removed Mutants</th><td>0</td></tr>
+  <tr><th scope="row">Mutation Score</th>
+  <td>
+    <div class="progress">
+      <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 89.29%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><span class="font-weight-bold text-dark">0.89</span></div>
+    </div>
+  </td>
+  </tr>
+ </tbody>
+ <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+    <th scope="row"></th>
+    <td></td>
+    </tr>
+  </tfoot>
+</table>
+     
+<hr class="my-4">
+</div>
+</div>
+<!-- Code -->
+<div class="row" id="code">
+<div class="col">
+<h3 class="section-title">Code</h3>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false;">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+    val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap((m: Movie) => m.genres.map(g => ((m.year, g), 1)))
+    val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey((x: Int, y: Int) => x + y)
+    val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map((g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey((m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2)
+    popularGenresByYear
+  }
+</pre>
+<hr class="my-4">
+</div>
+</div>
+<!-- DAG -->
+<div class="row" id="dag">
+<div class="col" >
+<h3 class="section-title">DAG</h3>
+<hr class="my-4">
+<figure class="figure">
+<div id="cy"></div>
+</figure>
+<hr class="my-4">
+</div> 
+</div>
+<!-- Datasets -->
+<div class="row" id="datasets">
+<div class="col" >
+<h3 class="section-title">Datasets</h3>
+<hr class="my-4">
+<table class="table table-striped table-hover">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Reference</th>
+      <th scope="col">Type</th>
+   </tr>
+  </thead>
+  <tbody>
+  <tr>
+  <th scope="row">12</th>
+  <td>movies</td>
+  <td>RDD[Movie]</td>
+</tr>
+<tr>
+  <th scope="row">13</th>
+  <td>yearGenreTuple</td>
+  <td>RDD[((Int, String), Int)]</td>
+</tr>
+<tr>
+  <th scope="row">14</th>
+  <td>yearGenreCount</td>
+  <td>RDD[((Int, String), Int)]</td>
+</tr>
+<tr>
+  <th scope="row">15</th>
+  <td>yearGenreCountTuple</td>
+  <td>RDD[(Int, (String, Int))]</td>
+</tr>
+<tr>
+  <th scope="row">16</th>
+  <td>popularGenresByYear</td>
+  <td>RDD[(Int, (String, Int))]</td>
+</tr>
+  </tbody>
+  <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+    <th scope="row" colspan="2">Total Datasets</th>
+    <td>5</td>
+    </tr>
+  </tfoot>
+</table>      
+    
+<hr class="my-4">
+</div>
+</div>
+<!-- Transformations -->
+<div class="row" id="transformations">
+<div class="col" >
+<h3 class="section-title" id="transformations">Transformations</h3>
+<hr class="my-4">
+<table class="table table-striped table-hover">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Name</th>
+      <th scope="col">Input Type</th>
+      <th scope="col">Output Type</th>
+   </tr>
+  </thead>
+  <tbody>
+  <tr>
+  <th scope="row">8</th>
+  <td>flatMap</td>
+  <td>RDD[Movie]</td>
+  <td>RDD[((Int, String), Int)]</td>
+</tr>
+<tr>
+  <th scope="row">9</th>
+  <td>reduceByKey</td>
+  <td>RDD[((Int, String), Int)]</td>
+  <td>RDD[((Int, String), Int)]</td>
+</tr>
+<tr>
+  <th scope="row">10</th>
+  <td>map</td>
+  <td>RDD[((Int, String), Int)]</td>
+  <td>RDD[(Int, (String, Int))]</td>
+</tr>
+<tr>
+  <th scope="row">11</th>
+  <td>reduceByKey</td>
+  <td>RDD[(Int, (String, Int))]</td>
+  <td>RDD[(Int, (String, Int))]</td>
+</tr>
+  </tbody>
+  <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+    <th scope="row" colspan="3">Total Transformations</th>
+    <td>4</td>
+    </tr>
+  </tfoot>
+</table>      
+    
+<hr class="my-4">   
+</div>
+</div>
+<!-- Mutants -->
+<div class="row" id="mutants">
+<div class="col">
+<h3 class="section-title">Mutants</h3>
+<hr class="my-4">
+<table class="display table table-striped table-hover" id="mutantsTable">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Mutation Operator</th>
+      <th scope="col">Status</th>
+      <th scope="col">Code</th>
+     </tr>
+  </thead>
+  <tbody>
+    <tr>
+  <th scope="row"><a href="../Mutants/Mutant-59.html" class="text-dark">59</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Deletion">UTD</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant59">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-60.html" class="text-dark">60</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Deletion">UTD</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant60">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-61.html" class="text-dark">61</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Lived</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant61">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-62.html" class="text-dark">62</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant62">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-63.html" class="text-dark">63</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Equivalent</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant63">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-64.html" class="text-dark">64</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant64">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-65.html" class="text-dark">65</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant65">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-66.html" class="text-dark">66</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant66">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-67.html" class="text-dark">67</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant67">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-68.html" class="text-dark">68</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant68">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-69.html" class="text-dark">69</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant69">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-70.html" class="text-dark">70</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant70">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-71.html" class="text-dark">71</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant71">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-72.html" class="text-dark">72</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant72">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-73.html" class="text-dark">73</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant73">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-74.html" class="text-dark">74</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant74">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-75.html" class="text-dark">75</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant75">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-76.html" class="text-dark">76</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant76">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-77.html" class="text-dark">77</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></td>
+  <td>Lived</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant77">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-78.html" class="text-dark">78</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></td>
+  <td>Lived</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant78">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-79.html" class="text-dark">79</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></td>
+  <td>Equivalent</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant79">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-80.html" class="text-dark">80</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant80">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-81.html" class="text-dark">81</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant81">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-82.html" class="text-dark">82</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant82">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-83.html" class="text-dark">83</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant83">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-84.html" class="text-dark">84</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></td>
+  <td>Equivalent</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant84">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-85.html" class="text-dark">85</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant85">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-86.html" class="text-dark">86</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant86">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-87.html" class="text-dark">87</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant87">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-88.html" class="text-dark">88</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant88">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-89.html" class="text-dark">89</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant89">Show</button></td>
+</tr>
+  </tbody>
+  <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+      <th scope="row" colspan="2">Mutation Score</th>
+      <td colspan="2">
+        <div class="progress">
+          <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 89.29%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><span class="font-weight-bold text-dark">0.89</span></div>
+        </div>
+      </td>
+    </tr>
+  </tfoot>
+</table>   
+   
+<hr class="my-4">
+</div>
+</div>
+<!-- Removed Mutants -->
+<div class="row" id="removedMutants">
+<div class="col">
+<h3 class="section-title">Removed Mutants</h3>
+<hr class="my-4">
+<table class="display table table-striped table-hover" id="removedMutantsTable">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Mutation Operator</th>
+      <th scope="col">Reduction Rule</th>
+      <th scope="col">Code</th>
+     </tr>
+  </thead>
+  <tbody>
+    
+  </tbody>
+  <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+      <th scope="row" colspan="2">Total Removed Mutants</th>
+      <td colspan="2">0</td>
+    </tr>
+  </tfoot>
+</table>   
+   
+<hr class="my-4">
+</div>
+</div>
+<!-- Mutation Operators -->
+<div class="row" id="mutationOperators">
+<div class="col">
+<h3 class="section-title">Mutation Operators</h3>
+<hr class="my-4">
+<table class="display table table-striped table-hover" id="programSourcesTable">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Mutation Operator</th>
+      <th scope="col">Mutants</th>
+      <th scope="col">Killed</th>
+      <th scope="col">Lived</th>
+      <th scope="col">Equivalent</th>
+      <th scope="col">Error</th>
+      <th scope="col">Removed</th>
+      </tr>
+  </thead>
+  <tbody>
+    <tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></th>
+  <td>15</td>
+  <td>13</td>
+  <td>1</td>
+  <td>1</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+<tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></th>
+  <td>4</td>
+  <td>1</td>
+  <td>2</td>
+  <td>1</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+<tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></th>
+  <td>10</td>
+  <td>9</td>
+  <td>0</td>
+  <td>1</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+<tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Deletion">UTD</a></th>
+  <td>2</td>
+  <td>2</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+  </tbody>
+  <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+      <th scope="row">Total</th>
+      <td>31</td>
+      <td>25</td>
+      <td>3</td>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+  </tfoot>
+</table>   
+   
+<hr class="my-4">
+</div>
+</div>
+<!-- Mutant Modals -->
+<div class="modal fade" id="modalMutant59" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel59" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-59.html" class="text-dark">59</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Deletion">UTD</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+    val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap((m: Movie) => m.genres.map(g => ((m.year, g), 1)))
+    val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey((x: Int, y: Int) => x + y)
+    val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map((g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey((m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2)
+    popularGenresByYear
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+  val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap { (m: Movie) => m.genres.map(g => ((m.year, g), 1)) }
+  val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple
+  val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map { (g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey { (m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2 }
+  popularGenresByYear
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant60" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel60" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-60.html" class="text-dark">60</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Deletion">UTD</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+    val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap((m: Movie) => m.genres.map(g => ((m.year, g), 1)))
+    val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey((x: Int, y: Int) => x + y)
+    val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map((g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey((m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2)
+    popularGenresByYear
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+  val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap { (m: Movie) => m.genres.map(g => ((m.year, g), 1)) }
+  val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey { (x: Int, y: Int) => x + y }
+  val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map { (g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple
+  popularGenresByYear
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant61" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel61" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-61.html" class="text-dark">61</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Lived</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+    val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap((m: Movie) => m.genres.map(g => ((m.year, g), 1)))
+    val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey((x: Int, y: Int) => x + y)
+    val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map((g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey((m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2)
+    popularGenresByYear
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2, 3, 4, 5, 6]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+  val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap { (inputParameter: Movie) => {
+    val originalFunction = ((m: Movie) => m.genres.map(g => ((m.year, g), 1)))(_)
+    val originalValue = originalFunction(inputParameter)
+    originalValue.headOption
+  } }
+  val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey { (x: Int, y: Int) => x + y }
+  val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map { (g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey { (m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2 }
+  popularGenresByYear
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant62" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel62" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-62.html" class="text-dark">62</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+    val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap((m: Movie) => m.genres.map(g => ((m.year, g), 1)))
+    val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey((x: Int, y: Int) => x + y)
+    val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map((g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey((m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2)
+    popularGenresByYear
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2, 3, 4, 5, 6]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+  val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap { (inputParameter: Movie) => {
+    val originalFunction = ((m: Movie) => m.genres.map(g => ((m.year, g), 1)))(_)
+    val originalValue = originalFunction(inputParameter)
+    originalValue.toList.tail
+  } }
+  val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey { (x: Int, y: Int) => x + y }
+  val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map { (g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey { (m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2 }
+  popularGenresByYear
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant63" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel63" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-63.html" class="text-dark">63</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Equivalent</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+    val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap((m: Movie) => m.genres.map(g => ((m.year, g), 1)))
+    val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey((x: Int, y: Int) => x + y)
+    val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map((g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey((m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2)
+    popularGenresByYear
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2, 3, 4, 5, 6]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+  val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap { (inputParameter: Movie) => {
+    val originalFunction = ((m: Movie) => m.genres.map(g => ((m.year, g), 1)))(_)
+    val originalValue = originalFunction(inputParameter)
+    originalValue.toList.reverse
+  } }
+  val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey { (x: Int, y: Int) => x + y }
+  val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map { (g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey { (m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2 }
+  popularGenresByYear
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant64" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel64" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-64.html" class="text-dark">64</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+    val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap((m: Movie) => m.genres.map(g => ((m.year, g), 1)))
+    val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey((x: Int, y: Int) => x + y)
+    val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map((g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey((m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2)
+    popularGenresByYear
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2, 3, 4, 5, 6]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+  val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap { (inputParameter: Movie) => {
+    val originalFunction = ((m: Movie) => m.genres.map(g => ((m.year, g), 1)))(_)
+    val originalValue = originalFunction(inputParameter)
+    List[((Int, String), Int)]()
+  } }
+  val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey { (x: Int, y: Int) => x + y }
+  val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map { (g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey { (m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2 }
+  popularGenresByYear
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant65" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel65" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-65.html" class="text-dark">65</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+    val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap((m: Movie) => m.genres.map(g => ((m.year, g), 1)))
+    val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey((x: Int, y: Int) => x + y)
+    val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map((g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey((m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2)
+    popularGenresByYear
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4, 5, 6, 7, 8]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+  val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap { (m: Movie) => m.genres.map(g => ((m.year, g), 1)) }
+  val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey { (x: Int, y: Int) => x + y }
+  val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map { (inputParameter: ((Int, String), Int)) => {
+    val originalFunction = ((g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)))(_)
+    val originalValue = originalFunction(inputParameter)
+    (0, originalValue._2)
+  } }
+  val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey { (m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2 }
+  popularGenresByYear
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant66" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel66" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-66.html" class="text-dark">66</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+    val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap((m: Movie) => m.genres.map(g => ((m.year, g), 1)))
+    val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey((x: Int, y: Int) => x + y)
+    val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map((g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey((m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2)
+    popularGenresByYear
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4, 5, 6, 7, 8]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+  val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap { (m: Movie) => m.genres.map(g => ((m.year, g), 1)) }
+  val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey { (x: Int, y: Int) => x + y }
+  val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map { (inputParameter: ((Int, String), Int)) => {
+    val originalFunction = ((g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)))(_)
+    val originalValue = originalFunction(inputParameter)
+    (1, originalValue._2)
+  } }
+  val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey { (m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2 }
+  popularGenresByYear
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant67" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel67" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-67.html" class="text-dark">67</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+    val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap((m: Movie) => m.genres.map(g => ((m.year, g), 1)))
+    val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey((x: Int, y: Int) => x + y)
+    val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map((g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey((m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2)
+    popularGenresByYear
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4, 5, 6, 7, 8]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+  val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap { (m: Movie) => m.genres.map(g => ((m.year, g), 1)) }
+  val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey { (x: Int, y: Int) => x + y }
+  val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map { (inputParameter: ((Int, String), Int)) => {
+    val originalFunction = ((g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)))(_)
+    val originalValue = originalFunction(inputParameter)
+    (Int.MaxValue, originalValue._2)
+  } }
+  val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey { (m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2 }
+  popularGenresByYear
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant68" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel68" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-68.html" class="text-dark">68</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+    val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap((m: Movie) => m.genres.map(g => ((m.year, g), 1)))
+    val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey((x: Int, y: Int) => x + y)
+    val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map((g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey((m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2)
+    popularGenresByYear
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4, 5, 6, 7, 8]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+  val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap { (m: Movie) => m.genres.map(g => ((m.year, g), 1)) }
+  val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey { (x: Int, y: Int) => x + y }
+  val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map { (inputParameter: ((Int, String), Int)) => {
+    val originalFunction = ((g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)))(_)
+    val originalValue = originalFunction(inputParameter)
+    (Int.MinValue, originalValue._2)
+  } }
+  val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey { (m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2 }
+  popularGenresByYear
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant69" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel69" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-69.html" class="text-dark">69</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+    val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap((m: Movie) => m.genres.map(g => ((m.year, g), 1)))
+    val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey((x: Int, y: Int) => x + y)
+    val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map((g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey((m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2)
+    popularGenresByYear
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4, 5, 6, 7, 8]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+  val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap { (m: Movie) => m.genres.map(g => ((m.year, g), 1)) }
+  val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey { (x: Int, y: Int) => x + y }
+  val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map { (inputParameter: ((Int, String), Int)) => {
+    val originalFunction = ((g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)))(_)
+    val originalValue = originalFunction(inputParameter)
+    (-originalValue._1, originalValue._2)
+  } }
+  val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey { (m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2 }
+  popularGenresByYear
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant70" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel70" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-70.html" class="text-dark">70</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+    val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap((m: Movie) => m.genres.map(g => ((m.year, g), 1)))
+    val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey((x: Int, y: Int) => x + y)
+    val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map((g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey((m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2)
+    popularGenresByYear
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4, 5, 6, 7, 8]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+  val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap { (m: Movie) => m.genres.map(g => ((m.year, g), 1)) }
+  val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey { (x: Int, y: Int) => x + y }
+  val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map { (inputParameter: ((Int, String), Int)) => {
+    val originalFunction = ((g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)))(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, ("", originalValue._2._2))
+  } }
+  val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey { (m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2 }
+  popularGenresByYear
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant71" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel71" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-71.html" class="text-dark">71</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+    val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap((m: Movie) => m.genres.map(g => ((m.year, g), 1)))
+    val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey((x: Int, y: Int) => x + y)
+    val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map((g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey((m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2)
+    popularGenresByYear
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4, 5, 6, 7, 8]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+  val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap { (m: Movie) => m.genres.map(g => ((m.year, g), 1)) }
+  val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey { (x: Int, y: Int) => x + y }
+  val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map { (inputParameter: ((Int, String), Int)) => {
+    val originalFunction = ((g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)))(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, (originalValue._2._1, 0))
+  } }
+  val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey { (m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2 }
+  popularGenresByYear
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant72" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel72" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-72.html" class="text-dark">72</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+    val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap((m: Movie) => m.genres.map(g => ((m.year, g), 1)))
+    val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey((x: Int, y: Int) => x + y)
+    val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map((g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey((m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2)
+    popularGenresByYear
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4, 5, 6, 7, 8]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+  val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap { (m: Movie) => m.genres.map(g => ((m.year, g), 1)) }
+  val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey { (x: Int, y: Int) => x + y }
+  val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map { (inputParameter: ((Int, String), Int)) => {
+    val originalFunction = ((g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)))(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, (originalValue._2._1, 1))
+  } }
+  val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey { (m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2 }
+  popularGenresByYear
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant73" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel73" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-73.html" class="text-dark">73</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+    val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap((m: Movie) => m.genres.map(g => ((m.year, g), 1)))
+    val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey((x: Int, y: Int) => x + y)
+    val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map((g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey((m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2)
+    popularGenresByYear
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4, 5, 6, 7, 8]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+  val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap { (m: Movie) => m.genres.map(g => ((m.year, g), 1)) }
+  val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey { (x: Int, y: Int) => x + y }
+  val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map { (inputParameter: ((Int, String), Int)) => {
+    val originalFunction = ((g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)))(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, (originalValue._2._1, Int.MaxValue))
+  } }
+  val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey { (m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2 }
+  popularGenresByYear
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant74" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel74" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-74.html" class="text-dark">74</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+    val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap((m: Movie) => m.genres.map(g => ((m.year, g), 1)))
+    val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey((x: Int, y: Int) => x + y)
+    val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map((g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey((m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2)
+    popularGenresByYear
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4, 5, 6, 7, 8]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+  val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap { (m: Movie) => m.genres.map(g => ((m.year, g), 1)) }
+  val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey { (x: Int, y: Int) => x + y }
+  val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map { (inputParameter: ((Int, String), Int)) => {
+    val originalFunction = ((g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)))(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, (originalValue._2._1, Int.MinValue))
+  } }
+  val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey { (m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2 }
+  popularGenresByYear
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant75" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel75" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-75.html" class="text-dark">75</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+    val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap((m: Movie) => m.genres.map(g => ((m.year, g), 1)))
+    val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey((x: Int, y: Int) => x + y)
+    val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map((g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey((m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2)
+    popularGenresByYear
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4, 5, 6, 7, 8]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+  val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap { (m: Movie) => m.genres.map(g => ((m.year, g), 1)) }
+  val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey { (x: Int, y: Int) => x + y }
+  val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map { (inputParameter: ((Int, String), Int)) => {
+    val originalFunction = ((g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)))(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, (originalValue._2._1, -originalValue._2._2))
+  } }
+  val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey { (m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2 }
+  popularGenresByYear
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant76" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel76" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-76.html" class="text-dark">76</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+    val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap((m: Movie) => m.genres.map(g => ((m.year, g), 1)))
+    val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey((x: Int, y: Int) => x + y)
+    val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map((g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey((m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2)
+    popularGenresByYear
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+  val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap { (m: Movie) => m.genres.map(g => ((m.year, g), 1)) }.distinct()
+  val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey { (x: Int, y: Int) => x + y }
+  val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map { (g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey { (m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2 }
+  popularGenresByYear
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant77" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel77" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-77.html" class="text-dark">77</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></h5>
+<h5>Status: Lived</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+    val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap((m: Movie) => m.genres.map(g => ((m.year, g), 1)))
+    val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey((x: Int, y: Int) => x + y)
+    val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map((g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey((m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2)
+    popularGenresByYear
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+  val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap { (m: Movie) => m.genres.map(g => ((m.year, g), 1)) }
+  val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey { (x: Int, y: Int) => x + y }.distinct()
+  val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map { (g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey { (m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2 }
+  popularGenresByYear
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant78" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel78" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-78.html" class="text-dark">78</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></h5>
+<h5>Status: Lived</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+    val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap((m: Movie) => m.genres.map(g => ((m.year, g), 1)))
+    val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey((x: Int, y: Int) => x + y)
+    val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map((g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey((m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2)
+    popularGenresByYear
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+  val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap { (m: Movie) => m.genres.map(g => ((m.year, g), 1)) }
+  val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey { (x: Int, y: Int) => x + y }
+  val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map { (g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)) }.distinct()
+  val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey { (m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2 }
+  popularGenresByYear
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant79" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel79" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-79.html" class="text-dark">79</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></h5>
+<h5>Status: Equivalent</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+    val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap((m: Movie) => m.genres.map(g => ((m.year, g), 1)))
+    val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey((x: Int, y: Int) => x + y)
+    val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map((g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey((m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2)
+    popularGenresByYear
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+  val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap { (m: Movie) => m.genres.map(g => ((m.year, g), 1)) }
+  val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey { (x: Int, y: Int) => x + y }
+  val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map { (g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey { (m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2 }.distinct()
+  popularGenresByYear
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant80" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel80" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-80.html" class="text-dark">80</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+    val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap((m: Movie) => m.genres.map(g => ((m.year, g), 1)))
+    val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey((x: Int, y: Int) => x + y)
+    val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map((g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey((m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2)
+    popularGenresByYear
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+  val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap { (m: Movie) => m.genres.map(g => ((m.year, g), 1)) }
+  val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey { (firstParameter: Int, secondParameter: Int) => firstParameter }
+  val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map { (g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey { (m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2 }
+  popularGenresByYear
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant81" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel81" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-81.html" class="text-dark">81</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+    val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap((m: Movie) => m.genres.map(g => ((m.year, g), 1)))
+    val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey((x: Int, y: Int) => x + y)
+    val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map((g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey((m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2)
+    popularGenresByYear
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+  val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap { (m: Movie) => m.genres.map(g => ((m.year, g), 1)) }
+  val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey { (firstParameter: Int, secondParameter: Int) => secondParameter }
+  val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map { (g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey { (m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2 }
+  popularGenresByYear
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant82" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel82" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-82.html" class="text-dark">82</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+    val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap((m: Movie) => m.genres.map(g => ((m.year, g), 1)))
+    val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey((x: Int, y: Int) => x + y)
+    val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map((g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey((m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2)
+    popularGenresByYear
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3, 4, 5, 6]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+  val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap { (m: Movie) => m.genres.map(g => ((m.year, g), 1)) }
+  val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey { (firstParameter: Int, secondParameter: Int) => {
+    val originalFunction = ((x: Int, y: Int) => x + y)(_, _)
+    originalFunction(firstParameter, firstParameter)
+  } }
+  val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map { (g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey { (m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2 }
+  popularGenresByYear
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant83" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel83" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-83.html" class="text-dark">83</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+    val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap((m: Movie) => m.genres.map(g => ((m.year, g), 1)))
+    val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey((x: Int, y: Int) => x + y)
+    val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map((g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey((m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2)
+    popularGenresByYear
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3, 4, 5, 6]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+  val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap { (m: Movie) => m.genres.map(g => ((m.year, g), 1)) }
+  val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey { (firstParameter: Int, secondParameter: Int) => {
+    val originalFunction = ((x: Int, y: Int) => x + y)(_, _)
+    originalFunction(secondParameter, secondParameter)
+  } }
+  val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map { (g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey { (m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2 }
+  popularGenresByYear
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant84" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel84" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-84.html" class="text-dark">84</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></h5>
+<h5>Status: Equivalent</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+    val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap((m: Movie) => m.genres.map(g => ((m.year, g), 1)))
+    val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey((x: Int, y: Int) => x + y)
+    val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map((g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey((m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2)
+    popularGenresByYear
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3, 4, 5, 6]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+  val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap { (m: Movie) => m.genres.map(g => ((m.year, g), 1)) }
+  val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey { (firstParameter: Int, secondParameter: Int) => {
+    val originalFunction = ((x: Int, y: Int) => x + y)(_, _)
+    originalFunction(secondParameter, firstParameter)
+  } }
+  val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map { (g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey { (m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2 }
+  popularGenresByYear
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant85" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel85" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-85.html" class="text-dark">85</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+    val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap((m: Movie) => m.genres.map(g => ((m.year, g), 1)))
+    val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey((x: Int, y: Int) => x + y)
+    val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map((g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey((m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2)
+    popularGenresByYear
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+  val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap { (m: Movie) => m.genres.map(g => ((m.year, g), 1)) }
+  val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey { (x: Int, y: Int) => x + y }
+  val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map { (g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey { (firstParameter: (String, Int), secondParameter: (String, Int)) => firstParameter }
+  popularGenresByYear
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant86" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel86" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-86.html" class="text-dark">86</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+    val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap((m: Movie) => m.genres.map(g => ((m.year, g), 1)))
+    val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey((x: Int, y: Int) => x + y)
+    val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map((g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey((m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2)
+    popularGenresByYear
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+  val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap { (m: Movie) => m.genres.map(g => ((m.year, g), 1)) }
+  val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey { (x: Int, y: Int) => x + y }
+  val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map { (g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey { (firstParameter: (String, Int), secondParameter: (String, Int)) => secondParameter }
+  popularGenresByYear
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant87" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel87" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-87.html" class="text-dark">87</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+    val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap((m: Movie) => m.genres.map(g => ((m.year, g), 1)))
+    val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey((x: Int, y: Int) => x + y)
+    val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map((g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey((m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2)
+    popularGenresByYear
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5, 6, 7, 8]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+  val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap { (m: Movie) => m.genres.map(g => ((m.year, g), 1)) }
+  val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey { (x: Int, y: Int) => x + y }
+  val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map { (g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey { (firstParameter: (String, Int), secondParameter: (String, Int)) => {
+    val originalFunction = ((m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2)(_, _)
+    originalFunction(firstParameter, firstParameter)
+  } }
+  popularGenresByYear
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant88" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel88" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-88.html" class="text-dark">88</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+    val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap((m: Movie) => m.genres.map(g => ((m.year, g), 1)))
+    val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey((x: Int, y: Int) => x + y)
+    val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map((g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey((m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2)
+    popularGenresByYear
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5, 6, 7, 8]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+  val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap { (m: Movie) => m.genres.map(g => ((m.year, g), 1)) }
+  val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey { (x: Int, y: Int) => x + y }
+  val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map { (g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey { (firstParameter: (String, Int), secondParameter: (String, Int)) => {
+    val originalFunction = ((m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2)(_, _)
+    originalFunction(secondParameter, secondParameter)
+  } }
+  popularGenresByYear
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant89" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel89" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-89.html" class="text-dark">89</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+    val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap((m: Movie) => m.genres.map(g => ((m.year, g), 1)))
+    val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey((x: Int, y: Int) => x + y)
+    val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map((g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)))
+    val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey((m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2)
+    popularGenresByYear
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5, 6, 7, 8]">
+def mostPopularGenresByYear(movies: RDD[Movie]) = {
+  val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap { (m: Movie) => m.genres.map(g => ((m.year, g), 1)) }
+  val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey { (x: Int, y: Int) => x + y }
+  val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map { (g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)) }
+  val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey { (firstParameter: (String, Int), secondParameter: (String, Int)) => {
+    val originalFunction = ((m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2)(_, _)
+    originalFunction(secondParameter, firstParameter)
+  } }
+  popularGenresByYear
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Removed Mutant Modals -->
+
+</main>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+<script type="text/javascript">
+ SyntaxHighlighter.all()
+</script>
+<script >
+$(document).ready(function() {
+  $('table.display').DataTable( {
+    fixedHeader: {
+      header: true,
+      footer: true
+    },
+    "lengthMenu": [[5, 10, 20, -1], [5, 10, 20, "All"]]
+  } );
+} );
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+});
+</script>
+
+<script >
+  var cy = cytoscape({
+    container: document.getElementById('cy'), // container to render in
+    elements: [ // list of graph elements to start with
+      { // dataset node 12
+  data: { id: 'dataset_12' , name : 'movies' , dataset : 'true' , inputDataset: 'true'  }
+}, 
+{ // transformation node 8
+  data: { id: 'transformation_8' , name : 'flatMap' , transformation : 'true'  }
+}, 
+{ // edge node 15
+  data: { id: 'edge_15' , source: 'dataset_12', target: 'transformation_8'  }
+}, 
+{ // dataset node 13
+  data: { id: 'dataset_13' , name : 'yearGenreTuple' , dataset : 'true'   }
+}, 
+{ // edge node 16
+  data: { id: 'edge_16'  , target: 'dataset_13', source: 'transformation_8' }
+}, 
+{ // transformation node 9
+  data: { id: 'transformation_9' , name : 'reduceByKey' , transformation : 'true'  }
+}, 
+{ // edge node 17
+  data: { id: 'edge_17' , source: 'dataset_13', target: 'transformation_9'  }
+}, 
+{ // dataset node 14
+  data: { id: 'dataset_14' , name : 'yearGenreCount' , dataset : 'true'   }
+}, 
+{ // edge node 18
+  data: { id: 'edge_18'  , target: 'dataset_14', source: 'transformation_9' }
+}, 
+{ // transformation node 10
+  data: { id: 'transformation_10' , name : 'map' , transformation : 'true'  }
+}, 
+{ // edge node 19
+  data: { id: 'edge_19' , source: 'dataset_14', target: 'transformation_10'  }
+}, 
+{ // dataset node 15
+  data: { id: 'dataset_15' , name : 'yearGenreCountTuple' , dataset : 'true'   }
+}, 
+{ // edge node 20
+  data: { id: 'edge_20'  , target: 'dataset_15', source: 'transformation_10' }
+}, 
+{ // transformation node 11
+  data: { id: 'transformation_11' , name : 'reduceByKey' , transformation : 'true'  }
+}, 
+{ // edge node 21
+  data: { id: 'edge_21' , source: 'dataset_15', target: 'transformation_11'  }
+}, 
+{ // dataset node 16
+  data: { id: 'dataset_16' , name : 'popularGenresByYear' , dataset : 'true'  , outputDataset: 'true' }
+}, 
+{ // edge node 22
+  data: { id: 'edge_22'  , target: 'dataset_16', source: 'transformation_11' }
+}
+    ],
+   style: [ // the stylesheet for the graph
+   {
+     selector: 'node',
+     style: {
+       'label': 'data(name)'
+     }
+   },
+   {
+     selector: 'edge',
+     style: {
+     'width': 3,
+     'line-color': '#ccc',
+     'target-arrow-color': '#ccc',
+     'target-arrow-shape': 'triangle',
+     }
+   },
+   {
+      selector: '[transformation]',
+      style: {
+        'background-color': 'black',
+        'shape': 'rectangle'
+       }
+   },
+   {
+      selector: '[dataset]',
+      style: {
+        'background-color': 'gray',
+        'shape': 'ellipse'
+      }
+   },
+   {
+      selector: '[inputDataset]',
+      style: {
+        'background-color': 'green',
+        'shape': 'ellipse'
+       }
+   },
+   {
+     selector: '[outputDataset]',
+     style: {
+       'background-color': 'red',
+       'shape': 'ellipse'
+      }
+   },
+   {
+      selector: '[loadTransformation]',
+      style: {
+        'background-color': 'red',
+        'shape': 'rectangle'
+       }
+   }
+  ],
+  layout: {
+    name: 'grid',
+    rows: 1
+  }
+});
+</script>
+    
+</body>
+</html>
+    

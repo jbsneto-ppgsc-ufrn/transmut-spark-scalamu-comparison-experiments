@@ -1,0 +1,2002 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/scripts/shCore.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/scripts/shBrushScala.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/styles/shCoreEclipse.css" rel="stylesheet" type="text/css" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/styles/shThemeEclipse.min.css" rel="stylesheet" type="text/css" />
+<!-- Cytoscape -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/2.5.1/cytoscape.min.js"></script>
+<!-- DataTable -->
+<link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<style>
+#cy {
+  width: 1100px;
+  height: 300px;
+  background-color: white;
+}
+body {
+  padding-top: 5rem;
+}
+.starter-template {
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+.section-title {
+  padding-top: 3.5rem;
+}
+</style>
+<title>TRANSMUT-Spark Mutation Testing Report</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+<a class="navbar-brand" href="../index.html">TRANSMUT-Spark</a>
+<div class="collapse navbar-collapse" id="navbarNav">
+  <ul class="navbar-nav mr-auto">
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Section</a>
+      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <a class="dropdown-item" href="#metrics">Metrics</a>
+        <a class="dropdown-item" href="#code">Code</a>
+        <a class="dropdown-item" href="#dag">DAG</a>
+        <a class="dropdown-item" href="#datasets">Datasets</a>
+        <a class="dropdown-item" href="#transformations">Transformations</a>
+        <a class="dropdown-item" href="#mutants">Mutants</a>
+        <a class="dropdown-item" href="#removedMutants">Removed Mutants</a>
+        <a class="dropdown-item" href="#mutationOperators">Mutation Operators</a>
+      </div>
+    </li>
+  </ul>
+</div>
+</nav>
+<main role"main" class="container">  
+<div class="starter-template">
+  <h2><a href="../index.html" class="text-dark">Mutation Testing Report</a></h2>
+  <h3><a href="../ProgramSources/Program-Source-1.html" class="text-dark">Program Source: MovieLensExploration</a></h3>
+  <h4><a href="#" class="text-dark">Program ID: 4</a></h4>
+  <h4><a href="#" class="text-dark">Program: ratingsStatistics</a></h4>
+</div>    
+<!-- Metrics -->
+<div class="row" id="metrics">
+<div class="col" >
+<h3 class="section-title">Metrics</h3>
+<hr class="my-4">
+<table class="table table-striped table-hover">
+<thead class="thead-dark"><tr><th scope="col">#</th><th scope="col">Total</th></tr></thead>
+<tbody>
+  <tr><th scope="row">Datasets</th><td>8</td></tr>
+  <tr><th scope="row">Transformations</th><td>6</td></tr>
+  <tr><th scope="row">Mutants</th><td>26</td></tr>
+  <tr><th scope="row">Killed Mutants</th><td>24</td></tr>
+  <tr><th scope="row">Lived Mutants</th><td>0</td></tr>
+  <tr><th scope="row">Equivalent Mutants</th><td>2</td></tr>
+  <tr><th scope="row">Error Mutants</th><td>0</td></tr>
+  <tr><th scope="row">Removed Mutants</th><td>0</td></tr>
+  <tr><th scope="row">Mutation Score</th>
+  <td>
+    <div class="progress">
+      <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 100.00%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><span class="font-weight-bold text-dark">1.00</span></div>
+    </div>
+  </td>
+  </tr>
+ </tbody>
+ <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+    <th scope="row"></th>
+    <td></td>
+    </tr>
+  </tfoot>
+</table>
+     
+<hr class="my-4">
+</div>
+</div>
+<!-- Code -->
+<div class="row" id="code">
+<div class="col">
+<h3 class="section-title">Code</h3>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false;">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))
+    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))
+    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))
+    ratingsStats
+  }
+</pre>
+<hr class="my-4">
+</div>
+</div>
+<!-- DAG -->
+<div class="row" id="dag">
+<div class="col" >
+<h3 class="section-title">DAG</h3>
+<hr class="my-4">
+<figure class="figure">
+<div id="cy"></div>
+</figure>
+<hr class="my-4">
+</div> 
+</div>
+<!-- Datasets -->
+<div class="row" id="datasets">
+<div class="col" >
+<h3 class="section-title">Datasets</h3>
+<hr class="my-4">
+<table class="table table-striped table-hover">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Reference</th>
+      <th scope="col">Type</th>
+   </tr>
+  </thead>
+  <tbody>
+  <tr>
+  <th scope="row">17</th>
+  <td>movies</td>
+  <td>RDD[Movie]</td>
+</tr>
+<tr>
+  <th scope="row">18</th>
+  <td>ratings</td>
+  <td>RDD[Rating]</td>
+</tr>
+<tr>
+  <th scope="row">19</th>
+  <td>moviesIdKey</td>
+  <td>RDD[(Int, Movie)]</td>
+</tr>
+<tr>
+  <th scope="row">20</th>
+  <td>ratingsMovieIdKey</td>
+  <td>RDD[(Int, Rating)]</td>
+</tr>
+<tr>
+  <th scope="row">21</th>
+  <td>joinMoviesRatings</td>
+  <td>RDD[(Int, (Movie, Rating))]</td>
+</tr>
+<tr>
+  <th scope="row">22</th>
+  <td>moviesInfoCounts</td>
+  <td>RDD[(Tuple3[Int, String, Int], Double)]</td>
+</tr>
+<tr>
+  <th scope="row">23</th>
+  <td>groupByMoviesInfo</td>
+  <td>RDD[(Tuple3[Int, String, Int], Iterable[Double])]</td>
+</tr>
+<tr>
+  <th scope="row">24</th>
+  <td>ratingsStats</td>
+  <td>RDD[(Tuple3[Int, String, Int], Tuple4[Int, Double, Double, Double])]</td>
+</tr>
+  </tbody>
+  <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+    <th scope="row" colspan="2">Total Datasets</th>
+    <td>8</td>
+    </tr>
+  </tfoot>
+</table>      
+    
+<hr class="my-4">
+</div>
+</div>
+<!-- Transformations -->
+<div class="row" id="transformations">
+<div class="col" >
+<h3 class="section-title" id="transformations">Transformations</h3>
+<hr class="my-4">
+<table class="table table-striped table-hover">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Name</th>
+      <th scope="col">Input Type</th>
+      <th scope="col">Output Type</th>
+   </tr>
+  </thead>
+  <tbody>
+  <tr>
+  <th scope="row">12</th>
+  <td>map</td>
+  <td>RDD[Movie]</td>
+  <td>RDD[(Int, Movie)]</td>
+</tr>
+<tr>
+  <th scope="row">13</th>
+  <td>map</td>
+  <td>RDD[Rating]</td>
+  <td>RDD[(Int, Rating)]</td>
+</tr>
+<tr>
+  <th scope="row">14</th>
+  <td>join</td>
+  <td>RDD[(Int, Movie)], RDD[(Int, Rating)]</td>
+  <td>RDD[(Int, (Movie, Rating))]</td>
+</tr>
+<tr>
+  <th scope="row">15</th>
+  <td>map</td>
+  <td>RDD[(Int, (Movie, Rating))]</td>
+  <td>RDD[(Tuple3[Int, String, Int], Double)]</td>
+</tr>
+<tr>
+  <th scope="row">16</th>
+  <td>groupByKey</td>
+  <td>RDD[(Tuple3[Int, String, Int], Double)]</td>
+  <td>RDD[(Tuple3[Int, String, Int], Iterable[Double])]</td>
+</tr>
+<tr>
+  <th scope="row">17</th>
+  <td>map</td>
+  <td>RDD[(Tuple3[Int, String, Int], Iterable[Double])]</td>
+  <td>RDD[(Tuple3[Int, String, Int], Tuple4[Int, Double, Double, Double])]</td>
+</tr>
+  </tbody>
+  <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+    <th scope="row" colspan="3">Total Transformations</th>
+    <td>6</td>
+    </tr>
+  </tfoot>
+</table>      
+    
+<hr class="my-4">   
+</div>
+</div>
+<!-- Mutants -->
+<div class="row" id="mutants">
+<div class="col">
+<h3 class="section-title">Mutants</h3>
+<hr class="my-4">
+<table class="display table table-striped table-hover" id="mutantsTable">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Mutation Operator</th>
+      <th scope="col">Status</th>
+      <th scope="col">Code</th>
+     </tr>
+  </thead>
+  <tbody>
+    <tr>
+  <th scope="row"><a href="../Mutants/Mutant-90.html" class="text-dark">90</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant90">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-91.html" class="text-dark">91</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant91">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-92.html" class="text-dark">92</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant92">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-93.html" class="text-dark">93</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant93">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-94.html" class="text-dark">94</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant94">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-95.html" class="text-dark">95</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant95">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-96.html" class="text-dark">96</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant96">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-97.html" class="text-dark">97</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant97">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-98.html" class="text-dark">98</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant98">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-99.html" class="text-dark">99</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant99">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-100.html" class="text-dark">100</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant100">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-101.html" class="text-dark">101</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant101">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-102.html" class="text-dark">102</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant102">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-103.html" class="text-dark">103</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant103">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-104.html" class="text-dark">104</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant104">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-105.html" class="text-dark">105</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant105">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-106.html" class="text-dark">106</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant106">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-107.html" class="text-dark">107</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant107">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-108.html" class="text-dark">108</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant108">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-109.html" class="text-dark">109</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant109">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-110.html" class="text-dark">110</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant110">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-111.html" class="text-dark">111</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></td>
+  <td>Equivalent</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant111">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-112.html" class="text-dark">112</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></td>
+  <td>Equivalent</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant112">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-113.html" class="text-dark">113</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Join Transformation Replacement">JTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant113">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-114.html" class="text-dark">114</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Join Transformation Replacement">JTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant114">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-115.html" class="text-dark">115</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Join Transformation Replacement">JTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant115">Show</button></td>
+</tr>
+  </tbody>
+  <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+      <th scope="row" colspan="2">Mutation Score</th>
+      <td colspan="2">
+        <div class="progress">
+          <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 100.00%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><span class="font-weight-bold text-dark">1.00</span></div>
+        </div>
+      </td>
+    </tr>
+  </tfoot>
+</table>   
+   
+<hr class="my-4">
+</div>
+</div>
+<!-- Removed Mutants -->
+<div class="row" id="removedMutants">
+<div class="col">
+<h3 class="section-title">Removed Mutants</h3>
+<hr class="my-4">
+<table class="display table table-striped table-hover" id="removedMutantsTable">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Mutation Operator</th>
+      <th scope="col">Reduction Rule</th>
+      <th scope="col">Code</th>
+     </tr>
+  </thead>
+  <tbody>
+    
+  </tbody>
+  <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+      <th scope="row" colspan="2">Total Removed Mutants</th>
+      <td colspan="2">0</td>
+    </tr>
+  </tfoot>
+</table>   
+   
+<hr class="my-4">
+</div>
+</div>
+<!-- Mutation Operators -->
+<div class="row" id="mutationOperators">
+<div class="col">
+<h3 class="section-title">Mutation Operators</h3>
+<hr class="my-4">
+<table class="display table table-striped table-hover" id="programSourcesTable">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Mutation Operator</th>
+      <th scope="col">Mutants</th>
+      <th scope="col">Killed</th>
+      <th scope="col">Lived</th>
+      <th scope="col">Equivalent</th>
+      <th scope="col">Error</th>
+      <th scope="col">Removed</th>
+      </tr>
+  </thead>
+  <tbody>
+    <tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Join Transformation Replacement">JTR</a></th>
+  <td>3</td>
+  <td>3</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+<tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></th>
+  <td>17</td>
+  <td>17</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+<tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></th>
+  <td>6</td>
+  <td>4</td>
+  <td>0</td>
+  <td>2</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+  </tbody>
+  <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+      <th scope="row">Total</th>
+      <td>26</td>
+      <td>24</td>
+      <td>0</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+  </tfoot>
+</table>   
+   
+<hr class="my-4">
+</div>
+</div>
+<!-- Mutant Modals -->
+<div class="modal fade" id="modalMutant90" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel90" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-90.html" class="text-dark">90</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))
+    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))
+    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))
+    ratingsStats
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2, 3, 4, 5, 6]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (inputParameter: Movie) => {
+    val originalFunction = ((m: Movie) => (m.movieId, m))(_)
+    val originalValue = originalFunction(inputParameter)
+    (0, originalValue._2)
+  } }
+  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (r: Rating) => (r.movieId, r) }
+  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating) }
+  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }
+  ratingsStats
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant91" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel91" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-91.html" class="text-dark">91</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))
+    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))
+    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))
+    ratingsStats
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2, 3, 4, 5, 6]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (inputParameter: Movie) => {
+    val originalFunction = ((m: Movie) => (m.movieId, m))(_)
+    val originalValue = originalFunction(inputParameter)
+    (1, originalValue._2)
+  } }
+  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (r: Rating) => (r.movieId, r) }
+  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating) }
+  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }
+  ratingsStats
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant92" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel92" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-92.html" class="text-dark">92</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))
+    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))
+    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))
+    ratingsStats
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2, 3, 4, 5, 6]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (inputParameter: Movie) => {
+    val originalFunction = ((m: Movie) => (m.movieId, m))(_)
+    val originalValue = originalFunction(inputParameter)
+    (Int.MaxValue, originalValue._2)
+  } }
+  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (r: Rating) => (r.movieId, r) }
+  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating) }
+  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }
+  ratingsStats
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant93" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel93" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-93.html" class="text-dark">93</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))
+    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))
+    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))
+    ratingsStats
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2, 3, 4, 5, 6]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (inputParameter: Movie) => {
+    val originalFunction = ((m: Movie) => (m.movieId, m))(_)
+    val originalValue = originalFunction(inputParameter)
+    (Int.MinValue, originalValue._2)
+  } }
+  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (r: Rating) => (r.movieId, r) }
+  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating) }
+  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }
+  ratingsStats
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant94" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel94" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-94.html" class="text-dark">94</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))
+    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))
+    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))
+    ratingsStats
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2, 3, 4, 5, 6]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (inputParameter: Movie) => {
+    val originalFunction = ((m: Movie) => (m.movieId, m))(_)
+    val originalValue = originalFunction(inputParameter)
+    (-originalValue._1, originalValue._2)
+  } }
+  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (r: Rating) => (r.movieId, r) }
+  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating) }
+  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }
+  ratingsStats
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant95" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel95" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-95.html" class="text-dark">95</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))
+    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))
+    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))
+    ratingsStats
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2, 3, 4, 5, 6]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (inputParameter: Movie) => {
+    val originalFunction = ((m: Movie) => (m.movieId, m))(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, null.asInstanceOf[Movie])
+  } }
+  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (r: Rating) => (r.movieId, r) }
+  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating) }
+  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }
+  ratingsStats
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant96" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel96" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-96.html" class="text-dark">96</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))
+    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))
+    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))
+    ratingsStats
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3, 4, 5, 6, 7]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (inputParameter: Rating) => {
+    val originalFunction = ((r: Rating) => (r.movieId, r))(_)
+    val originalValue = originalFunction(inputParameter)
+    (0, originalValue._2)
+  } }
+  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating) }
+  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }
+  ratingsStats
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant97" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel97" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-97.html" class="text-dark">97</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))
+    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))
+    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))
+    ratingsStats
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3, 4, 5, 6, 7]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (inputParameter: Rating) => {
+    val originalFunction = ((r: Rating) => (r.movieId, r))(_)
+    val originalValue = originalFunction(inputParameter)
+    (1, originalValue._2)
+  } }
+  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating) }
+  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }
+  ratingsStats
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant98" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel98" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-98.html" class="text-dark">98</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))
+    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))
+    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))
+    ratingsStats
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3, 4, 5, 6, 7]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (inputParameter: Rating) => {
+    val originalFunction = ((r: Rating) => (r.movieId, r))(_)
+    val originalValue = originalFunction(inputParameter)
+    (Int.MaxValue, originalValue._2)
+  } }
+  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating) }
+  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }
+  ratingsStats
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant99" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel99" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-99.html" class="text-dark">99</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))
+    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))
+    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))
+    ratingsStats
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3, 4, 5, 6, 7]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (inputParameter: Rating) => {
+    val originalFunction = ((r: Rating) => (r.movieId, r))(_)
+    val originalValue = originalFunction(inputParameter)
+    (Int.MinValue, originalValue._2)
+  } }
+  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating) }
+  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }
+  ratingsStats
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant100" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel100" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-100.html" class="text-dark">100</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))
+    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))
+    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))
+    ratingsStats
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3, 4, 5, 6, 7]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (inputParameter: Rating) => {
+    val originalFunction = ((r: Rating) => (r.movieId, r))(_)
+    val originalValue = originalFunction(inputParameter)
+    (-originalValue._1, originalValue._2)
+  } }
+  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating) }
+  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }
+  ratingsStats
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant101" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel101" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-101.html" class="text-dark">101</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))
+    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))
+    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))
+    ratingsStats
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3, 4, 5, 6, 7]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (inputParameter: Rating) => {
+    val originalFunction = ((r: Rating) => (r.movieId, r))(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, null.asInstanceOf[Rating])
+  } }
+  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating) }
+  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }
+  ratingsStats
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant102" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel102" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-102.html" class="text-dark">102</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))
+    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))
+    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))
+    ratingsStats
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5, 6, 7, 8, 9]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (r: Rating) => (r.movieId, r) }
+  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (inputParameter: (Int, (Movie, Rating))) => {
+    val originalFunction = ((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, 0d)
+  } }
+  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }
+  ratingsStats
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant103" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel103" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-103.html" class="text-dark">103</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))
+    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))
+    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))
+    ratingsStats
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5, 6, 7, 8, 9]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (r: Rating) => (r.movieId, r) }
+  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (inputParameter: (Int, (Movie, Rating))) => {
+    val originalFunction = ((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, 1d)
+  } }
+  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }
+  ratingsStats
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant104" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel104" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-104.html" class="text-dark">104</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))
+    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))
+    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))
+    ratingsStats
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5, 6, 7, 8, 9]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (r: Rating) => (r.movieId, r) }
+  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (inputParameter: (Int, (Movie, Rating))) => {
+    val originalFunction = ((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, Double.MaxValue)
+  } }
+  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }
+  ratingsStats
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant105" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel105" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-105.html" class="text-dark">105</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))
+    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))
+    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))
+    ratingsStats
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5, 6, 7, 8, 9]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (r: Rating) => (r.movieId, r) }
+  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (inputParameter: (Int, (Movie, Rating))) => {
+    val originalFunction = ((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, Double.MinValue)
+  } }
+  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }
+  ratingsStats
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant106" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel106" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-106.html" class="text-dark">106</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))
+    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))
+    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))
+    ratingsStats
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5, 6, 7, 8, 9]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (r: Rating) => (r.movieId, r) }
+  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (inputParameter: (Int, (Movie, Rating))) => {
+    val originalFunction = ((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, -originalValue._2)
+  } }
+  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }
+  ratingsStats
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant107" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel107" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-107.html" class="text-dark">107</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))
+    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))
+    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))
+    ratingsStats
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }.distinct()
+  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (r: Rating) => (r.movieId, r) }
+  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating) }
+  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }
+  ratingsStats
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant108" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel108" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-108.html" class="text-dark">108</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))
+    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))
+    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))
+    ratingsStats
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (r: Rating) => (r.movieId, r) }.distinct()
+  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating) }
+  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }
+  ratingsStats
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant109" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel109" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-109.html" class="text-dark">109</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))
+    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))
+    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))
+    ratingsStats
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (r: Rating) => (r.movieId, r) }
+  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey).distinct()
+  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating) }
+  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }
+  ratingsStats
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant110" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel110" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-110.html" class="text-dark">110</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))
+    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))
+    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))
+    ratingsStats
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (r: Rating) => (r.movieId, r) }
+  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating) }.distinct()
+  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }
+  ratingsStats
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant111" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel111" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-111.html" class="text-dark">111</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></h5>
+<h5>Status: Equivalent</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [6]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))
+    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))
+    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))
+    ratingsStats
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [6]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (r: Rating) => (r.movieId, r) }
+  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating) }
+  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey().distinct()
+  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }
+  ratingsStats
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant112" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel112" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-112.html" class="text-dark">112</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></h5>
+<h5>Status: Equivalent</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [7]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))
+    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))
+    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))
+    ratingsStats
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [7]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (r: Rating) => (r.movieId, r) }
+  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating) }
+  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }.distinct()
+  ratingsStats
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant113" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel113" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-113.html" class="text-dark">113</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Join Transformation Replacement">JTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))
+    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))
+    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))
+    ratingsStats
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (r: Rating) => (r.movieId, r) }
+  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.leftOuterJoin(ratingsMovieIdKey).map(tuple => (tuple._1, (tuple._2._1, tuple._2._2.getOrElse(null.asInstanceOf[Rating]))))
+  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating) }
+  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }
+  ratingsStats
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant114" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel114" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-114.html" class="text-dark">114</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Join Transformation Replacement">JTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))
+    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))
+    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))
+    ratingsStats
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (r: Rating) => (r.movieId, r) }
+  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.rightOuterJoin(ratingsMovieIdKey).map(tuple => (tuple._1, (tuple._2._1.getOrElse(null.asInstanceOf[Movie]), tuple._2._2)))
+  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating) }
+  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }
+  ratingsStats
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant115" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel115" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-115.html" class="text-dark">115</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Join Transformation Replacement">JTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))
+    val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map((r: Rating) => (r.movieId, r))
+    val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.join(ratingsMovieIdKey)
+    val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map((tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating))
+    val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+    val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map((x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)))
+    ratingsStats
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def ratingsStatistics(movies: RDD[Movie], ratings: RDD[Rating]): RDD[((Int, String, Int), (Int, Double, Double, Double))] = {
+  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }
+  val ratingsMovieIdKey: RDD[(Int, Rating)] = ratings.map { (r: Rating) => (r.movieId, r) }
+  val joinMoviesRatings: RDD[(Int, (Movie, Rating))] = moviesIdKey.fullOuterJoin(ratingsMovieIdKey).map(tuple => (tuple._1, (tuple._2._1.getOrElse(null.asInstanceOf[Movie]), tuple._2._2.getOrElse(null.asInstanceOf[Rating]))))
+  val moviesInfoCounts: RDD[((Int, String, Int), Double)] = joinMoviesRatings.map { (tuple: (Int, (Movie, Rating))) => ((tuple._1, tuple._2._1.title, tuple._2._1.year), tuple._2._2.rating) }
+  val groupByMoviesInfo: RDD[((Int, String, Int), Iterable[Double])] = moviesInfoCounts.groupByKey()
+  val ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))] = groupByMoviesInfo.map { (x: ((Int, String, Int), Iterable[Double])) => (x._1, (x._2.size, x._2.sum / x._2.size, x._2.min, x._2.max)) }
+  ratingsStats
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Removed Mutant Modals -->
+
+</main>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+<script type="text/javascript">
+ SyntaxHighlighter.all()
+</script>
+<script >
+$(document).ready(function() {
+  $('table.display').DataTable( {
+    fixedHeader: {
+      header: true,
+      footer: true
+    },
+    "lengthMenu": [[5, 10, 20, -1], [5, 10, 20, "All"]]
+  } );
+} );
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+});
+</script>
+
+<script >
+  var cy = cytoscape({
+    container: document.getElementById('cy'), // container to render in
+    elements: [ // list of graph elements to start with
+      { // dataset node 17
+  data: { id: 'dataset_17' , name : 'movies' , dataset : 'true' , inputDataset: 'true'  }
+}, 
+{ // transformation node 12
+  data: { id: 'transformation_12' , name : 'map' , transformation : 'true'  }
+}, 
+{ // edge node 23
+  data: { id: 'edge_23' , source: 'dataset_17', target: 'transformation_12'  }
+}, 
+{ // dataset node 19
+  data: { id: 'dataset_19' , name : 'moviesIdKey' , dataset : 'true'   }
+}, 
+{ // edge node 24
+  data: { id: 'edge_24'  , target: 'dataset_19', source: 'transformation_12' }
+}, 
+{ // dataset node 18
+  data: { id: 'dataset_18' , name : 'ratings' , dataset : 'true' , inputDataset: 'true'  }
+}, 
+{ // transformation node 13
+  data: { id: 'transformation_13' , name : 'map' , transformation : 'true'  }
+}, 
+{ // edge node 25
+  data: { id: 'edge_25' , source: 'dataset_18', target: 'transformation_13'  }
+}, 
+{ // dataset node 20
+  data: { id: 'dataset_20' , name : 'ratingsMovieIdKey' , dataset : 'true'   }
+}, 
+{ // edge node 26
+  data: { id: 'edge_26'  , target: 'dataset_20', source: 'transformation_13' }
+}, 
+{ // transformation node 14
+  data: { id: 'transformation_14' , name : 'join' , transformation : 'true'  }
+}, 
+{ // edge node 27
+  data: { id: 'edge_27' , source: 'dataset_19', target: 'transformation_14'  }
+}, 
+{ // edge node 28
+  data: { id: 'edge_28' , source: 'dataset_20', target: 'transformation_14'  }
+}, 
+{ // dataset node 21
+  data: { id: 'dataset_21' , name : 'joinMoviesRatings' , dataset : 'true'   }
+}, 
+{ // edge node 29
+  data: { id: 'edge_29'  , target: 'dataset_21', source: 'transformation_14' }
+}, 
+{ // transformation node 15
+  data: { id: 'transformation_15' , name : 'map' , transformation : 'true'  }
+}, 
+{ // edge node 30
+  data: { id: 'edge_30' , source: 'dataset_21', target: 'transformation_15'  }
+}, 
+{ // dataset node 22
+  data: { id: 'dataset_22' , name : 'moviesInfoCounts' , dataset : 'true'   }
+}, 
+{ // edge node 31
+  data: { id: 'edge_31'  , target: 'dataset_22', source: 'transformation_15' }
+}, 
+{ // transformation node 16
+  data: { id: 'transformation_16' , name : 'groupByKey' , transformation : 'true'  }
+}, 
+{ // edge node 32
+  data: { id: 'edge_32' , source: 'dataset_22', target: 'transformation_16'  }
+}, 
+{ // dataset node 23
+  data: { id: 'dataset_23' , name : 'groupByMoviesInfo' , dataset : 'true'   }
+}, 
+{ // edge node 33
+  data: { id: 'edge_33'  , target: 'dataset_23', source: 'transformation_16' }
+}, 
+{ // transformation node 17
+  data: { id: 'transformation_17' , name : 'map' , transformation : 'true'  }
+}, 
+{ // edge node 34
+  data: { id: 'edge_34' , source: 'dataset_23', target: 'transformation_17'  }
+}, 
+{ // dataset node 24
+  data: { id: 'dataset_24' , name : 'ratingsStats' , dataset : 'true'  , outputDataset: 'true' }
+}, 
+{ // edge node 35
+  data: { id: 'edge_35'  , target: 'dataset_24', source: 'transformation_17' }
+}
+    ],
+   style: [ // the stylesheet for the graph
+   {
+     selector: 'node',
+     style: {
+       'label': 'data(name)'
+     }
+   },
+   {
+     selector: 'edge',
+     style: {
+     'width': 3,
+     'line-color': '#ccc',
+     'target-arrow-color': '#ccc',
+     'target-arrow-shape': 'triangle',
+     }
+   },
+   {
+      selector: '[transformation]',
+      style: {
+        'background-color': 'black',
+        'shape': 'rectangle'
+       }
+   },
+   {
+      selector: '[dataset]',
+      style: {
+        'background-color': 'gray',
+        'shape': 'ellipse'
+      }
+   },
+   {
+      selector: '[inputDataset]',
+      style: {
+        'background-color': 'green',
+        'shape': 'ellipse'
+       }
+   },
+   {
+     selector: '[outputDataset]',
+     style: {
+       'background-color': 'red',
+       'shape': 'ellipse'
+      }
+   },
+   {
+      selector: '[loadTransformation]',
+      style: {
+        'background-color': 'red',
+        'shape': 'rectangle'
+       }
+   }
+  ],
+  layout: {
+    name: 'grid',
+    rows: 1
+  }
+});
+</script>
+    
+</body>
+</html>
+    

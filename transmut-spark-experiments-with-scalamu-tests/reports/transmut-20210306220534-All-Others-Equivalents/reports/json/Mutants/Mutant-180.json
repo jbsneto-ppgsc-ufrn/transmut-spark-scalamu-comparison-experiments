@@ -1,0 +1,9 @@
+{
+  "id" : 180,
+  "originalProgramId" : 8,
+  "mutationOperator" : "DTD",
+  "mutationOperatorDescription" : "Distinct Transformation Deletion",
+  "mutantCode" : "def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n  val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)\n  val uniqueLogLines: RDD[String] = aggregatedLogLines\n  val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))\n  cleanLogLines\n}",
+  "originalCode" : "def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n    val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)\n    val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()\n    val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))\n    cleanLogLines\n  }",
+  "status" : "Killed"
+}

@@ -1,0 +1,9 @@
+{
+  "id" : 181,
+  "originalProgramId" : 8,
+  "mutationOperator" : "DTI",
+  "mutationOperatorDescription" : "Distinct Transformation Insertion",
+  "mutantCode" : "def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n  val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs).distinct()\n  val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()\n  val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))\n  cleanLogLines\n}",
+  "originalCode" : "def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n    val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)\n    val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()\n    val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))\n    cleanLogLines\n  }",
+  "status" : "Equivalent"
+}

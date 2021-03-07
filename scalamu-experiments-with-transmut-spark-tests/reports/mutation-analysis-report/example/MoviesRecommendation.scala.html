@@ -1,0 +1,2249 @@
+
+
+<html>
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/languages/scala.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/styles/github.min.css">
+    <script>hljs.initHighlightingOnLoad();</script>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" type="text/css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+
+    <style type="text/css">
+        @import url(&#x27;https://fonts.googleapis.com/css?family=Fira+Mono|Raleway&#x27;);
+
+html,
+body,
+div,
+span,
+p,
+blockquote,
+pre {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-weight: inherit;
+    font-style: inherit;
+    font-size: 100%;
+    font-family: inherit;
+    vertical-align: baseline;
+}
+.meter {
+    height: 16px;
+    position: relative;
+    background: #BB2020;
+}
+.meter span {
+    display: block;
+    height: 100%;
+    background-color: rgb(43, 194, 83);
+    background-image: -webkit-gradient( linear, left bottom, left top, color-stop(0, rgb(43, 194, 83)), color-stop(1, rgb(84, 240, 84)));
+    background-image: -webkit-linear-gradient( center bottom, rgb(43, 194, 83) 37%, rgb(84, 240, 84) 69%);
+    background-image: -moz-linear-gradient( center bottom, rgb(43, 194, 83) 37%, rgb(84, 240, 84) 69%);
+    background-image: -ms-linear-gradient( center bottom, rgb(43, 194, 83) 37%, rgb(84, 240, 84) 69%);
+    background-image: -o-linear-gradient( center bottom, rgb(43, 194, 83) 37%, rgb(84, 240, 84) 69%);
+    -webkit-box-shadow: inset 0 2px 9px rgba(255, 255, 255, 0.3), inset 0 -2px 6px rgba(0, 0, 0, 0.4);
+    -moz-box-shadow: inset 0 2px 9px rgba(255, 255, 255, 0.3), inset 0 -2px 6px rgba(0, 0, 0, 0.4);
+    position: relative;
+    overflow: hidden;
+}
+.popover {
+  max-width: 100%;
+}
+.popover-content {
+  font-size: 15px;
+  font-family: Fira Code, Fira Mono, monospace;
+}
+th {
+    text-align: left;
+}
+body {
+    line-height: 1;
+    color: black;
+    background: white;
+    font-family: Raleway, sans-serif;
+}
+code, pre {
+    font-family: Fira Mono, monospace;
+}
+alert { 
+    border: 0;
+    border-radius: 0;
+}
+.src {
+    padding: 0;
+}
+.hljs {
+    padding: 1px;
+}
+.covered {
+    background-color: #aaffaa
+}
+.uncovered {
+    background-color: #ffaaaa
+}
+.na {
+    background-color: #f8f8f8
+}
+.killed {
+    background-color: #aaffaa
+}
+.no_coverage {
+    background-color: #ffaaaa
+}
+.alive {
+    background-color: #ffaaaa
+}
+.failure {
+    background-color: #FFFF4D;
+}
+.timed_out {
+    background-color: #FFFF4D;
+}
+.oom {
+    background-color: #FFFF4D;
+}
+.untested {
+    background-color: #FFFF4D
+}
+.mono {
+    font-family: Fira Mono, monospace;
+}
+
+    </style>
+</head>
+<body>
+<div class="alert alert-info">
+    <strong>MoviesRecommendation.scala</strong>
+</div>
+
+<table class="src" style="font-size:13px">
+    
+    
+    <tr id="line1">
+        <td class=na>
+            1
+        </td>
+        <td class="na">
+            <a href="#group1"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">package example </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line2">
+        <td class=na>
+            2
+        </td>
+        <td class="na">
+            <a href="#group2"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na"> </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line3">
+        <td class=na>
+            3
+        </td>
+        <td class="na">
+            <a href="#group3"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">import scala.math.sqrt </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line4">
+        <td class=na>
+            4
+        </td>
+        <td class="na">
+            <a href="#group4"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na"> </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line5">
+        <td class=na>
+            5
+        </td>
+        <td class="na">
+            <a href="#group5"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">import org.apache.log4j.Level </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line6">
+        <td class=na>
+            6
+        </td>
+        <td class="na">
+            <a href="#group6"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">import org.apache.log4j.Logger </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line7">
+        <td class=na>
+            7
+        </td>
+        <td class="na">
+            <a href="#group7"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">import org.apache.spark.SparkConf </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line8">
+        <td class=na>
+            8
+        </td>
+        <td class="na">
+            <a href="#group8"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">import org.apache.spark.SparkContext </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line9">
+        <td class=na>
+            9
+        </td>
+        <td class="na">
+            <a href="#group9"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">import org.apache.spark.rdd.RDD </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line10">
+        <td class=na>
+            10
+        </td>
+        <td class="na">
+            <a href="#group10"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na"> </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line11">
+        <td class=na>
+            11
+        </td>
+        <td class="na">
+            <a href="#group11"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">object MoviesRecommendation { </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line12">
+        <td class=na>
+            12
+        </td>
+        <td class="na">
+            <a href="#group12"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na"> </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line13">
+        <td class=na>
+            13
+        </td>
+        <td class="na">
+            <a href="#group13"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">  // ratings.csv has the following data: userId,movieId,rating,timestamp </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line14">
+        <td class=na>
+            14
+        </td>
+        <td class="na">
+            <a href="#group14"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">  // we want (userId,(movieId, rating)) </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line15">
+        <td class=na>
+            15
+        </td>
+        <td class="na">
+            <a href="#group15"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">  def parseRatings(r: String) = { </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line16">
+        <td class=na>
+            16
+        </td>
+        <td class="na">
+            <a href="#group16"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    try { </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line17">
+        <td class=na>
+            17
+        </td>
+        <td class="na">
+            <a href="#group17"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">      val data = r.split(&quot;,&quot;) </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line18">
+        <td class=na>
+            18
+        </td>
+        <td class="na">
+            <a href="#group18"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">      val userId = data(0).toInt </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line19">
+        <td class=na>
+            19
+        </td>
+        <td class="na">
+            <a href="#group19"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">      val movieId = data(1).toInt </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line20">
+        <td class=na>
+            20
+        </td>
+        <td class="na">
+            <a href="#group20"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">      val rating = data(2).toDouble </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line21">
+        <td class=covered>
+            21
+        </td>
+        <td class="covered">
+            <a href="#group21"><b>1</b></a>
+        </td>
+        <td width="99%" class="covered">
+            <pre><code class="scala covered">      Some((userId, (movieId, rating))) </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line22">
+        <td class=na>
+            22
+        </td>
+        <td class="na">
+            <a href="#group22"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    } catch { </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line23">
+        <td class=na>
+            23
+        </td>
+        <td class="na">
+            <a href="#group23"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">      case _: Throwable =&gt; None </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line24">
+        <td class=na>
+            24
+        </td>
+        <td class="na">
+            <a href="#group24"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    } </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line25">
+        <td class=na>
+            25
+        </td>
+        <td class="na">
+            <a href="#group25"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">  } </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line26">
+        <td class=na>
+            26
+        </td>
+        <td class="na">
+            <a href="#group26"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na"> </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line27">
+        <td class=na>
+            27
+        </td>
+        <td class="na">
+            <a href="#group27"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">  // filter duplicates by keeping only the pairs which the first movie id is less than the second movie id </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line28">
+        <td class=na>
+            28
+        </td>
+        <td class="na">
+            <a href="#group28"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">  def removeDuplicates(u: (Int, ((Int, Double), (Int, Double)))): Boolean = { </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line29">
+        <td class=na>
+            29
+        </td>
+        <td class="na">
+            <a href="#group29"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    val movieId1 = u._2._1._1 </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line30">
+        <td class=na>
+            30
+        </td>
+        <td class="na">
+            <a href="#group30"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    val movieId2 = u._2._2._1 </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line31">
+        <td class=covered>
+            31
+        </td>
+        <td class="covered">
+            <a href="#group31"><b>2</b></a>
+        </td>
+        <td width="99%" class="covered">
+            <pre><code class="scala covered">    return movieId1 &lt; movieId2 </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line32">
+        <td class=na>
+            32
+        </td>
+        <td class="na">
+            <a href="#group32"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">  } </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line33">
+        <td class=na>
+            33
+        </td>
+        <td class="na">
+            <a href="#group33"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na"> </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line34">
+        <td class=na>
+            34
+        </td>
+        <td class="na">
+            <a href="#group34"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">  // we get the pair of correlated movies and the pair of their ratings </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line35">
+        <td class=na>
+            35
+        </td>
+        <td class="na">
+            <a href="#group35"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">  def makeCorrelatedMoviesPairs(u: (Int, ((Int, Double), (Int, Double)))) = { </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line36">
+        <td class=na>
+            36
+        </td>
+        <td class="na">
+            <a href="#group36"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    val movieId1 = u._2._1._1 </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line37">
+        <td class=na>
+            37
+        </td>
+        <td class="na">
+            <a href="#group37"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    val rating1 = u._2._1._2 </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line38">
+        <td class=na>
+            38
+        </td>
+        <td class="na">
+            <a href="#group38"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    val movieId2 = u._2._2._1 </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line39">
+        <td class=na>
+            39
+        </td>
+        <td class="na">
+            <a href="#group39"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    val rating2 = u._2._2._2 </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line40">
+        <td class=na>
+            40
+        </td>
+        <td class="na">
+            <a href="#group40"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    ((movieId1, movieId2), (rating1, rating2)) </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line41">
+        <td class=na>
+            41
+        </td>
+        <td class="na">
+            <a href="#group41"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">  } </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line42">
+        <td class=na>
+            42
+        </td>
+        <td class="na">
+            <a href="#group42"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na"> </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line43">
+        <td class=na>
+            43
+        </td>
+        <td class="na">
+            <a href="#group43"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">  // calculate the similarity between two movies using the cosine-base similarity </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line44">
+        <td class=na>
+            44
+        </td>
+        <td class="na">
+            <a href="#group44"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">  // returns (similarity, number of pairs) </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line45">
+        <td class=na>
+            45
+        </td>
+        <td class="na">
+            <a href="#group45"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">  def similarity(pairs: Iterable[(Double, Double)]): (Double, Int) = { </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line46">
+        <td class=na>
+            46
+        </td>
+        <td class="na">
+            <a href="#group46"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    var sumAA: Double = 0.0 </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line47">
+        <td class=na>
+            47
+        </td>
+        <td class="na">
+            <a href="#group47"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    var sumBB: Double = 0.0 </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line48">
+        <td class=na>
+            48
+        </td>
+        <td class="na">
+            <a href="#group48"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    var sumAB: Double = 0.0 </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line49">
+        <td class=covered>
+            49
+        </td>
+        <td class="covered">
+            <a href="#group49"><b>1</b></a>
+        </td>
+        <td width="99%" class="covered">
+            <pre><code class="scala covered">    for (pair &lt;- pairs) { </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line50">
+        <td class=na>
+            50
+        </td>
+        <td class="na">
+            <a href="#group50"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">      val A = pair._1 </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line51">
+        <td class=na>
+            51
+        </td>
+        <td class="na">
+            <a href="#group51"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">      val B = pair._2 </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line52">
+        <td class=covered>
+            52
+        </td>
+        <td class="covered">
+            <a href="#group52"><b>4</b></a>
+        </td>
+        <td width="99%" class="covered">
+            <pre><code class="scala covered">      sumAA += A * A </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line53">
+        <td class=covered>
+            53
+        </td>
+        <td class="covered">
+            <a href="#group53"><b>4</b></a>
+        </td>
+        <td width="99%" class="covered">
+            <pre><code class="scala covered">      sumBB += B * B </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line54">
+        <td class=covered>
+            54
+        </td>
+        <td class="covered">
+            <a href="#group54"><b>4</b></a>
+        </td>
+        <td width="99%" class="covered">
+            <pre><code class="scala covered">      sumAB += A * B </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line55">
+        <td class=na>
+            55
+        </td>
+        <td class="na">
+            <a href="#group55"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    } </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line56">
+        <td class=na>
+            56
+        </td>
+        <td class="na">
+            <a href="#group56"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na"> </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line57">
+        <td class=na>
+            57
+        </td>
+        <td class="na">
+            <a href="#group57"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    val num: Double = sumAB </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line58">
+        <td class=covered>
+            58
+        </td>
+        <td class="covered">
+            <a href="#group58"><b>2</b></a>
+        </td>
+        <td width="99%" class="covered">
+            <pre><code class="scala covered">    val den = sqrt(sumAA) * sqrt(sumBB) </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line59">
+        <td class=na>
+            59
+        </td>
+        <td class="na">
+            <a href="#group59"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na"> </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line60">
+        <td class=na>
+            60
+        </td>
+        <td class="na">
+            <a href="#group60"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    var sim: Double = 0.0 </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line61">
+        <td class=uncovered>
+            61
+        </td>
+        <td class="uncovered">
+            <a href="#group61"><b>3</b></a>
+        </td>
+        <td width="99%" class="uncovered">
+            <pre><code class="scala uncovered">    if (den != 0) { </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line62">
+        <td class=covered>
+            62
+        </td>
+        <td class="covered">
+            <a href="#group62"><b>2</b></a>
+        </td>
+        <td width="99%" class="covered">
+            <pre><code class="scala covered">      sim = num / den </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line63">
+        <td class=na>
+            63
+        </td>
+        <td class="na">
+            <a href="#group63"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    } </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line64">
+        <td class=na>
+            64
+        </td>
+        <td class="na">
+            <a href="#group64"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    (sim, pairs.size) </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line65">
+        <td class=na>
+            65
+        </td>
+        <td class="na">
+            <a href="#group65"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">  } </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line66">
+        <td class=na>
+            66
+        </td>
+        <td class="na">
+            <a href="#group66"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na"> </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line67">
+        <td class=na>
+            67
+        </td>
+        <td class="na">
+            <a href="#group67"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">  // filter similarities greater than or equal to 0.9 and number of pairs greater than or equal to 900 </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line68">
+        <td class=na>
+            68
+        </td>
+        <td class="na">
+            <a href="#group68"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">  // we use 0.9 and 900 as thresholds to get &quot;relevant&quot; similarities to a better recommendation, this values can be changed according to different criteria </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line69">
+        <td class=na>
+            69
+        </td>
+        <td class="na">
+            <a href="#group69"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">  def relevantSimilarities(sim: ((Int, Int), (Double, Int)), minimumSimilarity: Double, minimumPairs: Int) = { </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line70">
+        <td class=uncovered>
+            70
+        </td>
+        <td class="uncovered">
+            <a href="#group70"><b>6</b></a>
+        </td>
+        <td width="99%" class="uncovered">
+            <pre><code class="scala uncovered">    sim._2._1 &gt; minimumSimilarity &amp;&amp; sim._2._2 &gt; minimumPairs </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line71">
+        <td class=na>
+            71
+        </td>
+        <td class="na">
+            <a href="#group71"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">  } </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line72">
+        <td class=na>
+            72
+        </td>
+        <td class="na">
+            <a href="#group72"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na"> </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line73">
+        <td class=na>
+            73
+        </td>
+        <td class="na">
+            <a href="#group73"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">  // we make a tuple of (movie id, (similar movie id, similarity score)) </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line74">
+        <td class=na>
+            74
+        </td>
+        <td class="na">
+            <a href="#group74"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">  // to get the top N recommended movies for each movie we do a redundancy to group by movie id </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line75">
+        <td class=na>
+            75
+        </td>
+        <td class="na">
+            <a href="#group75"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">  def makeMoviesSimilaritiesPairs(sim: ((Int, Int), (Double, Int))) = { </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line76">
+        <td class=na>
+            76
+        </td>
+        <td class="na">
+            <a href="#group76"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    val movieId = sim._1._1 </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line77">
+        <td class=na>
+            77
+        </td>
+        <td class="na">
+            <a href="#group77"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    val similarMovieId = sim._1._2 </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line78">
+        <td class=na>
+            78
+        </td>
+        <td class="na">
+            <a href="#group78"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    val similarityScore = sim._2._1 </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line79">
+        <td class=na>
+            79
+        </td>
+        <td class="na">
+            <a href="#group79"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    Array((movieId, (similarMovieId, similarityScore)), (similarMovieId, (movieId, similarityScore))) </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line80">
+        <td class=na>
+            80
+        </td>
+        <td class="na">
+            <a href="#group80"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">  } </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line81">
+        <td class=na>
+            81
+        </td>
+        <td class="na">
+            <a href="#group81"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na"> </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line82">
+        <td class=na>
+            82
+        </td>
+        <td class="na">
+            <a href="#group82"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">  // we create a sequence with movie id and the top N recommended movies based on this movie in csv format </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line83">
+        <td class=na>
+            83
+        </td>
+        <td class="na">
+            <a href="#group83"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">  // movieId,recommendedMovieId1,recommendedMovieId2,recommendedMovieId3,...,recommendedMovieIdN </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line84">
+        <td class=na>
+            84
+        </td>
+        <td class="na">
+            <a href="#group84"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">  def makeTopNRecommendedMoviesCSV(similarMovies: (Int, Iterable[(Int, Double)]), n: Int) = { </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line85">
+        <td class=na>
+            85
+        </td>
+        <td class="na">
+            <a href="#group85"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    val movieId = similarMovies._1 </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line86">
+        <td class=na>
+            86
+        </td>
+        <td class="na">
+            <a href="#group86"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    val sortedSimilarMovies = similarMovies._2.toList.sortBy(_._2).reverse </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line87">
+        <td class=na>
+            87
+        </td>
+        <td class="na">
+            <a href="#group87"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    var recommendedMovies = movieId.toString </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line88">
+        <td class=na>
+            88
+        </td>
+        <td class="na">
+            <a href="#group88"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    var i = 0 </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line89">
+        <td class=uncovered>
+            89
+        </td>
+        <td class="uncovered">
+            <a href="#group89"><b>9</b></a>
+        </td>
+        <td width="99%" class="uncovered">
+            <pre><code class="scala uncovered">    while (i &lt; n &amp;&amp; i &lt; sortedSimilarMovies.size) { </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line90">
+        <td class=covered>
+            90
+        </td>
+        <td class="covered">
+            <a href="#group90"><b>2</b></a>
+        </td>
+        <td width="99%" class="covered">
+            <pre><code class="scala covered">      recommendedMovies += &quot;,&quot; + sortedSimilarMovies(i)._1.toString </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line91">
+        <td class=uncovered>
+            91
+        </td>
+        <td class="uncovered">
+            <a href="#group91"><b>2</b></a>
+        </td>
+        <td width="99%" class="uncovered">
+            <pre><code class="scala uncovered">      i += 1 </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line92">
+        <td class=na>
+            92
+        </td>
+        <td class="na">
+            <a href="#group92"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    } </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line93">
+        <td class=na>
+            93
+        </td>
+        <td class="na">
+            <a href="#group93"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    recommendedMovies </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line94">
+        <td class=na>
+            94
+        </td>
+        <td class="na">
+            <a href="#group94"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">  } </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line95">
+        <td class=na>
+            95
+        </td>
+        <td class="na">
+            <a href="#group95"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na"> </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line96">
+        <td class=na>
+            96
+        </td>
+        <td class="na">
+            <a href="#group96"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">  def moviesSimilaritiesTable(inputRDD: RDD[String]): RDD[((Int, Int), (Double, Int))] = { </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line97">
+        <td class=na>
+            97
+        </td>
+        <td class="na">
+            <a href="#group97"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na"> </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line98">
+        <td class=na>
+            98
+        </td>
+        <td class="na">
+            <a href="#group98"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    val ratings: RDD[(Int, (Int, Double))] = inputRDD.flatMap(parseRatings) </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line99">
+        <td class=na>
+            99
+        </td>
+        <td class="na">
+            <a href="#group99"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na"> </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line100">
+        <td class=na>
+            100
+        </td>
+        <td class="na">
+            <a href="#group100"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    val selfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = ratings.join(ratings) </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line101">
+        <td class=na>
+            101
+        </td>
+        <td class="na">
+            <a href="#group101"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na"> </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line102">
+        <td class=covered>
+            102
+        </td>
+        <td class="covered">
+            <a href="#group102"><b>1</b></a>
+        </td>
+        <td width="99%" class="covered">
+            <pre><code class="scala covered">    val filteredSelfJoinRatings: RDD[(Int, ((Int, Double), (Int, Double)))] = selfJoinRatings.filter(removeDuplicates) </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line103">
+        <td class=na>
+            103
+        </td>
+        <td class="na">
+            <a href="#group103"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na"> </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line104">
+        <td class=na>
+            104
+        </td>
+        <td class="na">
+            <a href="#group104"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    val correlatedMovies: RDD[((Int, Int), (Double, Double))] = filteredSelfJoinRatings.map(makeCorrelatedMoviesPairs) </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line105">
+        <td class=na>
+            105
+        </td>
+        <td class="na">
+            <a href="#group105"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na"> </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line106">
+        <td class=na>
+            106
+        </td>
+        <td class="na">
+            <a href="#group106"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    val correlatedMoviesGroupedRatings: RDD[((Int, Int), Iterable[(Double, Double)])] = correlatedMovies.groupByKey() </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line107">
+        <td class=na>
+            107
+        </td>
+        <td class="na">
+            <a href="#group107"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na"> </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line108">
+        <td class=na>
+            108
+        </td>
+        <td class="na">
+            <a href="#group108"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    val moviesSimilarities: RDD[((Int, Int), (Double, Int))] = correlatedMoviesGroupedRatings.mapValues(similarity) </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line109">
+        <td class=na>
+            109
+        </td>
+        <td class="na">
+            <a href="#group109"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na"> </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line110">
+        <td class=na>
+            110
+        </td>
+        <td class="na">
+            <a href="#group110"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    val sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = moviesSimilarities.sortByKey() </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line111">
+        <td class=na>
+            111
+        </td>
+        <td class="na">
+            <a href="#group111"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na"> </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line112">
+        <td class=na>
+            112
+        </td>
+        <td class="na">
+            <a href="#group112"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    sortedMoviesSimilarities </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line113">
+        <td class=na>
+            113
+        </td>
+        <td class="na">
+            <a href="#group113"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">  } </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line114">
+        <td class=na>
+            114
+        </td>
+        <td class="na">
+            <a href="#group114"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na"> </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line115">
+        <td class=na>
+            115
+        </td>
+        <td class="na">
+            <a href="#group115"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">  def topNMoviesRecommendation(sortedMoviesSimilarities: RDD[((Int, Int), (Double, Int))], n: Int, minimumSimilarity: Double, minimumPairs: Int): RDD[String] = { </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line116">
+        <td class=na>
+            116
+        </td>
+        <td class="na">
+            <a href="#group116"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na"> </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line117">
+        <td class=covered>
+            117
+        </td>
+        <td class="covered">
+            <a href="#group117"><b>1</b></a>
+        </td>
+        <td width="99%" class="covered">
+            <pre><code class="scala covered">    val relevantMoviesSimilarities: RDD[((Int, Int), (Double, Int))] = sortedMoviesSimilarities.filter((x: ((Int, Int), (Double, Int))) =&gt; relevantSimilarities(x, minimumSimilarity, minimumPairs)) </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line118">
+        <td class=na>
+            118
+        </td>
+        <td class="na">
+            <a href="#group118"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na"> </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line119">
+        <td class=na>
+            119
+        </td>
+        <td class="na">
+            <a href="#group119"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    val recommendedMoviesPairs: RDD[(Int, (Int, Double))] = relevantMoviesSimilarities.flatMap(makeMoviesSimilaritiesPairs) </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line120">
+        <td class=na>
+            120
+        </td>
+        <td class="na">
+            <a href="#group120"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na"> </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line121">
+        <td class=na>
+            121
+        </td>
+        <td class="na">
+            <a href="#group121"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    val recommendedMoviesList: RDD[(Int, Iterable[(Int, Double)])] = recommendedMoviesPairs.groupByKey() </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line122">
+        <td class=na>
+            122
+        </td>
+        <td class="na">
+            <a href="#group122"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na"> </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line123">
+        <td class=na>
+            123
+        </td>
+        <td class="na">
+            <a href="#group123"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    val sortedRecommendedMoviesList: RDD[(Int, Iterable[(Int, Double)])] = recommendedMoviesList.sortByKey() </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line124">
+        <td class=na>
+            124
+        </td>
+        <td class="na">
+            <a href="#group124"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na"> </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line125">
+        <td class=na>
+            125
+        </td>
+        <td class="na">
+            <a href="#group125"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    val topNRecommendedMoviesByMovie: RDD[String] = sortedRecommendedMoviesList.map((x: (Int, Iterable[(Int, Double)])) =&gt; makeTopNRecommendedMoviesCSV(x, n)) </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line126">
+        <td class=na>
+            126
+        </td>
+        <td class="na">
+            <a href="#group126"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    topNRecommendedMoviesByMovie </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line127">
+        <td class=na>
+            127
+        </td>
+        <td class="na">
+            <a href="#group127"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">  } </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line128">
+        <td class=na>
+            128
+        </td>
+        <td class="na">
+            <a href="#group128"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na"> </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line129">
+        <td class=na>
+            129
+        </td>
+        <td class="na">
+            <a href="#group129"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">} </code></pre>
+        </td>
+    </tr>
+    
+</table>
+
+<h2>Mutants</h2>
+<table class="src" cellpadding="3px">
+    
+    <tr>
+        <td>
+            <a href="#line21" id="group21">21</a>
+        </td>
+        <td width="99%">
+            
+                <pre class="killed mutant" data-toggle="popover" 
+                     data-placement="auto top" data-html="true" 
+                     title="Mutation" data-trigger="hover" 
+                     data-content="
+Original: &lt;pre&gt;&lt;code&gt;scala.Some.apply[(Int, (Int, Double))](scala.Tuple2.apply[Int, (Int, Double)](userId, scala.Tuple2.apply[Int, Double](movieId, rating)))&lt;/code&gt;&lt;/pre&gt;
+&lt;br&gt;
+Mutated: &lt;pre&gt;&lt;code&gt;Option.empty[(Int, (Int, Double))]&lt;/code&gt;&lt;/pre&gt;
+     ">Replaced Option.apply[T] with None                 -&gt; Killed by example.MoviesRecommendationTest</pre>
+            
+        </td>
+    </tr>
+    <tr></tr>
+    
+    <tr>
+        <td>
+            <a href="#line31" id="group31">31</a>
+        </td>
+        <td width="99%">
+            
+                <pre class="killed mutant" data-toggle="popover" 
+                     data-placement="auto top" data-html="true" 
+                     title="Mutation" data-trigger="hover" 
+                     data-content="
+Original: &lt;pre&gt;&lt;code&gt;movieId1.&lt;(movieId2)&lt;/code&gt;&lt;/pre&gt;
+&lt;br&gt;
+Mutated: &lt;pre&gt;&lt;code&gt;movieId1.&gt;=(movieId2)&lt;/code&gt;&lt;/pre&gt;
+     ">Negated conditional operator                       -&gt; Killed by example.MoviesRecommendationTest</pre>
+            
+                <pre class="killed mutant" data-toggle="popover" 
+                     data-placement="auto top" data-html="true" 
+                     title="Mutation" data-trigger="hover" 
+                     data-content="
+Original: &lt;pre&gt;&lt;code&gt;movieId1.&lt;(movieId2)&lt;/code&gt;&lt;/pre&gt;
+&lt;br&gt;
+Mutated: &lt;pre&gt;&lt;code&gt;movieId1.&lt;=(movieId2)&lt;/code&gt;&lt;/pre&gt;
+     ">Modified conditional boundary                      -&gt; Killed by example.MoviesRecommendationTest</pre>
+            
+        </td>
+    </tr>
+    <tr></tr>
+    
+    <tr>
+        <td>
+            <a href="#line49" id="group49">49</a>
+        </td>
+        <td width="99%">
+            
+                <pre class="killed mutant" data-toggle="popover" 
+                     data-placement="auto top" data-html="true" 
+                     title="Mutation" data-trigger="hover" 
+                     data-content="
+Original: &lt;pre&gt;&lt;code&gt;pairs.foreach[Unit](((pair: (Double, Double)) =&gt; {
+  val A = pair._1;
+  val B = pair._2;
+  sumAA = sumAA.+(A.*(A));
+  sumBB = sumBB.+(B.*(B));
+  sumAB = sumAB.+(A.*(B))
+}))&lt;/code&gt;&lt;/pre&gt;
+&lt;br&gt;
+Mutated: &lt;pre&gt;&lt;code&gt;()&lt;/code&gt;&lt;/pre&gt;
+     ">Removed method call with Unit return type          -&gt; Killed by example.MoviesRecommendationTest</pre>
+            
+        </td>
+    </tr>
+    <tr></tr>
+    
+    <tr>
+        <td>
+            <a href="#line52" id="group52">52</a>
+        </td>
+        <td width="99%">
+            
+                <pre class="killed mutant" data-toggle="popover" 
+                     data-placement="auto top" data-html="true" 
+                     title="Mutation" data-trigger="hover" 
+                     data-content="
+Original: &lt;pre&gt;&lt;code&gt;sumAA.+(A.*(A))&lt;/code&gt;&lt;/pre&gt;
+&lt;br&gt;
+Mutated: &lt;pre&gt;&lt;code&gt;sumAA&lt;/code&gt;&lt;/pre&gt;
+     ">Replaced expression, typed A =&gt; A, with its lhs    -&gt; Killed by example.MoviesRecommendationTest</pre>
+            
+                <pre class="killed mutant" data-toggle="popover" 
+                     data-placement="auto top" data-html="true" 
+                     title="Mutation" data-trigger="hover" 
+                     data-content="
+Original: &lt;pre&gt;&lt;code&gt;A.*(A)&lt;/code&gt;&lt;/pre&gt;
+&lt;br&gt;
+Mutated: &lt;pre&gt;&lt;code&gt;A./(A)&lt;/code&gt;&lt;/pre&gt;
+     ">Replaced math operator                             -&gt; Killed by example.MoviesRecommendationTest</pre>
+            
+                <pre class="killed mutant" data-toggle="popover" 
+                     data-placement="auto top" data-html="true" 
+                     title="Mutation" data-trigger="hover" 
+                     data-content="
+Original: &lt;pre&gt;&lt;code&gt;sumAA.+(A.*(A))&lt;/code&gt;&lt;/pre&gt;
+&lt;br&gt;
+Mutated: &lt;pre&gt;&lt;code&gt;sumAA.-(A.*(A))&lt;/code&gt;&lt;/pre&gt;
+     ">Replaced math operator                             -&gt; Killed by example.MoviesRecommendationTest</pre>
+            
+                <pre class="killed mutant" data-toggle="popover" 
+                     data-placement="auto top" data-html="true" 
+                     title="Mutation" data-trigger="hover" 
+                     data-content="
+Original: &lt;pre&gt;&lt;code&gt;A.*(A)&lt;/code&gt;&lt;/pre&gt;
+&lt;br&gt;
+Mutated: &lt;pre&gt;&lt;code&gt;A&lt;/code&gt;&lt;/pre&gt;
+     ">Replaced expression, typed A =&gt; A, with its lhs    -&gt; Killed by example.MoviesRecommendationTest</pre>
+            
+        </td>
+    </tr>
+    <tr></tr>
+    
+    <tr>
+        <td>
+            <a href="#line53" id="group53">53</a>
+        </td>
+        <td width="99%">
+            
+                <pre class="killed mutant" data-toggle="popover" 
+                     data-placement="auto top" data-html="true" 
+                     title="Mutation" data-trigger="hover" 
+                     data-content="
+Original: &lt;pre&gt;&lt;code&gt;sumBB.+(B.*(B))&lt;/code&gt;&lt;/pre&gt;
+&lt;br&gt;
+Mutated: &lt;pre&gt;&lt;code&gt;sumBB.-(B.*(B))&lt;/code&gt;&lt;/pre&gt;
+     ">Replaced math operator                             -&gt; Killed by example.MoviesRecommendationTest</pre>
+            
+                <pre class="killed mutant" data-toggle="popover" 
+                     data-placement="auto top" data-html="true" 
+                     title="Mutation" data-trigger="hover" 
+                     data-content="
+Original: &lt;pre&gt;&lt;code&gt;B.*(B)&lt;/code&gt;&lt;/pre&gt;
+&lt;br&gt;
+Mutated: &lt;pre&gt;&lt;code&gt;B./(B)&lt;/code&gt;&lt;/pre&gt;
+     ">Replaced math operator                             -&gt; Killed by example.MoviesRecommendationTest</pre>
+            
+                <pre class="killed mutant" data-toggle="popover" 
+                     data-placement="auto top" data-html="true" 
+                     title="Mutation" data-trigger="hover" 
+                     data-content="
+Original: &lt;pre&gt;&lt;code&gt;sumBB.+(B.*(B))&lt;/code&gt;&lt;/pre&gt;
+&lt;br&gt;
+Mutated: &lt;pre&gt;&lt;code&gt;sumBB&lt;/code&gt;&lt;/pre&gt;
+     ">Replaced expression, typed A =&gt; A, with its lhs    -&gt; Killed by example.MoviesRecommendationTest</pre>
+            
+                <pre class="killed mutant" data-toggle="popover" 
+                     data-placement="auto top" data-html="true" 
+                     title="Mutation" data-trigger="hover" 
+                     data-content="
+Original: &lt;pre&gt;&lt;code&gt;B.*(B)&lt;/code&gt;&lt;/pre&gt;
+&lt;br&gt;
+Mutated: &lt;pre&gt;&lt;code&gt;B&lt;/code&gt;&lt;/pre&gt;
+     ">Replaced expression, typed A =&gt; A, with its lhs    -&gt; Killed by example.MoviesRecommendationTest</pre>
+            
+        </td>
+    </tr>
+    <tr></tr>
+    
+    <tr>
+        <td>
+            <a href="#line54" id="group54">54</a>
+        </td>
+        <td width="99%">
+            
+                <pre class="killed mutant" data-toggle="popover" 
+                     data-placement="auto top" data-html="true" 
+                     title="Mutation" data-trigger="hover" 
+                     data-content="
+Original: &lt;pre&gt;&lt;code&gt;sumAB.+(A.*(B))&lt;/code&gt;&lt;/pre&gt;
+&lt;br&gt;
+Mutated: &lt;pre&gt;&lt;code&gt;sumAB.-(A.*(B))&lt;/code&gt;&lt;/pre&gt;
+     ">Replaced math operator                             -&gt; Killed by example.MoviesRecommendationTest</pre>
+            
+                <pre class="killed mutant" data-toggle="popover" 
+                     data-placement="auto top" data-html="true" 
+                     title="Mutation" data-trigger="hover" 
+                     data-content="
+Original: &lt;pre&gt;&lt;code&gt;sumAB.+(A.*(B))&lt;/code&gt;&lt;/pre&gt;
+&lt;br&gt;
+Mutated: &lt;pre&gt;&lt;code&gt;sumAB&lt;/code&gt;&lt;/pre&gt;
+     ">Replaced expression, typed A =&gt; A, with its lhs    -&gt; Killed by example.MoviesRecommendationTest</pre>
+            
+                <pre class="killed mutant" data-toggle="popover" 
+                     data-placement="auto top" data-html="true" 
+                     title="Mutation" data-trigger="hover" 
+                     data-content="
+Original: &lt;pre&gt;&lt;code&gt;A.*(B)&lt;/code&gt;&lt;/pre&gt;
+&lt;br&gt;
+Mutated: &lt;pre&gt;&lt;code&gt;A&lt;/code&gt;&lt;/pre&gt;
+     ">Replaced expression, typed A =&gt; A, with its lhs    -&gt; Killed by example.MoviesRecommendationTest</pre>
+            
+                <pre class="killed mutant" data-toggle="popover" 
+                     data-placement="auto top" data-html="true" 
+                     title="Mutation" data-trigger="hover" 
+                     data-content="
+Original: &lt;pre&gt;&lt;code&gt;A.*(B)&lt;/code&gt;&lt;/pre&gt;
+&lt;br&gt;
+Mutated: &lt;pre&gt;&lt;code&gt;A./(B)&lt;/code&gt;&lt;/pre&gt;
+     ">Replaced math operator                             -&gt; Killed by example.MoviesRecommendationTest</pre>
+            
+        </td>
+    </tr>
+    <tr></tr>
+    
+    <tr>
+        <td>
+            <a href="#line58" id="group58">58</a>
+        </td>
+        <td width="99%">
+            
+                <pre class="killed mutant" data-toggle="popover" 
+                     data-placement="auto top" data-html="true" 
+                     title="Mutation" data-trigger="hover" 
+                     data-content="
+Original: &lt;pre&gt;&lt;code&gt;scala.math.`package`.sqrt(sumAA).*(scala.math.`package`.sqrt(sumBB))&lt;/code&gt;&lt;/pre&gt;
+&lt;br&gt;
+Mutated: &lt;pre&gt;&lt;code&gt;scala.math.`package`.sqrt(sumAA)./(scala.math.`package`.sqrt(sumBB))&lt;/code&gt;&lt;/pre&gt;
+     ">Replaced math operator                             -&gt; Killed by example.MoviesRecommendationTest</pre>
+            
+                <pre class="killed mutant" data-toggle="popover" 
+                     data-placement="auto top" data-html="true" 
+                     title="Mutation" data-trigger="hover" 
+                     data-content="
+Original: &lt;pre&gt;&lt;code&gt;scala.math.`package`.sqrt(sumAA).*(scala.math.`package`.sqrt(sumBB))&lt;/code&gt;&lt;/pre&gt;
+&lt;br&gt;
+Mutated: &lt;pre&gt;&lt;code&gt;scala.math.`package`.sqrt(sumAA)&lt;/code&gt;&lt;/pre&gt;
+     ">Replaced expression, typed A =&gt; A, with its lhs    -&gt; Killed by example.MoviesRecommendationTest</pre>
+            
+        </td>
+    </tr>
+    <tr></tr>
+    
+    <tr>
+        <td>
+            <a href="#line61" id="group61">61</a>
+        </td>
+        <td width="99%">
+            
+                <pre class="killed mutant" data-toggle="popover" 
+                     data-placement="auto top" data-html="true" 
+                     title="Mutation" data-trigger="hover" 
+                     data-content="
+Original: &lt;pre&gt;&lt;code&gt;den.!=(0)&lt;/code&gt;&lt;/pre&gt;
+&lt;br&gt;
+Mutated: &lt;pre&gt;&lt;code&gt;den.==(0)&lt;/code&gt;&lt;/pre&gt;
+     ">Negated conditional operator                       -&gt; Killed by example.MoviesRecommendationTest</pre>
+            
+                <pre class="killed mutant" data-toggle="popover" 
+                     data-placement="auto top" data-html="true" 
+                     title="Mutation" data-trigger="hover" 
+                     data-content="
+Original: &lt;pre&gt;&lt;code&gt;den.!=(0)&lt;/code&gt;&lt;/pre&gt;
+&lt;br&gt;
+Mutated: &lt;pre&gt;&lt;code&gt;false&lt;/code&gt;&lt;/pre&gt;
+     ">Replaced conditional with its &quot;else&quot; branch        -&gt; Killed by example.MoviesRecommendationTest</pre>
+            
+                <pre class="alive mutant" data-toggle="popover" 
+                     data-placement="auto top" data-html="true" 
+                     title="Mutation" data-trigger="hover" 
+                     data-content="
+Original: &lt;pre&gt;&lt;code&gt;den.!=(0)&lt;/code&gt;&lt;/pre&gt;
+&lt;br&gt;
+Mutated: &lt;pre&gt;&lt;code&gt;true&lt;/code&gt;&lt;/pre&gt;
+     ">Replaced conditional with its &quot;then&quot; branch        -&gt; Alive</pre>
+            
+        </td>
+    </tr>
+    <tr></tr>
+    
+    <tr>
+        <td>
+            <a href="#line62" id="group62">62</a>
+        </td>
+        <td width="99%">
+            
+                <pre class="killed mutant" data-toggle="popover" 
+                     data-placement="auto top" data-html="true" 
+                     title="Mutation" data-trigger="hover" 
+                     data-content="
+Original: &lt;pre&gt;&lt;code&gt;num./(den)&lt;/code&gt;&lt;/pre&gt;
+&lt;br&gt;
+Mutated: &lt;pre&gt;&lt;code&gt;num&lt;/code&gt;&lt;/pre&gt;
+     ">Replaced expression, typed A =&gt; A, with its lhs    -&gt; Killed by example.MoviesRecommendationTest</pre>
+            
+                <pre class="killed mutant" data-toggle="popover" 
+                     data-placement="auto top" data-html="true" 
+                     title="Mutation" data-trigger="hover" 
+                     data-content="
+Original: &lt;pre&gt;&lt;code&gt;num./(den)&lt;/code&gt;&lt;/pre&gt;
+&lt;br&gt;
+Mutated: &lt;pre&gt;&lt;code&gt;num.*(den)&lt;/code&gt;&lt;/pre&gt;
+     ">Replaced math operator                             -&gt; Killed by example.MoviesRecommendationTest</pre>
+            
+        </td>
+    </tr>
+    <tr></tr>
+    
+    <tr>
+        <td>
+            <a href="#line70" id="group70">70</a>
+        </td>
+        <td width="99%">
+            
+                <pre class="killed mutant" data-toggle="popover" 
+                     data-placement="auto top" data-html="true" 
+                     title="Mutation" data-trigger="hover" 
+                     data-content="
+Original: &lt;pre&gt;&lt;code&gt;sim._2._1.&gt;(minimumSimilarity)&lt;/code&gt;&lt;/pre&gt;
+&lt;br&gt;
+Mutated: &lt;pre&gt;&lt;code&gt;sim._2._1.&lt;=(minimumSimilarity)&lt;/code&gt;&lt;/pre&gt;
+     ">Negated conditional operator                       -&gt; Killed by example.MoviesRecommendationTest</pre>
+            
+                <pre class="killed mutant" data-toggle="popover" 
+                     data-placement="auto top" data-html="true" 
+                     title="Mutation" data-trigger="hover" 
+                     data-content="
+Original: &lt;pre&gt;&lt;code&gt;sim._2._2.&gt;(minimumPairs)&lt;/code&gt;&lt;/pre&gt;
+&lt;br&gt;
+Mutated: &lt;pre&gt;&lt;code&gt;sim._2._2.&lt;=(minimumPairs)&lt;/code&gt;&lt;/pre&gt;
+     ">Negated conditional operator                       -&gt; Killed by example.MoviesRecommendationTest</pre>
+            
+                <pre class="killed mutant" data-toggle="popover" 
+                     data-placement="auto top" data-html="true" 
+                     title="Mutation" data-trigger="hover" 
+                     data-content="
+Original: &lt;pre&gt;&lt;code&gt;sim._2._1.&gt;(minimumSimilarity).&amp;&amp;(sim._2._2.&gt;(minimumPairs))&lt;/code&gt;&lt;/pre&gt;
+&lt;br&gt;
+Mutated: &lt;pre&gt;&lt;code&gt;sim._2._1.&gt;(minimumSimilarity).||(sim._2._2.&gt;(minimumPairs))&lt;/code&gt;&lt;/pre&gt;
+     ">Replaced logical operator &amp;&amp; &lt;=&gt; ||                -&gt; Killed by example.MoviesRecommendationTest</pre>
+            
+                <pre class="alive mutant" data-toggle="popover" 
+                     data-placement="auto top" data-html="true" 
+                     title="Mutation" data-trigger="hover" 
+                     data-content="
+Original: &lt;pre&gt;&lt;code&gt;sim._2._1.&gt;(minimumSimilarity)&lt;/code&gt;&lt;/pre&gt;
+&lt;br&gt;
+Mutated: &lt;pre&gt;&lt;code&gt;sim._2._1.&gt;=(minimumSimilarity)&lt;/code&gt;&lt;/pre&gt;
+     ">Modified conditional boundary                      -&gt; Alive</pre>
+            
+                <pre class="alive mutant" data-toggle="popover" 
+                     data-placement="auto top" data-html="true" 
+                     title="Mutation" data-trigger="hover" 
+                     data-content="
+Original: &lt;pre&gt;&lt;code&gt;sim._2._2.&gt;(minimumPairs)&lt;/code&gt;&lt;/pre&gt;
+&lt;br&gt;
+Mutated: &lt;pre&gt;&lt;code&gt;sim._2._2.&gt;=(minimumPairs)&lt;/code&gt;&lt;/pre&gt;
+     ">Modified conditional boundary                      -&gt; Alive</pre>
+            
+                <pre class="alive mutant" data-toggle="popover" 
+                     data-placement="auto top" data-html="true" 
+                     title="Mutation" data-trigger="hover" 
+                     data-content="
+Original: &lt;pre&gt;&lt;code&gt;sim._2._1.&gt;(minimumSimilarity).&amp;&amp;(sim._2._2.&gt;(minimumPairs))&lt;/code&gt;&lt;/pre&gt;
+&lt;br&gt;
+Mutated: &lt;pre&gt;&lt;code&gt;sim._2._1.&gt;(minimumSimilarity)&lt;/code&gt;&lt;/pre&gt;
+     ">Replaced expression, typed A =&gt; A, with its lhs    -&gt; Alive</pre>
+            
+        </td>
+    </tr>
+    <tr></tr>
+    
+    <tr>
+        <td>
+            <a href="#line89" id="group89">89</a>
+        </td>
+        <td width="99%">
+            
+                <pre class="alive mutant" data-toggle="popover" 
+                     data-placement="auto top" data-html="true" 
+                     title="Mutation" data-trigger="hover" 
+                     data-content="
+Original: &lt;pre&gt;&lt;code&gt;i.&lt;(n)&lt;/code&gt;&lt;/pre&gt;
+&lt;br&gt;
+Mutated: &lt;pre&gt;&lt;code&gt;i.&lt;=(n)&lt;/code&gt;&lt;/pre&gt;
+     ">Modified conditional boundary                      -&gt; Alive</pre>
+            
+                <pre class="killed mutant" data-toggle="popover" 
+                     data-placement="auto top" data-html="true" 
+                     title="Mutation" data-trigger="hover" 
+                     data-content="
+Original: &lt;pre&gt;&lt;code&gt;i.&lt;(n).&amp;&amp;(i.&lt;(sortedSimilarMovies.size))&lt;/code&gt;&lt;/pre&gt;
+&lt;br&gt;
+Mutated: &lt;pre&gt;&lt;code&gt;false&lt;/code&gt;&lt;/pre&gt;
+     ">Replaced conditional with its &quot;else&quot; branch        -&gt; Killed by example.MoviesRecommendationTest</pre>
+            
+                <pre class="alive mutant" data-toggle="popover" 
+                     data-placement="auto top" data-html="true" 
+                     title="Mutation" data-trigger="hover" 
+                     data-content="
+Original: &lt;pre&gt;&lt;code&gt;i.&lt;(n).&amp;&amp;(i.&lt;(sortedSimilarMovies.size))&lt;/code&gt;&lt;/pre&gt;
+&lt;br&gt;
+Mutated: &lt;pre&gt;&lt;code&gt;i.&lt;(n)&lt;/code&gt;&lt;/pre&gt;
+     ">Replaced expression, typed A =&gt; A, with its lhs    -&gt; Alive</pre>
+            
+                <pre class="killed mutant" data-toggle="popover" 
+                     data-placement="auto top" data-html="true" 
+                     title="Mutation" data-trigger="hover" 
+                     data-content="
+Original: &lt;pre&gt;&lt;code&gt;i.&lt;(sortedSimilarMovies.size)&lt;/code&gt;&lt;/pre&gt;
+&lt;br&gt;
+Mutated: &lt;pre&gt;&lt;code&gt;i.&gt;=(sortedSimilarMovies.size)&lt;/code&gt;&lt;/pre&gt;
+     ">Negated conditional operator                       -&gt; Killed by example.MoviesRecommendationTest</pre>
+            
+                <pre class="alive mutant" data-toggle="popover" 
+                     data-placement="auto top" data-html="true" 
+                     title="Mutation" data-trigger="hover" 
+                     data-content="
+Original: &lt;pre&gt;&lt;code&gt;while$1()&lt;/code&gt;&lt;/pre&gt;
+&lt;br&gt;
+Mutated: &lt;pre&gt;&lt;code&gt;()&lt;/code&gt;&lt;/pre&gt;
+     ">Removed method call with Unit return type          -&gt; Alive</pre>
+            
+                <pre class="alive mutant" data-toggle="popover" 
+                     data-placement="auto top" data-html="true" 
+                     title="Mutation" data-trigger="hover" 
+                     data-content="
+Original: &lt;pre&gt;&lt;code&gt;i.&lt;(n).&amp;&amp;(i.&lt;(sortedSimilarMovies.size))&lt;/code&gt;&lt;/pre&gt;
+&lt;br&gt;
+Mutated: &lt;pre&gt;&lt;code&gt;i.&lt;(n).||(i.&lt;(sortedSimilarMovies.size))&lt;/code&gt;&lt;/pre&gt;
+     ">Replaced logical operator &amp;&amp; &lt;=&gt; ||                -&gt; Alive</pre>
+            
+                <pre class="killed mutant" data-toggle="popover" 
+                     data-placement="auto top" data-html="true" 
+                     title="Mutation" data-trigger="hover" 
+                     data-content="
+Original: &lt;pre&gt;&lt;code&gt;i.&lt;(n)&lt;/code&gt;&lt;/pre&gt;
+&lt;br&gt;
+Mutated: &lt;pre&gt;&lt;code&gt;i.&gt;=(n)&lt;/code&gt;&lt;/pre&gt;
+     ">Negated conditional operator                       -&gt; Killed by example.MoviesRecommendationTest</pre>
+            
+                <pre class="alive mutant" data-toggle="popover" 
+                     data-placement="auto top" data-html="true" 
+                     title="Mutation" data-trigger="hover" 
+                     data-content="
+Original: &lt;pre&gt;&lt;code&gt;i.&lt;(sortedSimilarMovies.size)&lt;/code&gt;&lt;/pre&gt;
+&lt;br&gt;
+Mutated: &lt;pre&gt;&lt;code&gt;i.&lt;=(sortedSimilarMovies.size)&lt;/code&gt;&lt;/pre&gt;
+     ">Modified conditional boundary                      -&gt; Alive</pre>
+            
+                <pre class="killed mutant" data-toggle="popover" 
+                     data-placement="auto top" data-html="true" 
+                     title="Mutation" data-trigger="hover" 
+                     data-content="
+Original: &lt;pre&gt;&lt;code&gt;i.&lt;(n).&amp;&amp;(i.&lt;(sortedSimilarMovies.size))&lt;/code&gt;&lt;/pre&gt;
+&lt;br&gt;
+Mutated: &lt;pre&gt;&lt;code&gt;true&lt;/code&gt;&lt;/pre&gt;
+     ">Replaced conditional with its &quot;then&quot; branch        -&gt; Killed by example.MoviesRecommendationTest</pre>
+            
+        </td>
+    </tr>
+    <tr></tr>
+    
+    <tr>
+        <td>
+            <a href="#line90" id="group90">90</a>
+        </td>
+        <td width="99%">
+            
+                <pre class="killed mutant" data-toggle="popover" 
+                     data-placement="auto top" data-html="true" 
+                     title="Mutation" data-trigger="hover" 
+                     data-content="
+Original: &lt;pre&gt;&lt;code&gt;recommendedMovies.+(&quot;,&quot;.+(sortedSimilarMovies.apply(i)._1.toString()))&lt;/code&gt;&lt;/pre&gt;
+&lt;br&gt;
+Mutated: &lt;pre&gt;&lt;code&gt;recommendedMovies&lt;/code&gt;&lt;/pre&gt;
+     ">Replaced expression, typed A =&gt; A, with its lhs    -&gt; Killed by example.MoviesRecommendationTest</pre>
+            
+                <pre class="killed mutant" data-toggle="popover" 
+                     data-placement="auto top" data-html="true" 
+                     title="Mutation" data-trigger="hover" 
+                     data-content="
+Original: &lt;pre&gt;&lt;code&gt;&quot;,&quot;.+(sortedSimilarMovies.apply(i)._1.toString())&lt;/code&gt;&lt;/pre&gt;
+&lt;br&gt;
+Mutated: &lt;pre&gt;&lt;code&gt;&quot;,&quot;&lt;/code&gt;&lt;/pre&gt;
+     ">Replaced expression, typed A =&gt; A, with its lhs    -&gt; Killed by example.MoviesRecommendationTest</pre>
+            
+        </td>
+    </tr>
+    <tr></tr>
+    
+    <tr>
+        <td>
+            <a href="#line91" id="group91">91</a>
+        </td>
+        <td width="99%">
+            
+                <pre class="killed mutant" data-toggle="popover" 
+                     data-placement="auto top" data-html="true" 
+                     title="Mutation" data-trigger="hover" 
+                     data-content="
+Original: &lt;pre&gt;&lt;code&gt;i.+(1)&lt;/code&gt;&lt;/pre&gt;
+&lt;br&gt;
+Mutated: &lt;pre&gt;&lt;code&gt;i.-(1)&lt;/code&gt;&lt;/pre&gt;
+     ">Replaced math operator                             -&gt; Killed by example.MoviesRecommendationTest</pre>
+            
+                <pre class="timed_out mutant" data-toggle="popover" 
+                     data-placement="auto top" data-html="true" 
+                     title="Mutation" data-trigger="hover" 
+                     data-content="
+Original: &lt;pre&gt;&lt;code&gt;i.+(1)&lt;/code&gt;&lt;/pre&gt;
+&lt;br&gt;
+Mutated: &lt;pre&gt;&lt;code&gt;i&lt;/code&gt;&lt;/pre&gt;
+     ">Replaced expression, typed A =&gt; A, with its lhs    -&gt; TimedOut</pre>
+            
+        </td>
+    </tr>
+    <tr></tr>
+    
+    <tr>
+        <td>
+            <a href="#line102" id="group102">102</a>
+        </td>
+        <td width="99%">
+            
+                <pre class="killed mutant" data-toggle="popover" 
+                     data-placement="auto top" data-html="true" 
+                     title="Mutation" data-trigger="hover" 
+                     data-content="
+Original: &lt;pre&gt;&lt;code&gt;selfJoinRatings.filter({
+  ((u: (Int, ((Int, Double), (Int, Double)))) =&gt; MoviesRecommendation.this.removeDuplicates(u))
+})&lt;/code&gt;&lt;/pre&gt;
+&lt;br&gt;
+Mutated: &lt;pre&gt;&lt;code&gt;selfJoinRatings&lt;/code&gt;&lt;/pre&gt;
+     ">Replaced expression, typed A =&gt; A, with its lhs    -&gt; Killed by example.MoviesRecommendationTest</pre>
+            
+        </td>
+    </tr>
+    <tr></tr>
+    
+    <tr>
+        <td>
+            <a href="#line117" id="group117">117</a>
+        </td>
+        <td width="99%">
+            
+                <pre class="killed mutant" data-toggle="popover" 
+                     data-placement="auto top" data-html="true" 
+                     title="Mutation" data-trigger="hover" 
+                     data-content="
+Original: &lt;pre&gt;&lt;code&gt;sortedMoviesSimilarities.filter(((x: scala.Tuple2[scala.Tuple2[scala.Int, scala.Int], scala.Tuple2[scala.Double, scala.Int]]) =&gt; MoviesRecommendation.this.relevantSimilarities(x, minimumSimilarity, minimumPairs)))&lt;/code&gt;&lt;/pre&gt;
+&lt;br&gt;
+Mutated: &lt;pre&gt;&lt;code&gt;sortedMoviesSimilarities&lt;/code&gt;&lt;/pre&gt;
+     ">Replaced expression, typed A =&gt; A, with its lhs    -&gt; Killed by example.MoviesRecommendationTest</pre>
+            
+        </td>
+    </tr>
+    <tr></tr>
+    
+</table>
+
+<h2>Examined tests</h2>
+<ol>
+    
+      <li class="mono" style="white-space:pre;">ScalaTest test: example.MoviesRecommendationTest</li>
+    
+</ol>
+<br/>
+
+<script>
+    $(document).ready(function(){
+      $('[data-toggle="popover"]').popover({ container: 'body' });
+    });
+</script>
+
+</body>
+</html>

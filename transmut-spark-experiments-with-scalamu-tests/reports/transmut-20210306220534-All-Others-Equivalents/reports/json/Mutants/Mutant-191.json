@@ -1,0 +1,9 @@
+{
+  "id" : 191,
+  "originalProgramId" : 9,
+  "mutationOperator" : "MTR",
+  "mutationOperatorDescription" : "Mapping Transformation Replacement",
+  "mutantCode" : "def countNGrams(input: RDD[String]) = {\n  val sentences = input.flatMap(tokenize)\n  val ngrams = sentences.flatMap { (inputParameter: String) => {\n    val originalFunction = ((s: String) => nGrams(s))(_)\n    val originalValue = originalFunction(inputParameter)\n    originalValue.headOption\n  } }\n  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }\n  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }\n  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }\n  ngramsCount\n}",
+  "originalCode" : "def countNGrams(input: RDD[String]) = {\n    \n    val sentences = input.flatMap(tokenize)\n\n    val ngrams = sentences.flatMap((s: String) => nGrams(s))\n\n    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))\n\n    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))\n\n    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)\n\n    ngramsCount\n  }",
+  "status" : "Killed"
+}

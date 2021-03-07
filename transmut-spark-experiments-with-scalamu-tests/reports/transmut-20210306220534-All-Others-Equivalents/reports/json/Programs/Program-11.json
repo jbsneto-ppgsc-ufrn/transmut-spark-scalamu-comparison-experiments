@@ -1,0 +1,423 @@
+{
+  "id" : 11,
+  "programSourceId" : 9,
+  "name" : "wordCount",
+  "code" : "def wordCount(input: RDD[String]) = {\n\t\tval words = input.flatMap( (line: String) => line.split(\" \") )\n\t\tval pairs = words.map( (word: String) => (word, 1) )\n\t\tval counts = pairs.reduceByKey( (a: Int, b: Int) => a + b )\n\t\tcounts\n\t}",
+  "datasets" : [
+    {
+      "id" : 64,
+      "name" : "input",
+      "datasetType" : "RDD[String]",
+      "inputDataset" : true,
+      "outputDataset" : false
+    },
+    {
+      "id" : 65,
+      "name" : "words",
+      "datasetType" : "RDD[String]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 66,
+      "name" : "pairs",
+      "datasetType" : "RDD[(String, Int)]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 67,
+      "name" : "counts",
+      "datasetType" : "RDD[(String, Int)]",
+      "inputDataset" : false,
+      "outputDataset" : true
+    }
+  ],
+  "transformations" : [
+    {
+      "id" : 51,
+      "name" : "flatMap",
+      "inputTypes" : [
+        "RDD[String]"
+      ],
+      "outputTypes" : [
+        "RDD[String]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 52,
+      "name" : "map",
+      "inputTypes" : [
+        "RDD[String]"
+      ],
+      "outputTypes" : [
+        "RDD[(String, Int)]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 53,
+      "name" : "reduceByKey",
+      "inputTypes" : [
+        "RDD[(String, Int)]"
+      ],
+      "outputTypes" : [
+        "RDD[(String, Int)]"
+      ],
+      "loadTransformation" : false
+    }
+  ],
+  "edges" : [
+    {
+      "id" : 105,
+      "datasetId" : 64,
+      "transformationId" : 51,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 106,
+      "datasetId" : 65,
+      "transformationId" : 51,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 107,
+      "datasetId" : 65,
+      "transformationId" : 52,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 108,
+      "datasetId" : 66,
+      "transformationId" : 52,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 109,
+      "datasetId" : 66,
+      "transformationId" : 53,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 110,
+      "datasetId" : 67,
+      "transformationId" : 53,
+      "direction" : "TransformationToDataset"
+    }
+  ],
+  "mutants" : [
+    {
+      "id" : 229,
+      "originalProgramId" : 11,
+      "mutationOperator" : "UTD",
+      "mutationOperatorDescription" : "Unary Transformation Deletion",
+      "mutantCode" : "def wordCount(input: RDD[String]) = {\n  val words = input\n  val pairs = words.map { (word: String) => (word, 1) }\n  val counts = pairs.reduceByKey { (a: Int, b: Int) => a + b }\n  counts\n}",
+      "originalCode" : "def wordCount(input: RDD[String]) = {\n\t\tval words = input.flatMap( (line: String) => line.split(\" \") )\n\t\tval pairs = words.map( (word: String) => (word, 1) )\n\t\tval counts = pairs.reduceByKey( (a: Int, b: Int) => a + b )\n\t\tcounts\n\t}",
+      "status" : "Killed"
+    },
+    {
+      "id" : 230,
+      "originalProgramId" : 11,
+      "mutationOperator" : "UTD",
+      "mutationOperatorDescription" : "Unary Transformation Deletion",
+      "mutantCode" : "def wordCount(input: RDD[String]) = {\n  val words = input.flatMap { (line: String) => line.split(\" \") }\n  val pairs = words.map { (word: String) => (word, 1) }\n  val counts = pairs\n  counts\n}",
+      "originalCode" : "def wordCount(input: RDD[String]) = {\n\t\tval words = input.flatMap( (line: String) => line.split(\" \") )\n\t\tval pairs = words.map( (word: String) => (word, 1) )\n\t\tval counts = pairs.reduceByKey( (a: Int, b: Int) => a + b )\n\t\tcounts\n\t}",
+      "status" : "Killed"
+    },
+    {
+      "id" : 231,
+      "originalProgramId" : 11,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def wordCount(input: RDD[String]) = {\n  val words = input.flatMap { (inputParameter: String) => {\n    val originalFunction = ((line: String) => line.split(\" \"))(_)\n    val originalValue = originalFunction(inputParameter)\n    originalValue.headOption\n  } }\n  val pairs = words.map { (word: String) => (word, 1) }\n  val counts = pairs.reduceByKey { (a: Int, b: Int) => a + b }\n  counts\n}",
+      "originalCode" : "def wordCount(input: RDD[String]) = {\n\t\tval words = input.flatMap( (line: String) => line.split(\" \") )\n\t\tval pairs = words.map( (word: String) => (word, 1) )\n\t\tval counts = pairs.reduceByKey( (a: Int, b: Int) => a + b )\n\t\tcounts\n\t}",
+      "status" : "Killed"
+    },
+    {
+      "id" : 232,
+      "originalProgramId" : 11,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def wordCount(input: RDD[String]) = {\n  val words = input.flatMap { (inputParameter: String) => {\n    val originalFunction = ((line: String) => line.split(\" \"))(_)\n    val originalValue = originalFunction(inputParameter)\n    originalValue.toList.tail\n  } }\n  val pairs = words.map { (word: String) => (word, 1) }\n  val counts = pairs.reduceByKey { (a: Int, b: Int) => a + b }\n  counts\n}",
+      "originalCode" : "def wordCount(input: RDD[String]) = {\n\t\tval words = input.flatMap( (line: String) => line.split(\" \") )\n\t\tval pairs = words.map( (word: String) => (word, 1) )\n\t\tval counts = pairs.reduceByKey( (a: Int, b: Int) => a + b )\n\t\tcounts\n\t}",
+      "status" : "Killed"
+    },
+    {
+      "id" : 233,
+      "originalProgramId" : 11,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def wordCount(input: RDD[String]) = {\n  val words = input.flatMap { (inputParameter: String) => {\n    val originalFunction = ((line: String) => line.split(\" \"))(_)\n    val originalValue = originalFunction(inputParameter)\n    originalValue.toList.reverse\n  } }\n  val pairs = words.map { (word: String) => (word, 1) }\n  val counts = pairs.reduceByKey { (a: Int, b: Int) => a + b }\n  counts\n}",
+      "originalCode" : "def wordCount(input: RDD[String]) = {\n\t\tval words = input.flatMap( (line: String) => line.split(\" \") )\n\t\tval pairs = words.map( (word: String) => (word, 1) )\n\t\tval counts = pairs.reduceByKey( (a: Int, b: Int) => a + b )\n\t\tcounts\n\t}",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 234,
+      "originalProgramId" : 11,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def wordCount(input: RDD[String]) = {\n  val words = input.flatMap { (inputParameter: String) => {\n    val originalFunction = ((line: String) => line.split(\" \"))(_)\n    val originalValue = originalFunction(inputParameter)\n    List[String]()\n  } }\n  val pairs = words.map { (word: String) => (word, 1) }\n  val counts = pairs.reduceByKey { (a: Int, b: Int) => a + b }\n  counts\n}",
+      "originalCode" : "def wordCount(input: RDD[String]) = {\n\t\tval words = input.flatMap( (line: String) => line.split(\" \") )\n\t\tval pairs = words.map( (word: String) => (word, 1) )\n\t\tval counts = pairs.reduceByKey( (a: Int, b: Int) => a + b )\n\t\tcounts\n\t}",
+      "status" : "Killed"
+    },
+    {
+      "id" : 235,
+      "originalProgramId" : 11,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def wordCount(input: RDD[String]) = {\n  val words = input.flatMap { (line: String) => line.split(\" \") }\n  val pairs = words.map { (inputParameter: String) => {\n    val originalFunction = ((word: String) => (word, 1))(_)\n    val originalValue = originalFunction(inputParameter)\n    (\"\", originalValue._2)\n  } }\n  val counts = pairs.reduceByKey { (a: Int, b: Int) => a + b }\n  counts\n}",
+      "originalCode" : "def wordCount(input: RDD[String]) = {\n\t\tval words = input.flatMap( (line: String) => line.split(\" \") )\n\t\tval pairs = words.map( (word: String) => (word, 1) )\n\t\tval counts = pairs.reduceByKey( (a: Int, b: Int) => a + b )\n\t\tcounts\n\t}",
+      "status" : "Killed"
+    },
+    {
+      "id" : 236,
+      "originalProgramId" : 11,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def wordCount(input: RDD[String]) = {\n  val words = input.flatMap { (line: String) => line.split(\" \") }\n  val pairs = words.map { (inputParameter: String) => {\n    val originalFunction = ((word: String) => (word, 1))(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, 0)\n  } }\n  val counts = pairs.reduceByKey { (a: Int, b: Int) => a + b }\n  counts\n}",
+      "originalCode" : "def wordCount(input: RDD[String]) = {\n\t\tval words = input.flatMap( (line: String) => line.split(\" \") )\n\t\tval pairs = words.map( (word: String) => (word, 1) )\n\t\tval counts = pairs.reduceByKey( (a: Int, b: Int) => a + b )\n\t\tcounts\n\t}",
+      "status" : "Killed"
+    },
+    {
+      "id" : 237,
+      "originalProgramId" : 11,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def wordCount(input: RDD[String]) = {\n  val words = input.flatMap { (line: String) => line.split(\" \") }\n  val pairs = words.map { (inputParameter: String) => {\n    val originalFunction = ((word: String) => (word, 1))(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, 1)\n  } }\n  val counts = pairs.reduceByKey { (a: Int, b: Int) => a + b }\n  counts\n}",
+      "originalCode" : "def wordCount(input: RDD[String]) = {\n\t\tval words = input.flatMap( (line: String) => line.split(\" \") )\n\t\tval pairs = words.map( (word: String) => (word, 1) )\n\t\tval counts = pairs.reduceByKey( (a: Int, b: Int) => a + b )\n\t\tcounts\n\t}",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 238,
+      "originalProgramId" : 11,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def wordCount(input: RDD[String]) = {\n  val words = input.flatMap { (line: String) => line.split(\" \") }\n  val pairs = words.map { (inputParameter: String) => {\n    val originalFunction = ((word: String) => (word, 1))(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, Int.MaxValue)\n  } }\n  val counts = pairs.reduceByKey { (a: Int, b: Int) => a + b }\n  counts\n}",
+      "originalCode" : "def wordCount(input: RDD[String]) = {\n\t\tval words = input.flatMap( (line: String) => line.split(\" \") )\n\t\tval pairs = words.map( (word: String) => (word, 1) )\n\t\tval counts = pairs.reduceByKey( (a: Int, b: Int) => a + b )\n\t\tcounts\n\t}",
+      "status" : "Killed"
+    },
+    {
+      "id" : 239,
+      "originalProgramId" : 11,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def wordCount(input: RDD[String]) = {\n  val words = input.flatMap { (line: String) => line.split(\" \") }\n  val pairs = words.map { (inputParameter: String) => {\n    val originalFunction = ((word: String) => (word, 1))(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, Int.MinValue)\n  } }\n  val counts = pairs.reduceByKey { (a: Int, b: Int) => a + b }\n  counts\n}",
+      "originalCode" : "def wordCount(input: RDD[String]) = {\n\t\tval words = input.flatMap( (line: String) => line.split(\" \") )\n\t\tval pairs = words.map( (word: String) => (word, 1) )\n\t\tval counts = pairs.reduceByKey( (a: Int, b: Int) => a + b )\n\t\tcounts\n\t}",
+      "status" : "Killed"
+    },
+    {
+      "id" : 240,
+      "originalProgramId" : 11,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def wordCount(input: RDD[String]) = {\n  val words = input.flatMap { (line: String) => line.split(\" \") }\n  val pairs = words.map { (inputParameter: String) => {\n    val originalFunction = ((word: String) => (word, 1))(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, -originalValue._2)\n  } }\n  val counts = pairs.reduceByKey { (a: Int, b: Int) => a + b }\n  counts\n}",
+      "originalCode" : "def wordCount(input: RDD[String]) = {\n\t\tval words = input.flatMap( (line: String) => line.split(\" \") )\n\t\tval pairs = words.map( (word: String) => (word, 1) )\n\t\tval counts = pairs.reduceByKey( (a: Int, b: Int) => a + b )\n\t\tcounts\n\t}",
+      "status" : "Killed"
+    },
+    {
+      "id" : 241,
+      "originalProgramId" : 11,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def wordCount(input: RDD[String]) = {\n  val words = input.flatMap { (line: String) => line.split(\" \") }.distinct()\n  val pairs = words.map { (word: String) => (word, 1) }\n  val counts = pairs.reduceByKey { (a: Int, b: Int) => a + b }\n  counts\n}",
+      "originalCode" : "def wordCount(input: RDD[String]) = {\n\t\tval words = input.flatMap( (line: String) => line.split(\" \") )\n\t\tval pairs = words.map( (word: String) => (word, 1) )\n\t\tval counts = pairs.reduceByKey( (a: Int, b: Int) => a + b )\n\t\tcounts\n\t}",
+      "status" : "Killed"
+    },
+    {
+      "id" : 242,
+      "originalProgramId" : 11,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def wordCount(input: RDD[String]) = {\n  val words = input.flatMap { (line: String) => line.split(\" \") }\n  val pairs = words.map { (word: String) => (word, 1) }.distinct()\n  val counts = pairs.reduceByKey { (a: Int, b: Int) => a + b }\n  counts\n}",
+      "originalCode" : "def wordCount(input: RDD[String]) = {\n\t\tval words = input.flatMap( (line: String) => line.split(\" \") )\n\t\tval pairs = words.map( (word: String) => (word, 1) )\n\t\tval counts = pairs.reduceByKey( (a: Int, b: Int) => a + b )\n\t\tcounts\n\t}",
+      "status" : "Killed"
+    },
+    {
+      "id" : 243,
+      "originalProgramId" : 11,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def wordCount(input: RDD[String]) = {\n  val words = input.flatMap { (line: String) => line.split(\" \") }\n  val pairs = words.map { (word: String) => (word, 1) }\n  val counts = pairs.reduceByKey { (a: Int, b: Int) => a + b }.distinct()\n  counts\n}",
+      "originalCode" : "def wordCount(input: RDD[String]) = {\n\t\tval words = input.flatMap( (line: String) => line.split(\" \") )\n\t\tval pairs = words.map( (word: String) => (word, 1) )\n\t\tval counts = pairs.reduceByKey( (a: Int, b: Int) => a + b )\n\t\tcounts\n\t}",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 244,
+      "originalProgramId" : 11,
+      "mutationOperator" : "ATR",
+      "mutationOperatorDescription" : "Aggregation Transformation Replacement",
+      "mutantCode" : "def wordCount(input: RDD[String]) = {\n  val words = input.flatMap { (line: String) => line.split(\" \") }\n  val pairs = words.map { (word: String) => (word, 1) }\n  val counts = pairs.reduceByKey { (firstParameter: Int, secondParameter: Int) => firstParameter }\n  counts\n}",
+      "originalCode" : "def wordCount(input: RDD[String]) = {\n\t\tval words = input.flatMap( (line: String) => line.split(\" \") )\n\t\tval pairs = words.map( (word: String) => (word, 1) )\n\t\tval counts = pairs.reduceByKey( (a: Int, b: Int) => a + b )\n\t\tcounts\n\t}",
+      "status" : "Killed"
+    },
+    {
+      "id" : 245,
+      "originalProgramId" : 11,
+      "mutationOperator" : "ATR",
+      "mutationOperatorDescription" : "Aggregation Transformation Replacement",
+      "mutantCode" : "def wordCount(input: RDD[String]) = {\n  val words = input.flatMap { (line: String) => line.split(\" \") }\n  val pairs = words.map { (word: String) => (word, 1) }\n  val counts = pairs.reduceByKey { (firstParameter: Int, secondParameter: Int) => secondParameter }\n  counts\n}",
+      "originalCode" : "def wordCount(input: RDD[String]) = {\n\t\tval words = input.flatMap( (line: String) => line.split(\" \") )\n\t\tval pairs = words.map( (word: String) => (word, 1) )\n\t\tval counts = pairs.reduceByKey( (a: Int, b: Int) => a + b )\n\t\tcounts\n\t}",
+      "status" : "Killed"
+    },
+    {
+      "id" : 246,
+      "originalProgramId" : 11,
+      "mutationOperator" : "ATR",
+      "mutationOperatorDescription" : "Aggregation Transformation Replacement",
+      "mutantCode" : "def wordCount(input: RDD[String]) = {\n  val words = input.flatMap { (line: String) => line.split(\" \") }\n  val pairs = words.map { (word: String) => (word, 1) }\n  val counts = pairs.reduceByKey { (firstParameter: Int, secondParameter: Int) => {\n    val originalFunction = ((a: Int, b: Int) => a + b)(_, _)\n    originalFunction(firstParameter, firstParameter)\n  } }\n  counts\n}",
+      "originalCode" : "def wordCount(input: RDD[String]) = {\n\t\tval words = input.flatMap( (line: String) => line.split(\" \") )\n\t\tval pairs = words.map( (word: String) => (word, 1) )\n\t\tval counts = pairs.reduceByKey( (a: Int, b: Int) => a + b )\n\t\tcounts\n\t}",
+      "status" : "Lived"
+    },
+    {
+      "id" : 247,
+      "originalProgramId" : 11,
+      "mutationOperator" : "ATR",
+      "mutationOperatorDescription" : "Aggregation Transformation Replacement",
+      "mutantCode" : "def wordCount(input: RDD[String]) = {\n  val words = input.flatMap { (line: String) => line.split(\" \") }\n  val pairs = words.map { (word: String) => (word, 1) }\n  val counts = pairs.reduceByKey { (firstParameter: Int, secondParameter: Int) => {\n    val originalFunction = ((a: Int, b: Int) => a + b)(_, _)\n    originalFunction(secondParameter, secondParameter)\n  } }\n  counts\n}",
+      "originalCode" : "def wordCount(input: RDD[String]) = {\n\t\tval words = input.flatMap( (line: String) => line.split(\" \") )\n\t\tval pairs = words.map( (word: String) => (word, 1) )\n\t\tval counts = pairs.reduceByKey( (a: Int, b: Int) => a + b )\n\t\tcounts\n\t}",
+      "status" : "Lived"
+    },
+    {
+      "id" : 248,
+      "originalProgramId" : 11,
+      "mutationOperator" : "ATR",
+      "mutationOperatorDescription" : "Aggregation Transformation Replacement",
+      "mutantCode" : "def wordCount(input: RDD[String]) = {\n  val words = input.flatMap { (line: String) => line.split(\" \") }\n  val pairs = words.map { (word: String) => (word, 1) }\n  val counts = pairs.reduceByKey { (firstParameter: Int, secondParameter: Int) => {\n    val originalFunction = ((a: Int, b: Int) => a + b)(_, _)\n    originalFunction(secondParameter, firstParameter)\n  } }\n  counts\n}",
+      "originalCode" : "def wordCount(input: RDD[String]) = {\n\t\tval words = input.flatMap( (line: String) => line.split(\" \") )\n\t\tval pairs = words.map( (word: String) => (word, 1) )\n\t\tval counts = pairs.reduceByKey( (a: Int, b: Int) => a + b )\n\t\tcounts\n\t}",
+      "status" : "Equivalent"
+    }
+  ],
+  "removedMutants" : [
+  ],
+  "mutationOperatorsMetrics" : {
+    "totalMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 10,
+      "UTD" : 2,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 5,
+      "OTI" : 0,
+      "DTI" : 3,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalKilledMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 8,
+      "UTD" : 2,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 2,
+      "OTI" : 0,
+      "DTI" : 2,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalLivedMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 0,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 2,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalEquivalentMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 2,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 1,
+      "OTI" : 0,
+      "DTI" : 1,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalErrorMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 0,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalRemovedMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 0,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "descriptionPerOperator" : {
+      "FTD" : "Filter Transformation Deletion",
+      "JTR" : "Join Transformation Replacement",
+      "UTR" : "Unary Transformation Replacement",
+      "MTR" : "Mapping Transformation Replacement",
+      "UTD" : "Unary Transformation Deletion",
+      "OTD" : "Order Transformation Deletion",
+      "BTR" : "Binary Transformation Replacement",
+      "STR" : "Set Transformation Replacement",
+      "BTS" : "Binary Transformation Swap",
+      "ATR" : "Aggregation Transformation Replacement",
+      "OTI" : "Order Transformation Inversion",
+      "DTI" : "Distinct Transformation Insertion",
+      "DTD" : "Distinct Transformation Deletion",
+      "NFTP" : "Negation of Filter Transformation Predicate",
+      "UTS" : "Unary Transformation Swap"
+    }
+  },
+  "totalDatasets" : 4,
+  "totalTransformations" : 3,
+  "totalMutants" : 20,
+  "totalKilledMutants" : 14,
+  "totalLivedMutants" : 2,
+  "totalEquivalentMutants" : 4,
+  "totalErrorMutants" : 0,
+  "totalRemovedMutants" : 0,
+  "mutationScore" : 0.875
+}

@@ -1,0 +1,1191 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/scripts/shCore.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/scripts/shBrushScala.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/styles/shCoreEclipse.css" rel="stylesheet" type="text/css" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/styles/shThemeEclipse.min.css" rel="stylesheet" type="text/css" />
+<!-- Cytoscape -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/2.5.1/cytoscape.min.js"></script>
+<!-- DataTable -->
+<link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<style>
+#cy {
+  width: 1100px;
+  height: 300px;
+  background-color: white;
+}
+body {
+  padding-top: 5rem;
+}
+.starter-template {
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+.section-title {
+  padding-top: 3.5rem;
+}
+</style>
+<title>TRANSMUT-Spark Mutation Testing Report</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+<a class="navbar-brand" href="../index.html">TRANSMUT-Spark</a>
+<div class="collapse navbar-collapse" id="navbarNav">
+  <ul class="navbar-nav mr-auto">
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Section</a>
+      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <a class="dropdown-item" href="#metrics">Metrics</a>
+        <a class="dropdown-item" href="#code">Code</a>
+        <a class="dropdown-item" href="#dag">DAG</a>
+        <a class="dropdown-item" href="#datasets">Datasets</a>
+        <a class="dropdown-item" href="#transformations">Transformations</a>
+        <a class="dropdown-item" href="#mutants">Mutants</a>
+        <a class="dropdown-item" href="#removedMutants">Removed Mutants</a>
+        <a class="dropdown-item" href="#mutationOperators">Mutation Operators</a>
+      </div>
+    </li>
+  </ul>
+</div>
+</nav>
+<main role"main" class="container">  
+<div class="starter-template">
+  <h2><a href="../index.html" class="text-dark">Mutation Testing Report</a></h2>
+  <h3><a href="../ProgramSources/Program-Source-6.html" class="text-dark">Program Source: NasaApacheWebLogsAnalysis</a></h3>
+  <h4><a href="#" class="text-dark">Program ID: 8</a></h4>
+  <h4><a href="#" class="text-dark">Program: unionLogsProblem</a></h4>
+</div>    
+<!-- Metrics -->
+<div class="row" id="metrics">
+<div class="col" >
+<h3 class="section-title">Metrics</h3>
+<hr class="my-4">
+<table class="table table-striped table-hover">
+<thead class="thead-dark"><tr><th scope="col">#</th><th scope="col">Total</th></tr></thead>
+<tbody>
+  <tr><th scope="row">Datasets</th><td>5</td></tr>
+  <tr><th scope="row">Transformations</th><td>3</td></tr>
+  <tr><th scope="row">Mutants</th><td>14</td></tr>
+  <tr><th scope="row">Killed Mutants</th><td>11</td></tr>
+  <tr><th scope="row">Lived Mutants</th><td>0</td></tr>
+  <tr><th scope="row">Equivalent Mutants</th><td>3</td></tr>
+  <tr><th scope="row">Error Mutants</th><td>0</td></tr>
+  <tr><th scope="row">Removed Mutants</th><td>0</td></tr>
+  <tr><th scope="row">Mutation Score</th>
+  <td>
+    <div class="progress">
+      <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 100.00%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><span class="font-weight-bold text-dark">1.00</span></div>
+    </div>
+  </td>
+  </tr>
+ </tbody>
+ <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+    <th scope="row"></th>
+    <td></td>
+    </tr>
+  </tfoot>
+</table>
+     
+<hr class="my-4">
+</div>
+</div>
+<!-- Code -->
+<div class="row" id="code">
+<div class="col">
+<h3 class="section-title">Code</h3>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false;">
+def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {
+    val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)
+    val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()
+    val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))
+    cleanLogLines
+  }
+</pre>
+<hr class="my-4">
+</div>
+</div>
+<!-- DAG -->
+<div class="row" id="dag">
+<div class="col" >
+<h3 class="section-title">DAG</h3>
+<hr class="my-4">
+<figure class="figure">
+<div id="cy"></div>
+</figure>
+<hr class="my-4">
+</div> 
+</div>
+<!-- Datasets -->
+<div class="row" id="datasets">
+<div class="col" >
+<h3 class="section-title">Datasets</h3>
+<hr class="my-4">
+<table class="table table-striped table-hover">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Reference</th>
+      <th scope="col">Type</th>
+   </tr>
+  </thead>
+  <tbody>
+  <tr>
+  <th scope="row">49</th>
+  <td>firstLogs</td>
+  <td>RDD[String]</td>
+</tr>
+<tr>
+  <th scope="row">50</th>
+  <td>secondLogs</td>
+  <td>RDD[String]</td>
+</tr>
+<tr>
+  <th scope="row">51</th>
+  <td>aggregatedLogLines</td>
+  <td>RDD[String]</td>
+</tr>
+<tr>
+  <th scope="row">52</th>
+  <td>uniqueLogLines</td>
+  <td>RDD[String]</td>
+</tr>
+<tr>
+  <th scope="row">53</th>
+  <td>cleanLogLines</td>
+  <td>RDD[String]</td>
+</tr>
+  </tbody>
+  <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+    <th scope="row" colspan="2">Total Datasets</th>
+    <td>5</td>
+    </tr>
+  </tfoot>
+</table>      
+    
+<hr class="my-4">
+</div>
+</div>
+<!-- Transformations -->
+<div class="row" id="transformations">
+<div class="col" >
+<h3 class="section-title" id="transformations">Transformations</h3>
+<hr class="my-4">
+<table class="table table-striped table-hover">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Name</th>
+      <th scope="col">Input Type</th>
+      <th scope="col">Output Type</th>
+   </tr>
+  </thead>
+  <tbody>
+  <tr>
+  <th scope="row">40</th>
+  <td>union</td>
+  <td>RDD[String], RDD[String]</td>
+  <td>RDD[String]</td>
+</tr>
+<tr>
+  <th scope="row">41</th>
+  <td>distinct</td>
+  <td>RDD[String]</td>
+  <td>RDD[String]</td>
+</tr>
+<tr>
+  <th scope="row">42</th>
+  <td>filter</td>
+  <td>RDD[String]</td>
+  <td>RDD[String]</td>
+</tr>
+  </tbody>
+  <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+    <th scope="row" colspan="3">Total Transformations</th>
+    <td>3</td>
+    </tr>
+  </tfoot>
+</table>      
+    
+<hr class="my-4">   
+</div>
+</div>
+<!-- Mutants -->
+<div class="row" id="mutants">
+<div class="col">
+<h3 class="section-title">Mutants</h3>
+<hr class="my-4">
+<table class="display table table-striped table-hover" id="mutantsTable">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Mutation Operator</th>
+      <th scope="col">Status</th>
+      <th scope="col">Code</th>
+     </tr>
+  </thead>
+  <tbody>
+    <tr>
+  <th scope="row"><a href="../Mutants/Mutant-170.html" class="text-dark">170</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Swap">UTS</a></td>
+  <td>Equivalent</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant170">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-171.html" class="text-dark">171</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Replacement">UTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant171">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-172.html" class="text-dark">172</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Replacement">UTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant172">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-173.html" class="text-dark">173</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Deletion">UTD</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant173">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-174.html" class="text-dark">174</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Deletion">UTD</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant174">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-175.html" class="text-dark">175</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Filter Transformation Deletion">FTD</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant175">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-176.html" class="text-dark">176</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Set Transformation Replacement">STR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant176">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-177.html" class="text-dark">177</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Set Transformation Replacement">STR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant177">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-178.html" class="text-dark">178</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Set Transformation Replacement">STR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant178">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-179.html" class="text-dark">179</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Set Transformation Replacement">STR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant179">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-180.html" class="text-dark">180</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Deletion">DTD</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant180">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-181.html" class="text-dark">181</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></td>
+  <td>Equivalent</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant181">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-182.html" class="text-dark">182</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></td>
+  <td>Equivalent</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant182">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-183.html" class="text-dark">183</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Negation of Filter Transformation Predicate">NFTP</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant183">Show</button></td>
+</tr>
+  </tbody>
+  <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+      <th scope="row" colspan="2">Mutation Score</th>
+      <td colspan="2">
+        <div class="progress">
+          <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 100.00%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><span class="font-weight-bold text-dark">1.00</span></div>
+        </div>
+      </td>
+    </tr>
+  </tfoot>
+</table>   
+   
+<hr class="my-4">
+</div>
+</div>
+<!-- Removed Mutants -->
+<div class="row" id="removedMutants">
+<div class="col">
+<h3 class="section-title">Removed Mutants</h3>
+<hr class="my-4">
+<table class="display table table-striped table-hover" id="removedMutantsTable">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Mutation Operator</th>
+      <th scope="col">Reduction Rule</th>
+      <th scope="col">Code</th>
+     </tr>
+  </thead>
+  <tbody>
+    
+  </tbody>
+  <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+      <th scope="row" colspan="2">Total Removed Mutants</th>
+      <td colspan="2">0</td>
+    </tr>
+  </tfoot>
+</table>   
+   
+<hr class="my-4">
+</div>
+</div>
+<!-- Mutation Operators -->
+<div class="row" id="mutationOperators">
+<div class="col">
+<h3 class="section-title">Mutation Operators</h3>
+<hr class="my-4">
+<table class="display table table-striped table-hover" id="programSourcesTable">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Mutation Operator</th>
+      <th scope="col">Mutants</th>
+      <th scope="col">Killed</th>
+      <th scope="col">Lived</th>
+      <th scope="col">Equivalent</th>
+      <th scope="col">Error</th>
+      <th scope="col">Removed</th>
+      </tr>
+  </thead>
+  <tbody>
+    <tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Swap">UTS</a></th>
+  <td>1</td>
+  <td>0</td>
+  <td>0</td>
+  <td>1</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+<tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></th>
+  <td>2</td>
+  <td>0</td>
+  <td>0</td>
+  <td>2</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+<tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Set Transformation Replacement">STR</a></th>
+  <td>4</td>
+  <td>4</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+<tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Negation of Filter Transformation Predicate">NFTP</a></th>
+  <td>1</td>
+  <td>1</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+<tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Filter Transformation Deletion">FTD</a></th>
+  <td>1</td>
+  <td>1</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+<tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Deletion">UTD</a></th>
+  <td>2</td>
+  <td>2</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+<tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Replacement">UTR</a></th>
+  <td>2</td>
+  <td>2</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+<tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Deletion">DTD</a></th>
+  <td>1</td>
+  <td>1</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+  </tbody>
+  <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+      <th scope="row">Total</th>
+      <td>14</td>
+      <td>11</td>
+      <td>0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+  </tfoot>
+</table>   
+   
+<hr class="my-4">
+</div>
+</div>
+<!-- Mutant Modals -->
+<div class="modal fade" id="modalMutant170" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel170" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-170.html" class="text-dark">170</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Swap">UTS</a></h5>
+<h5>Status: Equivalent</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3, 4]">
+def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {
+    val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)
+    val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()
+    val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))
+    cleanLogLines
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3, 4]">
+def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {
+  val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)
+  val uniqueLogLines: RDD[String] = aggregatedLogLines.filter(line => isNotHeader(line))
+  val cleanLogLines: RDD[String] = uniqueLogLines.distinct()
+  cleanLogLines
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant171" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel171" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-171.html" class="text-dark">171</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Replacement">UTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3, 4]">
+def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {
+    val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)
+    val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()
+    val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))
+    cleanLogLines
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {
+  val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)
+  val uniqueLogLines: RDD[String] = aggregatedLogLines.filter(line => isNotHeader(line))
+  val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))
+  cleanLogLines
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant172" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel172" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-172.html" class="text-dark">172</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Replacement">UTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4, 3]">
+def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {
+    val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)
+    val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()
+    val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))
+    cleanLogLines
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {
+  val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)
+  val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()
+  val cleanLogLines: RDD[String] = uniqueLogLines.distinct()
+  cleanLogLines
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant173" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel173" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-173.html" class="text-dark">173</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Deletion">UTD</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {
+    val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)
+    val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()
+    val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))
+    cleanLogLines
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {
+  val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)
+  val uniqueLogLines: RDD[String] = aggregatedLogLines
+  val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))
+  cleanLogLines
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant174" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel174" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-174.html" class="text-dark">174</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Deletion">UTD</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {
+    val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)
+    val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()
+    val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))
+    cleanLogLines
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {
+  val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)
+  val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()
+  val cleanLogLines: RDD[String] = uniqueLogLines
+  cleanLogLines
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant175" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel175" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-175.html" class="text-dark">175</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Filter Transformation Deletion">FTD</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {
+    val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)
+    val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()
+    val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))
+    cleanLogLines
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {
+  val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)
+  val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()
+  val cleanLogLines: RDD[String] = uniqueLogLines
+  cleanLogLines
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant176" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel176" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-176.html" class="text-dark">176</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Set Transformation Replacement">STR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {
+    val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)
+    val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()
+    val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))
+    cleanLogLines
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {
+  val aggregatedLogLines: RDD[String] = firstLogs.intersection(secondLogs)
+  val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()
+  val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))
+  cleanLogLines
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant177" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel177" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-177.html" class="text-dark">177</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Set Transformation Replacement">STR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {
+    val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)
+    val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()
+    val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))
+    cleanLogLines
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {
+  val aggregatedLogLines: RDD[String] = firstLogs.subtract(secondLogs)
+  val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()
+  val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))
+  cleanLogLines
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant178" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel178" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-178.html" class="text-dark">178</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Set Transformation Replacement">STR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {
+    val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)
+    val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()
+    val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))
+    cleanLogLines
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {
+  val aggregatedLogLines: RDD[String] = firstLogs
+  val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()
+  val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))
+  cleanLogLines
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant179" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel179" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-179.html" class="text-dark">179</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Set Transformation Replacement">STR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {
+    val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)
+    val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()
+    val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))
+    cleanLogLines
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {
+  val aggregatedLogLines: RDD[String] = secondLogs
+  val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()
+  val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))
+  cleanLogLines
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant180" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel180" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-180.html" class="text-dark">180</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Deletion">DTD</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {
+    val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)
+    val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()
+    val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))
+    cleanLogLines
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {
+  val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)
+  val uniqueLogLines: RDD[String] = aggregatedLogLines
+  val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))
+  cleanLogLines
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant181" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel181" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-181.html" class="text-dark">181</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></h5>
+<h5>Status: Equivalent</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {
+    val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)
+    val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()
+    val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))
+    cleanLogLines
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {
+  val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs).distinct()
+  val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()
+  val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))
+  cleanLogLines
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant182" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel182" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-182.html" class="text-dark">182</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></h5>
+<h5>Status: Equivalent</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {
+    val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)
+    val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()
+    val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))
+    cleanLogLines
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {
+  val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)
+  val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()
+  val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line)).distinct()
+  cleanLogLines
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant183" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel183" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-183.html" class="text-dark">183</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Negation of Filter Transformation Predicate">NFTP</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {
+    val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)
+    val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()
+    val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))
+    cleanLogLines
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4, 5, 6, 7, 8]">
+def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {
+  val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)
+  val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()
+  val cleanLogLines: RDD[String] = uniqueLogLines.filter { (inputParameter: String) => {
+    val originalFunction = (line => isNotHeader(line))(_)
+    val originalValue = originalFunction(inputParameter)
+    !originalValue
+  } }
+  cleanLogLines
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Removed Mutant Modals -->
+
+</main>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+<script type="text/javascript">
+ SyntaxHighlighter.all()
+</script>
+<script >
+$(document).ready(function() {
+  $('table.display').DataTable( {
+    fixedHeader: {
+      header: true,
+      footer: true
+    },
+    "lengthMenu": [[5, 10, 20, -1], [5, 10, 20, "All"]]
+  } );
+} );
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+});
+</script>
+
+<script >
+  var cy = cytoscape({
+    container: document.getElementById('cy'), // container to render in
+    elements: [ // list of graph elements to start with
+      { // dataset node 49
+  data: { id: 'dataset_49' , name : 'firstLogs' , dataset : 'true' , inputDataset: 'true'  }
+}, 
+{ // transformation node 40
+  data: { id: 'transformation_40' , name : 'union' , transformation : 'true'  }
+}, 
+{ // edge node 82
+  data: { id: 'edge_82' , source: 'dataset_49', target: 'transformation_40'  }
+}, 
+{ // dataset node 50
+  data: { id: 'dataset_50' , name : 'secondLogs' , dataset : 'true' , inputDataset: 'true'  }
+}, 
+{ // edge node 83
+  data: { id: 'edge_83' , source: 'dataset_50', target: 'transformation_40'  }
+}, 
+{ // dataset node 51
+  data: { id: 'dataset_51' , name : 'aggregatedLogLines' , dataset : 'true'   }
+}, 
+{ // edge node 84
+  data: { id: 'edge_84'  , target: 'dataset_51', source: 'transformation_40' }
+}, 
+{ // transformation node 41
+  data: { id: 'transformation_41' , name : 'distinct' , transformation : 'true'  }
+}, 
+{ // edge node 85
+  data: { id: 'edge_85' , source: 'dataset_51', target: 'transformation_41'  }
+}, 
+{ // dataset node 52
+  data: { id: 'dataset_52' , name : 'uniqueLogLines' , dataset : 'true'   }
+}, 
+{ // edge node 86
+  data: { id: 'edge_86'  , target: 'dataset_52', source: 'transformation_41' }
+}, 
+{ // transformation node 42
+  data: { id: 'transformation_42' , name : 'filter' , transformation : 'true'  }
+}, 
+{ // edge node 87
+  data: { id: 'edge_87' , source: 'dataset_52', target: 'transformation_42'  }
+}, 
+{ // dataset node 53
+  data: { id: 'dataset_53' , name : 'cleanLogLines' , dataset : 'true'  , outputDataset: 'true' }
+}, 
+{ // edge node 88
+  data: { id: 'edge_88'  , target: 'dataset_53', source: 'transformation_42' }
+}
+    ],
+   style: [ // the stylesheet for the graph
+   {
+     selector: 'node',
+     style: {
+       'label': 'data(name)'
+     }
+   },
+   {
+     selector: 'edge',
+     style: {
+     'width': 3,
+     'line-color': '#ccc',
+     'target-arrow-color': '#ccc',
+     'target-arrow-shape': 'triangle',
+     }
+   },
+   {
+      selector: '[transformation]',
+      style: {
+        'background-color': 'black',
+        'shape': 'rectangle'
+       }
+   },
+   {
+      selector: '[dataset]',
+      style: {
+        'background-color': 'gray',
+        'shape': 'ellipse'
+      }
+   },
+   {
+      selector: '[inputDataset]',
+      style: {
+        'background-color': 'green',
+        'shape': 'ellipse'
+       }
+   },
+   {
+     selector: '[outputDataset]',
+     style: {
+       'background-color': 'red',
+       'shape': 'ellipse'
+      }
+   },
+   {
+      selector: '[loadTransformation]',
+      style: {
+        'background-color': 'red',
+        'shape': 'rectangle'
+       }
+   }
+  ],
+  layout: {
+    name: 'grid',
+    rows: 1
+  }
+});
+</script>
+    
+</body>
+</html>
+    

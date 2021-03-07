@@ -1,0 +1,360 @@
+{
+  "id" : 10,
+  "programSourceId" : 8,
+  "name" : "scan",
+  "code" : "def scan(input: RDD[String]): RDD[(String, Int)] = {\n    val rankings = input.map(parseRankings)\n    val filteredRankings: RDD[Ranking] = rankings.filter(filterRankings)\n    val results: RDD[(String, Int)] = filteredRankings.map(mapRankingToTuple)\n    results\n  }",
+  "datasets" : [
+    {
+      "id" : 60,
+      "name" : "input",
+      "datasetType" : "RDD[String]",
+      "inputDataset" : true,
+      "outputDataset" : false
+    },
+    {
+      "id" : 61,
+      "name" : "rankings",
+      "datasetType" : "RDD[Ranking]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 62,
+      "name" : "filteredRankings",
+      "datasetType" : "RDD[Ranking]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 63,
+      "name" : "results",
+      "datasetType" : "RDD[(String, Int)]",
+      "inputDataset" : false,
+      "outputDataset" : true
+    }
+  ],
+  "transformations" : [
+    {
+      "id" : 48,
+      "name" : "map",
+      "inputTypes" : [
+        "RDD[String]"
+      ],
+      "outputTypes" : [
+        "RDD[Ranking]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 49,
+      "name" : "filter",
+      "inputTypes" : [
+        "RDD[Ranking]"
+      ],
+      "outputTypes" : [
+        "RDD[Ranking]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 50,
+      "name" : "map",
+      "inputTypes" : [
+        "RDD[Ranking]"
+      ],
+      "outputTypes" : [
+        "RDD[(String, Int)]"
+      ],
+      "loadTransformation" : false
+    }
+  ],
+  "edges" : [
+    {
+      "id" : 99,
+      "datasetId" : 60,
+      "transformationId" : 48,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 100,
+      "datasetId" : 61,
+      "transformationId" : 48,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 101,
+      "datasetId" : 61,
+      "transformationId" : 49,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 102,
+      "datasetId" : 62,
+      "transformationId" : 49,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 103,
+      "datasetId" : 62,
+      "transformationId" : 50,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 104,
+      "datasetId" : 63,
+      "transformationId" : 50,
+      "direction" : "TransformationToDataset"
+    }
+  ],
+  "mutants" : [
+    {
+      "id" : 216,
+      "originalProgramId" : 10,
+      "mutationOperator" : "UTD",
+      "mutationOperatorDescription" : "Unary Transformation Deletion",
+      "mutantCode" : "def scan(input: RDD[String]): RDD[(String, Int)] = {\n  val rankings = input.map(parseRankings)\n  val filteredRankings: RDD[Ranking] = rankings\n  val results: RDD[(String, Int)] = filteredRankings.map(mapRankingToTuple)\n  results\n}",
+      "originalCode" : "def scan(input: RDD[String]): RDD[(String, Int)] = {\n    val rankings = input.map(parseRankings)\n    val filteredRankings: RDD[Ranking] = rankings.filter(filterRankings)\n    val results: RDD[(String, Int)] = filteredRankings.map(mapRankingToTuple)\n    results\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 217,
+      "originalProgramId" : 10,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def scan(input: RDD[String]): RDD[(String, Int)] = {\n  val rankings = input.map { (inputParameter: String) => {\n    val originalFunction = parseRankings(_)\n    val originalValue = originalFunction(inputParameter)\n    null.asInstanceOf[Ranking]\n  } }\n  val filteredRankings: RDD[Ranking] = rankings.filter(filterRankings)\n  val results: RDD[(String, Int)] = filteredRankings.map(mapRankingToTuple)\n  results\n}",
+      "originalCode" : "def scan(input: RDD[String]): RDD[(String, Int)] = {\n    val rankings = input.map(parseRankings)\n    val filteredRankings: RDD[Ranking] = rankings.filter(filterRankings)\n    val results: RDD[(String, Int)] = filteredRankings.map(mapRankingToTuple)\n    results\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 218,
+      "originalProgramId" : 10,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def scan(input: RDD[String]): RDD[(String, Int)] = {\n  val rankings = input.map(parseRankings)\n  val filteredRankings: RDD[Ranking] = rankings.filter(filterRankings)\n  val results: RDD[(String, Int)] = filteredRankings.map { (inputParameter: Ranking) => {\n    val originalFunction = mapRankingToTuple(_)\n    val originalValue = originalFunction(inputParameter)\n    (\"\", originalValue._2)\n  } }\n  results\n}",
+      "originalCode" : "def scan(input: RDD[String]): RDD[(String, Int)] = {\n    val rankings = input.map(parseRankings)\n    val filteredRankings: RDD[Ranking] = rankings.filter(filterRankings)\n    val results: RDD[(String, Int)] = filteredRankings.map(mapRankingToTuple)\n    results\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 219,
+      "originalProgramId" : 10,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def scan(input: RDD[String]): RDD[(String, Int)] = {\n  val rankings = input.map(parseRankings)\n  val filteredRankings: RDD[Ranking] = rankings.filter(filterRankings)\n  val results: RDD[(String, Int)] = filteredRankings.map { (inputParameter: Ranking) => {\n    val originalFunction = mapRankingToTuple(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, 0)\n  } }\n  results\n}",
+      "originalCode" : "def scan(input: RDD[String]): RDD[(String, Int)] = {\n    val rankings = input.map(parseRankings)\n    val filteredRankings: RDD[Ranking] = rankings.filter(filterRankings)\n    val results: RDD[(String, Int)] = filteredRankings.map(mapRankingToTuple)\n    results\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 220,
+      "originalProgramId" : 10,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def scan(input: RDD[String]): RDD[(String, Int)] = {\n  val rankings = input.map(parseRankings)\n  val filteredRankings: RDD[Ranking] = rankings.filter(filterRankings)\n  val results: RDD[(String, Int)] = filteredRankings.map { (inputParameter: Ranking) => {\n    val originalFunction = mapRankingToTuple(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, 1)\n  } }\n  results\n}",
+      "originalCode" : "def scan(input: RDD[String]): RDD[(String, Int)] = {\n    val rankings = input.map(parseRankings)\n    val filteredRankings: RDD[Ranking] = rankings.filter(filterRankings)\n    val results: RDD[(String, Int)] = filteredRankings.map(mapRankingToTuple)\n    results\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 221,
+      "originalProgramId" : 10,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def scan(input: RDD[String]): RDD[(String, Int)] = {\n  val rankings = input.map(parseRankings)\n  val filteredRankings: RDD[Ranking] = rankings.filter(filterRankings)\n  val results: RDD[(String, Int)] = filteredRankings.map { (inputParameter: Ranking) => {\n    val originalFunction = mapRankingToTuple(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, Int.MaxValue)\n  } }\n  results\n}",
+      "originalCode" : "def scan(input: RDD[String]): RDD[(String, Int)] = {\n    val rankings = input.map(parseRankings)\n    val filteredRankings: RDD[Ranking] = rankings.filter(filterRankings)\n    val results: RDD[(String, Int)] = filteredRankings.map(mapRankingToTuple)\n    results\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 222,
+      "originalProgramId" : 10,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def scan(input: RDD[String]): RDD[(String, Int)] = {\n  val rankings = input.map(parseRankings)\n  val filteredRankings: RDD[Ranking] = rankings.filter(filterRankings)\n  val results: RDD[(String, Int)] = filteredRankings.map { (inputParameter: Ranking) => {\n    val originalFunction = mapRankingToTuple(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, Int.MinValue)\n  } }\n  results\n}",
+      "originalCode" : "def scan(input: RDD[String]): RDD[(String, Int)] = {\n    val rankings = input.map(parseRankings)\n    val filteredRankings: RDD[Ranking] = rankings.filter(filterRankings)\n    val results: RDD[(String, Int)] = filteredRankings.map(mapRankingToTuple)\n    results\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 223,
+      "originalProgramId" : 10,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def scan(input: RDD[String]): RDD[(String, Int)] = {\n  val rankings = input.map(parseRankings)\n  val filteredRankings: RDD[Ranking] = rankings.filter(filterRankings)\n  val results: RDD[(String, Int)] = filteredRankings.map { (inputParameter: Ranking) => {\n    val originalFunction = mapRankingToTuple(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, -originalValue._2)\n  } }\n  results\n}",
+      "originalCode" : "def scan(input: RDD[String]): RDD[(String, Int)] = {\n    val rankings = input.map(parseRankings)\n    val filteredRankings: RDD[Ranking] = rankings.filter(filterRankings)\n    val results: RDD[(String, Int)] = filteredRankings.map(mapRankingToTuple)\n    results\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 224,
+      "originalProgramId" : 10,
+      "mutationOperator" : "FTD",
+      "mutationOperatorDescription" : "Filter Transformation Deletion",
+      "mutantCode" : "def scan(input: RDD[String]): RDD[(String, Int)] = {\n  val rankings = input.map(parseRankings)\n  val filteredRankings: RDD[Ranking] = rankings\n  val results: RDD[(String, Int)] = filteredRankings.map(mapRankingToTuple)\n  results\n}",
+      "originalCode" : "def scan(input: RDD[String]): RDD[(String, Int)] = {\n    val rankings = input.map(parseRankings)\n    val filteredRankings: RDD[Ranking] = rankings.filter(filterRankings)\n    val results: RDD[(String, Int)] = filteredRankings.map(mapRankingToTuple)\n    results\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 225,
+      "originalProgramId" : 10,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def scan(input: RDD[String]): RDD[(String, Int)] = {\n  val rankings = input.map(parseRankings).distinct()\n  val filteredRankings: RDD[Ranking] = rankings.filter(filterRankings)\n  val results: RDD[(String, Int)] = filteredRankings.map(mapRankingToTuple)\n  results\n}",
+      "originalCode" : "def scan(input: RDD[String]): RDD[(String, Int)] = {\n    val rankings = input.map(parseRankings)\n    val filteredRankings: RDD[Ranking] = rankings.filter(filterRankings)\n    val results: RDD[(String, Int)] = filteredRankings.map(mapRankingToTuple)\n    results\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 226,
+      "originalProgramId" : 10,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def scan(input: RDD[String]): RDD[(String, Int)] = {\n  val rankings = input.map(parseRankings)\n  val filteredRankings: RDD[Ranking] = rankings.filter(filterRankings).distinct()\n  val results: RDD[(String, Int)] = filteredRankings.map(mapRankingToTuple)\n  results\n}",
+      "originalCode" : "def scan(input: RDD[String]): RDD[(String, Int)] = {\n    val rankings = input.map(parseRankings)\n    val filteredRankings: RDD[Ranking] = rankings.filter(filterRankings)\n    val results: RDD[(String, Int)] = filteredRankings.map(mapRankingToTuple)\n    results\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 227,
+      "originalProgramId" : 10,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def scan(input: RDD[String]): RDD[(String, Int)] = {\n  val rankings = input.map(parseRankings)\n  val filteredRankings: RDD[Ranking] = rankings.filter(filterRankings)\n  val results: RDD[(String, Int)] = filteredRankings.map(mapRankingToTuple).distinct()\n  results\n}",
+      "originalCode" : "def scan(input: RDD[String]): RDD[(String, Int)] = {\n    val rankings = input.map(parseRankings)\n    val filteredRankings: RDD[Ranking] = rankings.filter(filterRankings)\n    val results: RDD[(String, Int)] = filteredRankings.map(mapRankingToTuple)\n    results\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 228,
+      "originalProgramId" : 10,
+      "mutationOperator" : "NFTP",
+      "mutationOperatorDescription" : "Negation of Filter Transformation Predicate",
+      "mutantCode" : "def scan(input: RDD[String]): RDD[(String, Int)] = {\n  val rankings = input.map(parseRankings)\n  val filteredRankings: RDD[Ranking] = rankings.filter { (inputParameter: Ranking) => {\n    val originalFunction = filterRankings(_)\n    val originalValue = originalFunction(inputParameter)\n    !originalValue\n  } }\n  val results: RDD[(String, Int)] = filteredRankings.map(mapRankingToTuple)\n  results\n}",
+      "originalCode" : "def scan(input: RDD[String]): RDD[(String, Int)] = {\n    val rankings = input.map(parseRankings)\n    val filteredRankings: RDD[Ranking] = rankings.filter(filterRankings)\n    val results: RDD[(String, Int)] = filteredRankings.map(mapRankingToTuple)\n    results\n  }",
+      "status" : "Killed"
+    }
+  ],
+  "removedMutants" : [
+  ],
+  "mutationOperatorsMetrics" : {
+    "totalMutantsPerOperator" : {
+      "FTD" : 1,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 7,
+      "UTD" : 1,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 3,
+      "DTD" : 0,
+      "NFTP" : 1,
+      "UTS" : 0
+    },
+    "totalKilledMutantsPerOperator" : {
+      "FTD" : 1,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 1,
+      "UTD" : 1,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 0,
+      "NFTP" : 1,
+      "UTS" : 0
+    },
+    "totalLivedMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 6,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 3,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalEquivalentMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 0,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalErrorMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 0,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalRemovedMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 0,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "descriptionPerOperator" : {
+      "FTD" : "Filter Transformation Deletion",
+      "JTR" : "Join Transformation Replacement",
+      "UTR" : "Unary Transformation Replacement",
+      "MTR" : "Mapping Transformation Replacement",
+      "UTD" : "Unary Transformation Deletion",
+      "OTD" : "Order Transformation Deletion",
+      "BTR" : "Binary Transformation Replacement",
+      "STR" : "Set Transformation Replacement",
+      "BTS" : "Binary Transformation Swap",
+      "ATR" : "Aggregation Transformation Replacement",
+      "OTI" : "Order Transformation Inversion",
+      "DTI" : "Distinct Transformation Insertion",
+      "DTD" : "Distinct Transformation Deletion",
+      "NFTP" : "Negation of Filter Transformation Predicate",
+      "UTS" : "Unary Transformation Swap"
+    }
+  },
+  "totalDatasets" : 4,
+  "totalTransformations" : 3,
+  "totalMutants" : 13,
+  "totalKilledMutants" : 4,
+  "totalLivedMutants" : 9,
+  "totalEquivalentMutants" : 0,
+  "totalErrorMutants" : 0,
+  "totalRemovedMutants" : 0,
+  "mutationScore" : 0.30769232
+}

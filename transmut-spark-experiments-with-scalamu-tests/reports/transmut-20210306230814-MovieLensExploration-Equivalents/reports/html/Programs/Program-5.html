@@ -1,0 +1,964 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/scripts/shCore.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/scripts/shBrushScala.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/styles/shCoreEclipse.css" rel="stylesheet" type="text/css" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/styles/shThemeEclipse.min.css" rel="stylesheet" type="text/css" />
+<!-- Cytoscape -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/2.5.1/cytoscape.min.js"></script>
+<!-- DataTable -->
+<link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<style>
+#cy {
+  width: 1100px;
+  height: 300px;
+  background-color: white;
+}
+body {
+  padding-top: 5rem;
+}
+.starter-template {
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+.section-title {
+  padding-top: 3.5rem;
+}
+</style>
+<title>TRANSMUT-Spark Mutation Testing Report</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+<a class="navbar-brand" href="../index.html">TRANSMUT-Spark</a>
+<div class="collapse navbar-collapse" id="navbarNav">
+  <ul class="navbar-nav mr-auto">
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Section</a>
+      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <a class="dropdown-item" href="#metrics">Metrics</a>
+        <a class="dropdown-item" href="#code">Code</a>
+        <a class="dropdown-item" href="#dag">DAG</a>
+        <a class="dropdown-item" href="#datasets">Datasets</a>
+        <a class="dropdown-item" href="#transformations">Transformations</a>
+        <a class="dropdown-item" href="#mutants">Mutants</a>
+        <a class="dropdown-item" href="#removedMutants">Removed Mutants</a>
+        <a class="dropdown-item" href="#mutationOperators">Mutation Operators</a>
+      </div>
+    </li>
+  </ul>
+</div>
+</nav>
+<main role"main" class="container">  
+<div class="starter-template">
+  <h2><a href="../index.html" class="text-dark">Mutation Testing Report</a></h2>
+  <h3><a href="../ProgramSources/Program-Source-1.html" class="text-dark">Program Source: MovieLensExploration</a></h3>
+  <h4><a href="#" class="text-dark">Program ID: 5</a></h4>
+  <h4><a href="#" class="text-dark">Program: meanOfMeansOfRatingsOfAllMovies</a></h4>
+</div>    
+<!-- Metrics -->
+<div class="row" id="metrics">
+<div class="col" >
+<h3 class="section-title">Metrics</h3>
+<hr class="my-4">
+<table class="table table-striped table-hover">
+<thead class="thead-dark"><tr><th scope="col">#</th><th scope="col">Total</th></tr></thead>
+<tbody>
+  <tr><th scope="row">Datasets</th><td>2</td></tr>
+  <tr><th scope="row">Transformations</th><td>2</td></tr>
+  <tr><th scope="row">Mutants</th><td>11</td></tr>
+  <tr><th scope="row">Killed Mutants</th><td>9</td></tr>
+  <tr><th scope="row">Lived Mutants</th><td>1</td></tr>
+  <tr><th scope="row">Equivalent Mutants</th><td>1</td></tr>
+  <tr><th scope="row">Error Mutants</th><td>0</td></tr>
+  <tr><th scope="row">Removed Mutants</th><td>0</td></tr>
+  <tr><th scope="row">Mutation Score</th>
+  <td>
+    <div class="progress">
+      <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 90.00%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><span class="font-weight-bold text-dark">0.90</span></div>
+    </div>
+  </td>
+  </tr>
+ </tbody>
+ <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+    <th scope="row"></th>
+    <td></td>
+    </tr>
+  </tfoot>
+</table>
+     
+<hr class="my-4">
+</div>
+</div>
+<!-- Code -->
+<div class="row" id="code">
+<div class="col">
+<h3 class="section-title">Code</h3>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false;">
+def meanOfMeansOfRatingsOfAllMovies(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))]) = {
+    val meanOfRatingsAllMovies: RDD[(Double, Int)] = ratingsStats.map((m: ((Int, String, Int), (Int, Double, Double, Double))) => (m._2._2, 1))
+    val sumMeanOfRatingsAllMovies: (Double, Int) = meanOfRatingsAllMovies.reduce((m1: (Double, Int), m2: (Double, Int)) => (m1._1 + m2._1, m1._2 + m2._2))
+    sumMeanOfRatingsAllMovies._1 / sumMeanOfRatingsAllMovies._2
+  }
+</pre>
+<hr class="my-4">
+</div>
+</div>
+<!-- DAG -->
+<div class="row" id="dag">
+<div class="col" >
+<h3 class="section-title">DAG</h3>
+<hr class="my-4">
+<figure class="figure">
+<div id="cy"></div>
+</figure>
+<hr class="my-4">
+</div> 
+</div>
+<!-- Datasets -->
+<div class="row" id="datasets">
+<div class="col" >
+<h3 class="section-title">Datasets</h3>
+<hr class="my-4">
+<table class="table table-striped table-hover">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Reference</th>
+      <th scope="col">Type</th>
+   </tr>
+  </thead>
+  <tbody>
+  <tr>
+  <th scope="row">25</th>
+  <td>ratingsStats</td>
+  <td>RDD[(Tuple3[Int, String, Int], Tuple4[Int, Double, Double, Double])]</td>
+</tr>
+<tr>
+  <th scope="row">26</th>
+  <td>meanOfRatingsAllMovies</td>
+  <td>RDD[(Double, Int)]</td>
+</tr>
+  </tbody>
+  <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+    <th scope="row" colspan="2">Total Datasets</th>
+    <td>2</td>
+    </tr>
+  </tfoot>
+</table>      
+    
+<hr class="my-4">
+</div>
+</div>
+<!-- Transformations -->
+<div class="row" id="transformations">
+<div class="col" >
+<h3 class="section-title" id="transformations">Transformations</h3>
+<hr class="my-4">
+<table class="table table-striped table-hover">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Name</th>
+      <th scope="col">Input Type</th>
+      <th scope="col">Output Type</th>
+   </tr>
+  </thead>
+  <tbody>
+  <tr>
+  <th scope="row">18</th>
+  <td>map</td>
+  <td>RDD[(Tuple3[Int, String, Int], Tuple4[Int, Double, Double, Double])]</td>
+  <td>RDD[(Double, Int)]</td>
+</tr>
+<tr>
+  <th scope="row">19</th>
+  <td>reduce</td>
+  <td>RDD[(Double, Int)]</td>
+  <td></td>
+</tr>
+  </tbody>
+  <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+    <th scope="row" colspan="3">Total Transformations</th>
+    <td>2</td>
+    </tr>
+  </tfoot>
+</table>      
+    
+<hr class="my-4">   
+</div>
+</div>
+<!-- Mutants -->
+<div class="row" id="mutants">
+<div class="col">
+<h3 class="section-title">Mutants</h3>
+<hr class="my-4">
+<table class="display table table-striped table-hover" id="mutantsTable">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Mutation Operator</th>
+      <th scope="col">Status</th>
+      <th scope="col">Code</th>
+     </tr>
+  </thead>
+  <tbody>
+    <tr>
+  <th scope="row"><a href="../Mutants/Mutant-116.html" class="text-dark">116</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant116">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-117.html" class="text-dark">117</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant117">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-118.html" class="text-dark">118</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant118">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-119.html" class="text-dark">119</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant119">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-120.html" class="text-dark">120</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant120">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-121.html" class="text-dark">121</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant121">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-122.html" class="text-dark">122</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Equivalent</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant122">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-123.html" class="text-dark">123</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant123">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-124.html" class="text-dark">124</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant124">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-125.html" class="text-dark">125</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant125">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-126.html" class="text-dark">126</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></td>
+  <td>Lived</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant126">Show</button></td>
+</tr>
+  </tbody>
+  <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+      <th scope="row" colspan="2">Mutation Score</th>
+      <td colspan="2">
+        <div class="progress">
+          <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 90.00%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><span class="font-weight-bold text-dark">0.90</span></div>
+        </div>
+      </td>
+    </tr>
+  </tfoot>
+</table>   
+   
+<hr class="my-4">
+</div>
+</div>
+<!-- Removed Mutants -->
+<div class="row" id="removedMutants">
+<div class="col">
+<h3 class="section-title">Removed Mutants</h3>
+<hr class="my-4">
+<table class="display table table-striped table-hover" id="removedMutantsTable">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Mutation Operator</th>
+      <th scope="col">Reduction Rule</th>
+      <th scope="col">Code</th>
+     </tr>
+  </thead>
+  <tbody>
+    
+  </tbody>
+  <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+      <th scope="row" colspan="2">Total Removed Mutants</th>
+      <td colspan="2">0</td>
+    </tr>
+  </tfoot>
+</table>   
+   
+<hr class="my-4">
+</div>
+</div>
+<!-- Mutation Operators -->
+<div class="row" id="mutationOperators">
+<div class="col">
+<h3 class="section-title">Mutation Operators</h3>
+<hr class="my-4">
+<table class="display table table-striped table-hover" id="programSourcesTable">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Mutation Operator</th>
+      <th scope="col">Mutants</th>
+      <th scope="col">Killed</th>
+      <th scope="col">Lived</th>
+      <th scope="col">Equivalent</th>
+      <th scope="col">Error</th>
+      <th scope="col">Removed</th>
+      </tr>
+  </thead>
+  <tbody>
+    <tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></th>
+  <td>10</td>
+  <td>9</td>
+  <td>0</td>
+  <td>1</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+<tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></th>
+  <td>1</td>
+  <td>0</td>
+  <td>1</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+  </tbody>
+  <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+      <th scope="row">Total</th>
+      <td>11</td>
+      <td>9</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+  </tfoot>
+</table>   
+   
+<hr class="my-4">
+</div>
+</div>
+<!-- Mutant Modals -->
+<div class="modal fade" id="modalMutant116" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel116" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-116.html" class="text-dark">116</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def meanOfMeansOfRatingsOfAllMovies(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))]) = {
+    val meanOfRatingsAllMovies: RDD[(Double, Int)] = ratingsStats.map((m: ((Int, String, Int), (Int, Double, Double, Double))) => (m._2._2, 1))
+    val sumMeanOfRatingsAllMovies: (Double, Int) = meanOfRatingsAllMovies.reduce((m1: (Double, Int), m2: (Double, Int)) => (m1._1 + m2._1, m1._2 + m2._2))
+    sumMeanOfRatingsAllMovies._1 / sumMeanOfRatingsAllMovies._2
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2, 3, 4, 5, 6]">
+def meanOfMeansOfRatingsOfAllMovies(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))]) = {
+  val meanOfRatingsAllMovies: RDD[(Double, Int)] = ratingsStats.map { (inputParameter: (Tuple3[Int, String, Int], Tuple4[Int, Double, Double, Double])) => {
+    val originalFunction = ((m: ((Int, String, Int), (Int, Double, Double, Double))) => (m._2._2, 1))(_)
+    val originalValue = originalFunction(inputParameter)
+    (0d, originalValue._2)
+  } }
+  val sumMeanOfRatingsAllMovies: (Double, Int) = meanOfRatingsAllMovies.reduce { (m1: (Double, Int), m2: (Double, Int)) => (m1._1 + m2._1, m1._2 + m2._2) }
+  sumMeanOfRatingsAllMovies._1 / sumMeanOfRatingsAllMovies._2
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant117" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel117" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-117.html" class="text-dark">117</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def meanOfMeansOfRatingsOfAllMovies(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))]) = {
+    val meanOfRatingsAllMovies: RDD[(Double, Int)] = ratingsStats.map((m: ((Int, String, Int), (Int, Double, Double, Double))) => (m._2._2, 1))
+    val sumMeanOfRatingsAllMovies: (Double, Int) = meanOfRatingsAllMovies.reduce((m1: (Double, Int), m2: (Double, Int)) => (m1._1 + m2._1, m1._2 + m2._2))
+    sumMeanOfRatingsAllMovies._1 / sumMeanOfRatingsAllMovies._2
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2, 3, 4, 5, 6]">
+def meanOfMeansOfRatingsOfAllMovies(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))]) = {
+  val meanOfRatingsAllMovies: RDD[(Double, Int)] = ratingsStats.map { (inputParameter: (Tuple3[Int, String, Int], Tuple4[Int, Double, Double, Double])) => {
+    val originalFunction = ((m: ((Int, String, Int), (Int, Double, Double, Double))) => (m._2._2, 1))(_)
+    val originalValue = originalFunction(inputParameter)
+    (1d, originalValue._2)
+  } }
+  val sumMeanOfRatingsAllMovies: (Double, Int) = meanOfRatingsAllMovies.reduce { (m1: (Double, Int), m2: (Double, Int)) => (m1._1 + m2._1, m1._2 + m2._2) }
+  sumMeanOfRatingsAllMovies._1 / sumMeanOfRatingsAllMovies._2
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant118" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel118" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-118.html" class="text-dark">118</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def meanOfMeansOfRatingsOfAllMovies(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))]) = {
+    val meanOfRatingsAllMovies: RDD[(Double, Int)] = ratingsStats.map((m: ((Int, String, Int), (Int, Double, Double, Double))) => (m._2._2, 1))
+    val sumMeanOfRatingsAllMovies: (Double, Int) = meanOfRatingsAllMovies.reduce((m1: (Double, Int), m2: (Double, Int)) => (m1._1 + m2._1, m1._2 + m2._2))
+    sumMeanOfRatingsAllMovies._1 / sumMeanOfRatingsAllMovies._2
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2, 3, 4, 5, 6]">
+def meanOfMeansOfRatingsOfAllMovies(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))]) = {
+  val meanOfRatingsAllMovies: RDD[(Double, Int)] = ratingsStats.map { (inputParameter: (Tuple3[Int, String, Int], Tuple4[Int, Double, Double, Double])) => {
+    val originalFunction = ((m: ((Int, String, Int), (Int, Double, Double, Double))) => (m._2._2, 1))(_)
+    val originalValue = originalFunction(inputParameter)
+    (Double.MaxValue, originalValue._2)
+  } }
+  val sumMeanOfRatingsAllMovies: (Double, Int) = meanOfRatingsAllMovies.reduce { (m1: (Double, Int), m2: (Double, Int)) => (m1._1 + m2._1, m1._2 + m2._2) }
+  sumMeanOfRatingsAllMovies._1 / sumMeanOfRatingsAllMovies._2
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant119" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel119" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-119.html" class="text-dark">119</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def meanOfMeansOfRatingsOfAllMovies(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))]) = {
+    val meanOfRatingsAllMovies: RDD[(Double, Int)] = ratingsStats.map((m: ((Int, String, Int), (Int, Double, Double, Double))) => (m._2._2, 1))
+    val sumMeanOfRatingsAllMovies: (Double, Int) = meanOfRatingsAllMovies.reduce((m1: (Double, Int), m2: (Double, Int)) => (m1._1 + m2._1, m1._2 + m2._2))
+    sumMeanOfRatingsAllMovies._1 / sumMeanOfRatingsAllMovies._2
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2, 3, 4, 5, 6]">
+def meanOfMeansOfRatingsOfAllMovies(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))]) = {
+  val meanOfRatingsAllMovies: RDD[(Double, Int)] = ratingsStats.map { (inputParameter: (Tuple3[Int, String, Int], Tuple4[Int, Double, Double, Double])) => {
+    val originalFunction = ((m: ((Int, String, Int), (Int, Double, Double, Double))) => (m._2._2, 1))(_)
+    val originalValue = originalFunction(inputParameter)
+    (Double.MinValue, originalValue._2)
+  } }
+  val sumMeanOfRatingsAllMovies: (Double, Int) = meanOfRatingsAllMovies.reduce { (m1: (Double, Int), m2: (Double, Int)) => (m1._1 + m2._1, m1._2 + m2._2) }
+  sumMeanOfRatingsAllMovies._1 / sumMeanOfRatingsAllMovies._2
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant120" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel120" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-120.html" class="text-dark">120</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def meanOfMeansOfRatingsOfAllMovies(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))]) = {
+    val meanOfRatingsAllMovies: RDD[(Double, Int)] = ratingsStats.map((m: ((Int, String, Int), (Int, Double, Double, Double))) => (m._2._2, 1))
+    val sumMeanOfRatingsAllMovies: (Double, Int) = meanOfRatingsAllMovies.reduce((m1: (Double, Int), m2: (Double, Int)) => (m1._1 + m2._1, m1._2 + m2._2))
+    sumMeanOfRatingsAllMovies._1 / sumMeanOfRatingsAllMovies._2
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2, 3, 4, 5, 6]">
+def meanOfMeansOfRatingsOfAllMovies(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))]) = {
+  val meanOfRatingsAllMovies: RDD[(Double, Int)] = ratingsStats.map { (inputParameter: (Tuple3[Int, String, Int], Tuple4[Int, Double, Double, Double])) => {
+    val originalFunction = ((m: ((Int, String, Int), (Int, Double, Double, Double))) => (m._2._2, 1))(_)
+    val originalValue = originalFunction(inputParameter)
+    (-originalValue._1, originalValue._2)
+  } }
+  val sumMeanOfRatingsAllMovies: (Double, Int) = meanOfRatingsAllMovies.reduce { (m1: (Double, Int), m2: (Double, Int)) => (m1._1 + m2._1, m1._2 + m2._2) }
+  sumMeanOfRatingsAllMovies._1 / sumMeanOfRatingsAllMovies._2
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant121" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel121" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-121.html" class="text-dark">121</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def meanOfMeansOfRatingsOfAllMovies(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))]) = {
+    val meanOfRatingsAllMovies: RDD[(Double, Int)] = ratingsStats.map((m: ((Int, String, Int), (Int, Double, Double, Double))) => (m._2._2, 1))
+    val sumMeanOfRatingsAllMovies: (Double, Int) = meanOfRatingsAllMovies.reduce((m1: (Double, Int), m2: (Double, Int)) => (m1._1 + m2._1, m1._2 + m2._2))
+    sumMeanOfRatingsAllMovies._1 / sumMeanOfRatingsAllMovies._2
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2, 3, 4, 5, 6]">
+def meanOfMeansOfRatingsOfAllMovies(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))]) = {
+  val meanOfRatingsAllMovies: RDD[(Double, Int)] = ratingsStats.map { (inputParameter: (Tuple3[Int, String, Int], Tuple4[Int, Double, Double, Double])) => {
+    val originalFunction = ((m: ((Int, String, Int), (Int, Double, Double, Double))) => (m._2._2, 1))(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, 0)
+  } }
+  val sumMeanOfRatingsAllMovies: (Double, Int) = meanOfRatingsAllMovies.reduce { (m1: (Double, Int), m2: (Double, Int)) => (m1._1 + m2._1, m1._2 + m2._2) }
+  sumMeanOfRatingsAllMovies._1 / sumMeanOfRatingsAllMovies._2
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant122" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel122" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-122.html" class="text-dark">122</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Equivalent</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def meanOfMeansOfRatingsOfAllMovies(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))]) = {
+    val meanOfRatingsAllMovies: RDD[(Double, Int)] = ratingsStats.map((m: ((Int, String, Int), (Int, Double, Double, Double))) => (m._2._2, 1))
+    val sumMeanOfRatingsAllMovies: (Double, Int) = meanOfRatingsAllMovies.reduce((m1: (Double, Int), m2: (Double, Int)) => (m1._1 + m2._1, m1._2 + m2._2))
+    sumMeanOfRatingsAllMovies._1 / sumMeanOfRatingsAllMovies._2
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2, 3, 4, 5, 6]">
+def meanOfMeansOfRatingsOfAllMovies(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))]) = {
+  val meanOfRatingsAllMovies: RDD[(Double, Int)] = ratingsStats.map { (inputParameter: (Tuple3[Int, String, Int], Tuple4[Int, Double, Double, Double])) => {
+    val originalFunction = ((m: ((Int, String, Int), (Int, Double, Double, Double))) => (m._2._2, 1))(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, 1)
+  } }
+  val sumMeanOfRatingsAllMovies: (Double, Int) = meanOfRatingsAllMovies.reduce { (m1: (Double, Int), m2: (Double, Int)) => (m1._1 + m2._1, m1._2 + m2._2) }
+  sumMeanOfRatingsAllMovies._1 / sumMeanOfRatingsAllMovies._2
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant123" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel123" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-123.html" class="text-dark">123</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def meanOfMeansOfRatingsOfAllMovies(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))]) = {
+    val meanOfRatingsAllMovies: RDD[(Double, Int)] = ratingsStats.map((m: ((Int, String, Int), (Int, Double, Double, Double))) => (m._2._2, 1))
+    val sumMeanOfRatingsAllMovies: (Double, Int) = meanOfRatingsAllMovies.reduce((m1: (Double, Int), m2: (Double, Int)) => (m1._1 + m2._1, m1._2 + m2._2))
+    sumMeanOfRatingsAllMovies._1 / sumMeanOfRatingsAllMovies._2
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2, 3, 4, 5, 6]">
+def meanOfMeansOfRatingsOfAllMovies(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))]) = {
+  val meanOfRatingsAllMovies: RDD[(Double, Int)] = ratingsStats.map { (inputParameter: (Tuple3[Int, String, Int], Tuple4[Int, Double, Double, Double])) => {
+    val originalFunction = ((m: ((Int, String, Int), (Int, Double, Double, Double))) => (m._2._2, 1))(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, Int.MaxValue)
+  } }
+  val sumMeanOfRatingsAllMovies: (Double, Int) = meanOfRatingsAllMovies.reduce { (m1: (Double, Int), m2: (Double, Int)) => (m1._1 + m2._1, m1._2 + m2._2) }
+  sumMeanOfRatingsAllMovies._1 / sumMeanOfRatingsAllMovies._2
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant124" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel124" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-124.html" class="text-dark">124</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def meanOfMeansOfRatingsOfAllMovies(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))]) = {
+    val meanOfRatingsAllMovies: RDD[(Double, Int)] = ratingsStats.map((m: ((Int, String, Int), (Int, Double, Double, Double))) => (m._2._2, 1))
+    val sumMeanOfRatingsAllMovies: (Double, Int) = meanOfRatingsAllMovies.reduce((m1: (Double, Int), m2: (Double, Int)) => (m1._1 + m2._1, m1._2 + m2._2))
+    sumMeanOfRatingsAllMovies._1 / sumMeanOfRatingsAllMovies._2
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2, 3, 4, 5, 6]">
+def meanOfMeansOfRatingsOfAllMovies(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))]) = {
+  val meanOfRatingsAllMovies: RDD[(Double, Int)] = ratingsStats.map { (inputParameter: (Tuple3[Int, String, Int], Tuple4[Int, Double, Double, Double])) => {
+    val originalFunction = ((m: ((Int, String, Int), (Int, Double, Double, Double))) => (m._2._2, 1))(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, Int.MinValue)
+  } }
+  val sumMeanOfRatingsAllMovies: (Double, Int) = meanOfRatingsAllMovies.reduce { (m1: (Double, Int), m2: (Double, Int)) => (m1._1 + m2._1, m1._2 + m2._2) }
+  sumMeanOfRatingsAllMovies._1 / sumMeanOfRatingsAllMovies._2
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant125" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel125" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-125.html" class="text-dark">125</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def meanOfMeansOfRatingsOfAllMovies(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))]) = {
+    val meanOfRatingsAllMovies: RDD[(Double, Int)] = ratingsStats.map((m: ((Int, String, Int), (Int, Double, Double, Double))) => (m._2._2, 1))
+    val sumMeanOfRatingsAllMovies: (Double, Int) = meanOfRatingsAllMovies.reduce((m1: (Double, Int), m2: (Double, Int)) => (m1._1 + m2._1, m1._2 + m2._2))
+    sumMeanOfRatingsAllMovies._1 / sumMeanOfRatingsAllMovies._2
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2, 3, 4, 5, 6]">
+def meanOfMeansOfRatingsOfAllMovies(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))]) = {
+  val meanOfRatingsAllMovies: RDD[(Double, Int)] = ratingsStats.map { (inputParameter: (Tuple3[Int, String, Int], Tuple4[Int, Double, Double, Double])) => {
+    val originalFunction = ((m: ((Int, String, Int), (Int, Double, Double, Double))) => (m._2._2, 1))(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, -originalValue._2)
+  } }
+  val sumMeanOfRatingsAllMovies: (Double, Int) = meanOfRatingsAllMovies.reduce { (m1: (Double, Int), m2: (Double, Int)) => (m1._1 + m2._1, m1._2 + m2._2) }
+  sumMeanOfRatingsAllMovies._1 / sumMeanOfRatingsAllMovies._2
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant126" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel126" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-126.html" class="text-dark">126</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></h5>
+<h5>Status: Lived</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def meanOfMeansOfRatingsOfAllMovies(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))]) = {
+    val meanOfRatingsAllMovies: RDD[(Double, Int)] = ratingsStats.map((m: ((Int, String, Int), (Int, Double, Double, Double))) => (m._2._2, 1))
+    val sumMeanOfRatingsAllMovies: (Double, Int) = meanOfRatingsAllMovies.reduce((m1: (Double, Int), m2: (Double, Int)) => (m1._1 + m2._1, m1._2 + m2._2))
+    sumMeanOfRatingsAllMovies._1 / sumMeanOfRatingsAllMovies._2
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def meanOfMeansOfRatingsOfAllMovies(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))]) = {
+  val meanOfRatingsAllMovies: RDD[(Double, Int)] = ratingsStats.map { (m: ((Int, String, Int), (Int, Double, Double, Double))) => (m._2._2, 1) }.distinct()
+  val sumMeanOfRatingsAllMovies: (Double, Int) = meanOfRatingsAllMovies.reduce { (m1: (Double, Int), m2: (Double, Int)) => (m1._1 + m2._1, m1._2 + m2._2) }
+  sumMeanOfRatingsAllMovies._1 / sumMeanOfRatingsAllMovies._2
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Removed Mutant Modals -->
+
+</main>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+<script type="text/javascript">
+ SyntaxHighlighter.all()
+</script>
+<script >
+$(document).ready(function() {
+  $('table.display').DataTable( {
+    fixedHeader: {
+      header: true,
+      footer: true
+    },
+    "lengthMenu": [[5, 10, 20, -1], [5, 10, 20, "All"]]
+  } );
+} );
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+});
+</script>
+
+<script >
+  var cy = cytoscape({
+    container: document.getElementById('cy'), // container to render in
+    elements: [ // list of graph elements to start with
+      { // dataset node 25
+  data: { id: 'dataset_25' , name : 'ratingsStats' , dataset : 'true' , inputDataset: 'true'  }
+}, 
+{ // transformation node 18
+  data: { id: 'transformation_18' , name : 'map' , transformation : 'true'  }
+}, 
+{ // edge node 36
+  data: { id: 'edge_36' , source: 'dataset_25', target: 'transformation_18'  }
+}, 
+{ // dataset node 26
+  data: { id: 'dataset_26' , name : 'meanOfRatingsAllMovies' , dataset : 'true'   }
+}, 
+{ // edge node 37
+  data: { id: 'edge_37'  , target: 'dataset_26', source: 'transformation_18' }
+}, 
+{ // transformation node 19
+  data: { id: 'transformation_19' , name : 'reduce' , transformation : 'true' , loadTransformation: 'true' }
+}, 
+{ // edge node 38
+  data: { id: 'edge_38' , source: 'dataset_26', target: 'transformation_19'  }
+}
+    ],
+   style: [ // the stylesheet for the graph
+   {
+     selector: 'node',
+     style: {
+       'label': 'data(name)'
+     }
+   },
+   {
+     selector: 'edge',
+     style: {
+     'width': 3,
+     'line-color': '#ccc',
+     'target-arrow-color': '#ccc',
+     'target-arrow-shape': 'triangle',
+     }
+   },
+   {
+      selector: '[transformation]',
+      style: {
+        'background-color': 'black',
+        'shape': 'rectangle'
+       }
+   },
+   {
+      selector: '[dataset]',
+      style: {
+        'background-color': 'gray',
+        'shape': 'ellipse'
+      }
+   },
+   {
+      selector: '[inputDataset]',
+      style: {
+        'background-color': 'green',
+        'shape': 'ellipse'
+       }
+   },
+   {
+     selector: '[outputDataset]',
+     style: {
+       'background-color': 'red',
+       'shape': 'ellipse'
+      }
+   },
+   {
+      selector: '[loadTransformation]',
+      style: {
+        'background-color': 'red',
+        'shape': 'rectangle'
+       }
+   }
+  ],
+  layout: {
+    name: 'grid',
+    rows: 1
+  }
+});
+</script>
+    
+</body>
+</html>
+    

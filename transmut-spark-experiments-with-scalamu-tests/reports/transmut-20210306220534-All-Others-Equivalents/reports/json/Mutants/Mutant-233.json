@@ -1,0 +1,9 @@
+{
+  "id" : 233,
+  "originalProgramId" : 11,
+  "mutationOperator" : "MTR",
+  "mutationOperatorDescription" : "Mapping Transformation Replacement",
+  "mutantCode" : "def wordCount(input: RDD[String]) = {\n  val words = input.flatMap { (inputParameter: String) => {\n    val originalFunction = ((line: String) => line.split(\" \"))(_)\n    val originalValue = originalFunction(inputParameter)\n    originalValue.toList.reverse\n  } }\n  val pairs = words.map { (word: String) => (word, 1) }\n  val counts = pairs.reduceByKey { (a: Int, b: Int) => a + b }\n  counts\n}",
+  "originalCode" : "def wordCount(input: RDD[String]) = {\n\t\tval words = input.flatMap( (line: String) => line.split(\" \") )\n\t\tval pairs = words.map( (word: String) => (word, 1) )\n\t\tval counts = pairs.reduceByKey( (a: Int, b: Int) => a + b )\n\t\tcounts\n\t}",
+  "status" : "Equivalent"
+}

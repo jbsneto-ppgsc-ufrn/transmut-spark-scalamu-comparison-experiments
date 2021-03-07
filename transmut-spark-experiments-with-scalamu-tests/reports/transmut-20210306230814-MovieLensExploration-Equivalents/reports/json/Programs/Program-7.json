@@ -1,0 +1,755 @@
+{
+  "id" : 7,
+  "programSourceId" : 1,
+  "name" : "genresTagsCount",
+  "code" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))\n    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))\n    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)\n    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))\n    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n    genresTagsCountSorted\n  }",
+  "datasets" : [
+    {
+      "id" : 33,
+      "name" : "movies",
+      "datasetType" : "RDD[Movie]",
+      "inputDataset" : true,
+      "outputDataset" : false
+    },
+    {
+      "id" : 34,
+      "name" : "tags",
+      "datasetType" : "RDD[Tag]",
+      "inputDataset" : true,
+      "outputDataset" : false
+    },
+    {
+      "id" : 35,
+      "name" : "moviesIdKey",
+      "datasetType" : "RDD[(Int, Movie)]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 36,
+      "name" : "tagsMovieIdKey",
+      "datasetType" : "RDD[(Int, String)]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 37,
+      "name" : "joinMoviesTags",
+      "datasetType" : "RDD[(Int, (Movie, String))]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 38,
+      "name" : "genresTags",
+      "datasetType" : "RDD[((String, String), Int)]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 39,
+      "name" : "genresTagsCounts",
+      "datasetType" : "RDD[((String, String), Int)]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 40,
+      "name" : "genresTagsCountMapped",
+      "datasetType" : "RDD[(String, (String, Int))]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 41,
+      "name" : "genresTagsCountSorted",
+      "datasetType" : "RDD[(String, (String, Int))]",
+      "inputDataset" : false,
+      "outputDataset" : true
+    }
+  ],
+  "transformations" : [
+    {
+      "id" : 25,
+      "name" : "map",
+      "inputTypes" : [
+        "RDD[Movie]"
+      ],
+      "outputTypes" : [
+        "RDD[(Int, Movie)]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 26,
+      "name" : "map",
+      "inputTypes" : [
+        "RDD[Tag]"
+      ],
+      "outputTypes" : [
+        "RDD[(Int, String)]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 27,
+      "name" : "join",
+      "inputTypes" : [
+        "RDD[(Int, Movie)]",
+        "RDD[(Int, String)]"
+      ],
+      "outputTypes" : [
+        "RDD[(Int, (Movie, String))]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 28,
+      "name" : "flatMap",
+      "inputTypes" : [
+        "RDD[(Int, (Movie, String))]"
+      ],
+      "outputTypes" : [
+        "RDD[((String, String), Int)]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 29,
+      "name" : "reduceByKey",
+      "inputTypes" : [
+        "RDD[((String, String), Int)]"
+      ],
+      "outputTypes" : [
+        "RDD[((String, String), Int)]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 30,
+      "name" : "map",
+      "inputTypes" : [
+        "RDD[((String, String), Int)]"
+      ],
+      "outputTypes" : [
+        "RDD[(String, (String, Int))]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 31,
+      "name" : "sortByKey",
+      "inputTypes" : [
+        "RDD[(String, (String, Int))]"
+      ],
+      "outputTypes" : [
+        "RDD[(String, (String, Int))]"
+      ],
+      "loadTransformation" : false
+    }
+  ],
+  "edges" : [
+    {
+      "id" : 49,
+      "datasetId" : 33,
+      "transformationId" : 25,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 50,
+      "datasetId" : 35,
+      "transformationId" : 25,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 51,
+      "datasetId" : 34,
+      "transformationId" : 26,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 52,
+      "datasetId" : 36,
+      "transformationId" : 26,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 53,
+      "datasetId" : 35,
+      "transformationId" : 27,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 54,
+      "datasetId" : 36,
+      "transformationId" : 27,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 55,
+      "datasetId" : 37,
+      "transformationId" : 27,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 56,
+      "datasetId" : 37,
+      "transformationId" : 28,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 57,
+      "datasetId" : 38,
+      "transformationId" : 28,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 58,
+      "datasetId" : 38,
+      "transformationId" : 29,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 59,
+      "datasetId" : 39,
+      "transformationId" : 29,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 60,
+      "datasetId" : 39,
+      "transformationId" : 30,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 61,
+      "datasetId" : 40,
+      "transformationId" : 30,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 62,
+      "datasetId" : 40,
+      "transformationId" : 31,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 63,
+      "datasetId" : 41,
+      "transformationId" : 31,
+      "direction" : "TransformationToDataset"
+    }
+  ],
+  "mutants" : [
+    {
+      "id" : 147,
+      "originalProgramId" : 7,
+      "mutationOperator" : "UTD",
+      "mutationOperatorDescription" : "Unary Transformation Deletion",
+      "mutantCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }\n  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }\n  val genresTagsCounts: RDD[((String, String), Int)] = genresTags\n  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }\n  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n  genresTagsCountSorted\n}",
+      "originalCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))\n    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))\n    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)\n    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))\n    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n    genresTagsCountSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 148,
+      "originalProgramId" : 7,
+      "mutationOperator" : "UTD",
+      "mutationOperatorDescription" : "Unary Transformation Deletion",
+      "mutantCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }\n  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }\n  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }\n  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }\n  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped\n  genresTagsCountSorted\n}",
+      "originalCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))\n    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))\n    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)\n    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))\n    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n    genresTagsCountSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 149,
+      "originalProgramId" : 7,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (inputParameter: Movie) => {\n    val originalFunction = ((m: Movie) => (m.movieId, m))(_)\n    val originalValue = originalFunction(inputParameter)\n    (0, originalValue._2)\n  } }\n  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }\n  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }\n  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }\n  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }\n  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n  genresTagsCountSorted\n}",
+      "originalCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))\n    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))\n    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)\n    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))\n    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n    genresTagsCountSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 150,
+      "originalProgramId" : 7,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (inputParameter: Movie) => {\n    val originalFunction = ((m: Movie) => (m.movieId, m))(_)\n    val originalValue = originalFunction(inputParameter)\n    (1, originalValue._2)\n  } }\n  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }\n  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }\n  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }\n  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }\n  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n  genresTagsCountSorted\n}",
+      "originalCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))\n    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))\n    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)\n    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))\n    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n    genresTagsCountSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 151,
+      "originalProgramId" : 7,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (inputParameter: Movie) => {\n    val originalFunction = ((m: Movie) => (m.movieId, m))(_)\n    val originalValue = originalFunction(inputParameter)\n    (Int.MaxValue, originalValue._2)\n  } }\n  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }\n  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }\n  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }\n  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }\n  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n  genresTagsCountSorted\n}",
+      "originalCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))\n    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))\n    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)\n    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))\n    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n    genresTagsCountSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 152,
+      "originalProgramId" : 7,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (inputParameter: Movie) => {\n    val originalFunction = ((m: Movie) => (m.movieId, m))(_)\n    val originalValue = originalFunction(inputParameter)\n    (Int.MinValue, originalValue._2)\n  } }\n  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }\n  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }\n  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }\n  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }\n  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n  genresTagsCountSorted\n}",
+      "originalCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))\n    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))\n    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)\n    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))\n    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n    genresTagsCountSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 153,
+      "originalProgramId" : 7,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (inputParameter: Movie) => {\n    val originalFunction = ((m: Movie) => (m.movieId, m))(_)\n    val originalValue = originalFunction(inputParameter)\n    (-originalValue._1, originalValue._2)\n  } }\n  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }\n  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }\n  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }\n  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }\n  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n  genresTagsCountSorted\n}",
+      "originalCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))\n    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))\n    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)\n    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))\n    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n    genresTagsCountSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 154,
+      "originalProgramId" : 7,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (inputParameter: Movie) => {\n    val originalFunction = ((m: Movie) => (m.movieId, m))(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, null.asInstanceOf[Movie])\n  } }\n  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }\n  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }\n  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }\n  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }\n  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n  genresTagsCountSorted\n}",
+      "originalCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))\n    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))\n    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)\n    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))\n    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n    genresTagsCountSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 155,
+      "originalProgramId" : 7,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (inputParameter: Tag) => {\n    val originalFunction = ((t: Tag) => (t.movieId, t.tag))(_)\n    val originalValue = originalFunction(inputParameter)\n    (0, originalValue._2)\n  } }\n  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }\n  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }\n  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }\n  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n  genresTagsCountSorted\n}",
+      "originalCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))\n    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))\n    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)\n    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))\n    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n    genresTagsCountSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 156,
+      "originalProgramId" : 7,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (inputParameter: Tag) => {\n    val originalFunction = ((t: Tag) => (t.movieId, t.tag))(_)\n    val originalValue = originalFunction(inputParameter)\n    (1, originalValue._2)\n  } }\n  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }\n  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }\n  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }\n  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n  genresTagsCountSorted\n}",
+      "originalCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))\n    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))\n    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)\n    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))\n    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n    genresTagsCountSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 157,
+      "originalProgramId" : 7,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (inputParameter: Tag) => {\n    val originalFunction = ((t: Tag) => (t.movieId, t.tag))(_)\n    val originalValue = originalFunction(inputParameter)\n    (Int.MaxValue, originalValue._2)\n  } }\n  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }\n  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }\n  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }\n  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n  genresTagsCountSorted\n}",
+      "originalCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))\n    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))\n    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)\n    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))\n    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n    genresTagsCountSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 158,
+      "originalProgramId" : 7,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (inputParameter: Tag) => {\n    val originalFunction = ((t: Tag) => (t.movieId, t.tag))(_)\n    val originalValue = originalFunction(inputParameter)\n    (Int.MinValue, originalValue._2)\n  } }\n  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }\n  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }\n  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }\n  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n  genresTagsCountSorted\n}",
+      "originalCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))\n    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))\n    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)\n    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))\n    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n    genresTagsCountSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 159,
+      "originalProgramId" : 7,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (inputParameter: Tag) => {\n    val originalFunction = ((t: Tag) => (t.movieId, t.tag))(_)\n    val originalValue = originalFunction(inputParameter)\n    (-originalValue._1, originalValue._2)\n  } }\n  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }\n  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }\n  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }\n  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n  genresTagsCountSorted\n}",
+      "originalCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))\n    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))\n    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)\n    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))\n    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n    genresTagsCountSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 160,
+      "originalProgramId" : 7,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (inputParameter: Tag) => {\n    val originalFunction = ((t: Tag) => (t.movieId, t.tag))(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, \"\")\n  } }\n  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }\n  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }\n  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }\n  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n  genresTagsCountSorted\n}",
+      "originalCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))\n    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))\n    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)\n    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))\n    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n    genresTagsCountSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 161,
+      "originalProgramId" : 7,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }\n  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (inputParameter: (Int, (Movie, String))) => {\n    val originalFunction = ((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))(_)\n    val originalValue = originalFunction(inputParameter)\n    originalValue.headOption\n  } }\n  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }\n  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }\n  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n  genresTagsCountSorted\n}",
+      "originalCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))\n    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))\n    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)\n    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))\n    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n    genresTagsCountSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 162,
+      "originalProgramId" : 7,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }\n  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (inputParameter: (Int, (Movie, String))) => {\n    val originalFunction = ((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))(_)\n    val originalValue = originalFunction(inputParameter)\n    originalValue.toList.tail\n  } }\n  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }\n  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }\n  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n  genresTagsCountSorted\n}",
+      "originalCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))\n    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))\n    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)\n    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))\n    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n    genresTagsCountSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 163,
+      "originalProgramId" : 7,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }\n  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (inputParameter: (Int, (Movie, String))) => {\n    val originalFunction = ((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))(_)\n    val originalValue = originalFunction(inputParameter)\n    originalValue.toList.reverse\n  } }\n  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }\n  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }\n  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n  genresTagsCountSorted\n}",
+      "originalCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))\n    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))\n    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)\n    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))\n    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n    genresTagsCountSorted\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 164,
+      "originalProgramId" : 7,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }\n  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (inputParameter: (Int, (Movie, String))) => {\n    val originalFunction = ((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))(_)\n    val originalValue = originalFunction(inputParameter)\n    List[((String, String), Int)]()\n  } }\n  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }\n  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }\n  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n  genresTagsCountSorted\n}",
+      "originalCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))\n    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))\n    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)\n    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))\n    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n    genresTagsCountSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 165,
+      "originalProgramId" : 7,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }\n  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }\n  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }\n  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (inputParameter: ((String, String), Int)) => {\n    val originalFunction = ((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))(_)\n    val originalValue = originalFunction(inputParameter)\n    (\"\", originalValue._2)\n  } }\n  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n  genresTagsCountSorted\n}",
+      "originalCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))\n    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))\n    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)\n    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))\n    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n    genresTagsCountSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 166,
+      "originalProgramId" : 7,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }\n  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }\n  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }\n  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (inputParameter: ((String, String), Int)) => {\n    val originalFunction = ((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, (\"\", originalValue._2._2))\n  } }\n  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n  genresTagsCountSorted\n}",
+      "originalCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))\n    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))\n    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)\n    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))\n    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n    genresTagsCountSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 167,
+      "originalProgramId" : 7,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }\n  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }\n  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }\n  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (inputParameter: ((String, String), Int)) => {\n    val originalFunction = ((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, (originalValue._2._1, 0))\n  } }\n  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n  genresTagsCountSorted\n}",
+      "originalCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))\n    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))\n    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)\n    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))\n    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n    genresTagsCountSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 168,
+      "originalProgramId" : 7,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }\n  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }\n  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }\n  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (inputParameter: ((String, String), Int)) => {\n    val originalFunction = ((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, (originalValue._2._1, 1))\n  } }\n  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n  genresTagsCountSorted\n}",
+      "originalCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))\n    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))\n    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)\n    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))\n    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n    genresTagsCountSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 169,
+      "originalProgramId" : 7,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }\n  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }\n  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }\n  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (inputParameter: ((String, String), Int)) => {\n    val originalFunction = ((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, (originalValue._2._1, Int.MaxValue))\n  } }\n  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n  genresTagsCountSorted\n}",
+      "originalCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))\n    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))\n    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)\n    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))\n    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n    genresTagsCountSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 170,
+      "originalProgramId" : 7,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }\n  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }\n  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }\n  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (inputParameter: ((String, String), Int)) => {\n    val originalFunction = ((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, (originalValue._2._1, Int.MinValue))\n  } }\n  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n  genresTagsCountSorted\n}",
+      "originalCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))\n    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))\n    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)\n    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))\n    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n    genresTagsCountSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 171,
+      "originalProgramId" : 7,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }\n  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }\n  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }\n  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (inputParameter: ((String, String), Int)) => {\n    val originalFunction = ((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, (originalValue._2._1, -originalValue._2._2))\n  } }\n  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n  genresTagsCountSorted\n}",
+      "originalCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))\n    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))\n    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)\n    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))\n    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n    genresTagsCountSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 172,
+      "originalProgramId" : 7,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }.distinct()\n  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }\n  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }\n  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }\n  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }\n  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n  genresTagsCountSorted\n}",
+      "originalCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))\n    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))\n    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)\n    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))\n    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n    genresTagsCountSorted\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 173,
+      "originalProgramId" : 7,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }.distinct()\n  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }\n  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }\n  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }\n  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n  genresTagsCountSorted\n}",
+      "originalCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))\n    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))\n    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)\n    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))\n    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n    genresTagsCountSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 174,
+      "originalProgramId" : 7,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }\n  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey).distinct()\n  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }\n  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }\n  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }\n  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n  genresTagsCountSorted\n}",
+      "originalCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))\n    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))\n    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)\n    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))\n    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n    genresTagsCountSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 175,
+      "originalProgramId" : 7,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }\n  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }.distinct()\n  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }\n  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }\n  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n  genresTagsCountSorted\n}",
+      "originalCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))\n    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))\n    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)\n    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))\n    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n    genresTagsCountSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 176,
+      "originalProgramId" : 7,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }\n  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }\n  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }.distinct()\n  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }\n  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n  genresTagsCountSorted\n}",
+      "originalCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))\n    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))\n    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)\n    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))\n    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n    genresTagsCountSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 177,
+      "originalProgramId" : 7,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }\n  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }\n  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }\n  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }.distinct()\n  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n  genresTagsCountSorted\n}",
+      "originalCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))\n    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))\n    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)\n    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))\n    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n    genresTagsCountSorted\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 178,
+      "originalProgramId" : 7,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }\n  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }\n  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }\n  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }\n  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true).distinct()\n  genresTagsCountSorted\n}",
+      "originalCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))\n    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))\n    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)\n    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))\n    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n    genresTagsCountSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 179,
+      "originalProgramId" : 7,
+      "mutationOperator" : "ATR",
+      "mutationOperatorDescription" : "Aggregation Transformation Replacement",
+      "mutantCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }\n  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }\n  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (firstParameter: Int, secondParameter: Int) => firstParameter }\n  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }\n  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n  genresTagsCountSorted\n}",
+      "originalCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))\n    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))\n    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)\n    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))\n    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n    genresTagsCountSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 180,
+      "originalProgramId" : 7,
+      "mutationOperator" : "ATR",
+      "mutationOperatorDescription" : "Aggregation Transformation Replacement",
+      "mutantCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }\n  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }\n  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (firstParameter: Int, secondParameter: Int) => secondParameter }\n  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }\n  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n  genresTagsCountSorted\n}",
+      "originalCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))\n    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))\n    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)\n    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))\n    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n    genresTagsCountSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 181,
+      "originalProgramId" : 7,
+      "mutationOperator" : "ATR",
+      "mutationOperatorDescription" : "Aggregation Transformation Replacement",
+      "mutantCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }\n  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }\n  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (firstParameter: Int, secondParameter: Int) => {\n    val originalFunction = ((w: Int, z: Int) => w + z)(_, _)\n    originalFunction(firstParameter, firstParameter)\n  } }\n  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }\n  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n  genresTagsCountSorted\n}",
+      "originalCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))\n    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))\n    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)\n    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))\n    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n    genresTagsCountSorted\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 182,
+      "originalProgramId" : 7,
+      "mutationOperator" : "ATR",
+      "mutationOperatorDescription" : "Aggregation Transformation Replacement",
+      "mutantCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }\n  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }\n  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (firstParameter: Int, secondParameter: Int) => {\n    val originalFunction = ((w: Int, z: Int) => w + z)(_, _)\n    originalFunction(secondParameter, secondParameter)\n  } }\n  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }\n  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n  genresTagsCountSorted\n}",
+      "originalCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))\n    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))\n    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)\n    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))\n    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n    genresTagsCountSorted\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 183,
+      "originalProgramId" : 7,
+      "mutationOperator" : "ATR",
+      "mutationOperatorDescription" : "Aggregation Transformation Replacement",
+      "mutantCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }\n  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }\n  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (firstParameter: Int, secondParameter: Int) => {\n    val originalFunction = ((w: Int, z: Int) => w + z)(_, _)\n    originalFunction(secondParameter, firstParameter)\n  } }\n  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }\n  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n  genresTagsCountSorted\n}",
+      "originalCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))\n    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))\n    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)\n    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))\n    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n    genresTagsCountSorted\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 184,
+      "originalProgramId" : 7,
+      "mutationOperator" : "JTR",
+      "mutationOperatorDescription" : "Join Transformation Replacement",
+      "mutantCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }\n  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.leftOuterJoin(tagsMovieIdKey).map(tuple => (tuple._1, (tuple._2._1, tuple._2._2.getOrElse(\"\"))))\n  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }\n  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }\n  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }\n  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n  genresTagsCountSorted\n}",
+      "originalCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))\n    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))\n    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)\n    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))\n    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n    genresTagsCountSorted\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 185,
+      "originalProgramId" : 7,
+      "mutationOperator" : "JTR",
+      "mutationOperatorDescription" : "Join Transformation Replacement",
+      "mutantCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }\n  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.rightOuterJoin(tagsMovieIdKey).map(tuple => (tuple._1, (tuple._2._1.getOrElse(null.asInstanceOf[Movie]), tuple._2._2)))\n  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }\n  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }\n  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }\n  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n  genresTagsCountSorted\n}",
+      "originalCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))\n    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))\n    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)\n    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))\n    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n    genresTagsCountSorted\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 186,
+      "originalProgramId" : 7,
+      "mutationOperator" : "JTR",
+      "mutationOperatorDescription" : "Join Transformation Replacement",
+      "mutantCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }\n  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.fullOuterJoin(tagsMovieIdKey).map(tuple => (tuple._1, (tuple._2._1.getOrElse(null.asInstanceOf[Movie]), tuple._2._2.getOrElse(\"\"))))\n  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }\n  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }\n  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }\n  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n  genresTagsCountSorted\n}",
+      "originalCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))\n    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))\n    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)\n    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))\n    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n    genresTagsCountSorted\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 187,
+      "originalProgramId" : 7,
+      "mutationOperator" : "OTD",
+      "mutationOperatorDescription" : "Order Transformation Deletion",
+      "mutantCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }\n  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }\n  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }\n  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }\n  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped\n  genresTagsCountSorted\n}",
+      "originalCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))\n    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))\n    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)\n    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))\n    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n    genresTagsCountSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 188,
+      "originalProgramId" : 7,
+      "mutationOperator" : "OTI",
+      "mutationOperatorDescription" : "Order Transformation Inversion",
+      "mutantCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n  val moviesIdKey: RDD[(Int, Movie)] = movies.map { (m: Movie) => (m.movieId, m) }\n  val tagsMovieIdKey: RDD[(Int, String)] = tags.map { (t: Tag) => (t.movieId, t.tag) }\n  val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n  val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap { (mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)) }\n  val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey { (w: Int, z: Int) => w + z }\n  val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map { (g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)) }\n  val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(false)\n  genresTagsCountSorted\n}",
+      "originalCode" : "def genresTagsCount(movies: RDD[Movie], tags: RDD[Tag]) = {\n    val moviesIdKey: RDD[(Int, Movie)] = movies.map((m: Movie) => (m.movieId, m))\n    val tagsMovieIdKey: RDD[(Int, String)] = tags.map((t: Tag) => (t.movieId, t.tag))\n    val joinMoviesTags: RDD[(Int, (Movie, String))] = moviesIdKey.join(tagsMovieIdKey)\n    val genresTags: RDD[((String, String), Int)] = joinMoviesTags.flatMap((mg: (Int, (Movie, String))) => mg._2._1.genres.map(g => ((g, mg._2._2), 1)))\n    val genresTagsCounts: RDD[((String, String), Int)] = genresTags.reduceByKey((w: Int, z: Int) => w + z)\n    val genresTagsCountMapped: RDD[(String, (String, Int))] = genresTagsCounts.map((g: ((String, String), Int)) => (g._1._1, (g._1._2, g._2)))\n    val genresTagsCountSorted: RDD[(String, (String, Int))] = genresTagsCountMapped.sortByKey(true)\n    genresTagsCountSorted\n  }",
+      "status" : "Killed"
+    }
+  ],
+  "removedMutants" : [
+  ],
+  "mutationOperatorsMetrics" : {
+    "totalMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 3,
+      "UTR" : 0,
+      "MTR" : 23,
+      "UTD" : 2,
+      "OTD" : 1,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 5,
+      "OTI" : 1,
+      "DTI" : 7,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalKilledMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 22,
+      "UTD" : 2,
+      "OTD" : 1,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 2,
+      "OTI" : 1,
+      "DTI" : 5,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalLivedMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 3,
+      "UTR" : 0,
+      "MTR" : 0,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 2,
+      "OTI" : 0,
+      "DTI" : 2,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalEquivalentMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 1,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 1,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalErrorMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 0,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalRemovedMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 0,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "descriptionPerOperator" : {
+      "FTD" : "Filter Transformation Deletion",
+      "JTR" : "Join Transformation Replacement",
+      "UTR" : "Unary Transformation Replacement",
+      "MTR" : "Mapping Transformation Replacement",
+      "UTD" : "Unary Transformation Deletion",
+      "OTD" : "Order Transformation Deletion",
+      "BTR" : "Binary Transformation Replacement",
+      "STR" : "Set Transformation Replacement",
+      "BTS" : "Binary Transformation Swap",
+      "ATR" : "Aggregation Transformation Replacement",
+      "OTI" : "Order Transformation Inversion",
+      "DTI" : "Distinct Transformation Insertion",
+      "DTD" : "Distinct Transformation Deletion",
+      "NFTP" : "Negation of Filter Transformation Predicate",
+      "UTS" : "Unary Transformation Swap"
+    }
+  },
+  "totalDatasets" : 9,
+  "totalTransformations" : 7,
+  "totalMutants" : 42,
+  "totalKilledMutants" : 33,
+  "totalLivedMutants" : 7,
+  "totalEquivalentMutants" : 2,
+  "totalErrorMutants" : 0,
+  "totalRemovedMutants" : 0,
+  "mutationScore" : 0.825
+}

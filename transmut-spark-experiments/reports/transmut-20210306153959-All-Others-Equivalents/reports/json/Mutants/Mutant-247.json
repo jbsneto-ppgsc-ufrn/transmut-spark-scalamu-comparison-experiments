@@ -1,0 +1,9 @@
+{
+  "id" : 247,
+  "originalProgramId" : 11,
+  "mutationOperator" : "ATR",
+  "mutationOperatorDescription" : "Aggregation Transformation Replacement",
+  "mutantCode" : "def wordCount(input: RDD[String]) = {\n  val words = input.flatMap { (line: String) => line.split(\" \") }\n  val pairs = words.map { (word: String) => (word, 1) }\n  val counts = pairs.reduceByKey { (firstParameter: Int, secondParameter: Int) => {\n    val originalFunction = ((a: Int, b: Int) => a + b)(_, _)\n    originalFunction(secondParameter, secondParameter)\n  } }\n  counts\n}",
+  "originalCode" : "def wordCount(input: RDD[String]) = {\n\t\tval words = input.flatMap( (line: String) => line.split(\" \") )\n\t\tval pairs = words.map( (word: String) => (word, 1) )\n\t\tval counts = pairs.reduceByKey( (a: Int, b: Int) => a + b )\n\t\tcounts\n\t}",
+  "status" : "Killed"
+}

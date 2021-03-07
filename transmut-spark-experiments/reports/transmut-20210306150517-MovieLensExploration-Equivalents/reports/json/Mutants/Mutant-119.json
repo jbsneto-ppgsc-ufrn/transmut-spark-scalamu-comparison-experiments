@@ -1,0 +1,9 @@
+{
+  "id" : 119,
+  "originalProgramId" : 5,
+  "mutationOperator" : "MTR",
+  "mutationOperatorDescription" : "Mapping Transformation Replacement",
+  "mutantCode" : "def meanOfMeansOfRatingsOfAllMovies(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))]) = {\n  val meanOfRatingsAllMovies: RDD[(Double, Int)] = ratingsStats.map { (inputParameter: (Tuple3[Int, String, Int], Tuple4[Int, Double, Double, Double])) => {\n    val originalFunction = ((m: ((Int, String, Int), (Int, Double, Double, Double))) => (m._2._2, 1))(_)\n    val originalValue = originalFunction(inputParameter)\n    (Double.MinValue, originalValue._2)\n  } }\n  val sumMeanOfRatingsAllMovies: (Double, Int) = meanOfRatingsAllMovies.reduce { (m1: (Double, Int), m2: (Double, Int)) => (m1._1 + m2._1, m1._2 + m2._2) }\n  sumMeanOfRatingsAllMovies._1 / sumMeanOfRatingsAllMovies._2\n}",
+  "originalCode" : "def meanOfMeansOfRatingsOfAllMovies(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))]) = {\n    val meanOfRatingsAllMovies: RDD[(Double, Int)] = ratingsStats.map((m: ((Int, String, Int), (Int, Double, Double, Double))) => (m._2._2, 1))\n    val sumMeanOfRatingsAllMovies: (Double, Int) = meanOfRatingsAllMovies.reduce((m1: (Double, Int), m2: (Double, Int)) => (m1._1 + m2._1, m1._2 + m2._2))\n    sumMeanOfRatingsAllMovies._1 / sumMeanOfRatingsAllMovies._2\n  }",
+  "status" : "Killed"
+}

@@ -1,0 +1,9 @@
+{
+  "id" : 224,
+  "originalProgramId" : 10,
+  "mutationOperator" : "FTD",
+  "mutationOperatorDescription" : "Filter Transformation Deletion",
+  "mutantCode" : "def scan(input: RDD[String]): RDD[(String, Int)] = {\n  val rankings = input.map(parseRankings)\n  val filteredRankings: RDD[Ranking] = rankings\n  val results: RDD[(String, Int)] = filteredRankings.map(mapRankingToTuple)\n  results\n}",
+  "originalCode" : "def scan(input: RDD[String]): RDD[(String, Int)] = {\n    val rankings = input.map(parseRankings)\n    val filteredRankings: RDD[Ranking] = rankings.filter(filterRankings)\n    val results: RDD[(String, Int)] = filteredRankings.map(mapRankingToTuple)\n    results\n  }",
+  "status" : "Killed"
+}

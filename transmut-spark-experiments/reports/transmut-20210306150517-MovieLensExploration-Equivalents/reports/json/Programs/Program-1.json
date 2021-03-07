@@ -1,0 +1,392 @@
+{
+  "id" : 1,
+  "programSourceId" : 1,
+  "name" : "parseRDDs",
+  "code" : "def parseRDDs(ratingsCSV: RDD[String], moviesCSV: RDD[String], tagsCSV: RDD[String]): (RDD[Rating], RDD[Movie], RDD[Tag]) = {\n    val ratings: RDD[Rating] = ratingsCSV.flatMap(parseRatings)\n    val movies: RDD[Movie] = moviesCSV.flatMap(parseMovies)\n    val tags: RDD[Tag] = tagsCSV.flatMap(parseTags)\n    (ratings, movies, tags)\n  }",
+  "datasets" : [
+    {
+      "id" : 1,
+      "name" : "ratingsCSV",
+      "datasetType" : "RDD[String]",
+      "inputDataset" : true,
+      "outputDataset" : false
+    },
+    {
+      "id" : 2,
+      "name" : "moviesCSV",
+      "datasetType" : "RDD[String]",
+      "inputDataset" : true,
+      "outputDataset" : false
+    },
+    {
+      "id" : 3,
+      "name" : "tagsCSV",
+      "datasetType" : "RDD[String]",
+      "inputDataset" : true,
+      "outputDataset" : false
+    },
+    {
+      "id" : 4,
+      "name" : "ratings",
+      "datasetType" : "RDD[Rating]",
+      "inputDataset" : false,
+      "outputDataset" : true
+    },
+    {
+      "id" : 5,
+      "name" : "movies",
+      "datasetType" : "RDD[Movie]",
+      "inputDataset" : false,
+      "outputDataset" : true
+    },
+    {
+      "id" : 6,
+      "name" : "tags",
+      "datasetType" : "RDD[Tag]",
+      "inputDataset" : false,
+      "outputDataset" : true
+    }
+  ],
+  "transformations" : [
+    {
+      "id" : 1,
+      "name" : "flatMap",
+      "inputTypes" : [
+        "RDD[String]"
+      ],
+      "outputTypes" : [
+        "RDD[Rating]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 2,
+      "name" : "flatMap",
+      "inputTypes" : [
+        "RDD[String]"
+      ],
+      "outputTypes" : [
+        "RDD[Movie]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 3,
+      "name" : "flatMap",
+      "inputTypes" : [
+        "RDD[String]"
+      ],
+      "outputTypes" : [
+        "RDD[Tag]"
+      ],
+      "loadTransformation" : false
+    }
+  ],
+  "edges" : [
+    {
+      "id" : 1,
+      "datasetId" : 1,
+      "transformationId" : 1,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 2,
+      "datasetId" : 4,
+      "transformationId" : 1,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 3,
+      "datasetId" : 2,
+      "transformationId" : 2,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 4,
+      "datasetId" : 5,
+      "transformationId" : 2,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 5,
+      "datasetId" : 3,
+      "transformationId" : 3,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 6,
+      "datasetId" : 6,
+      "transformationId" : 3,
+      "direction" : "TransformationToDataset"
+    }
+  ],
+  "mutants" : [
+    {
+      "id" : 1,
+      "originalProgramId" : 1,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def parseRDDs(ratingsCSV: RDD[String], moviesCSV: RDD[String], tagsCSV: RDD[String]): (RDD[Rating], RDD[Movie], RDD[Tag]) = {\n  val ratings: RDD[Rating] = ratingsCSV.flatMap { (inputParameter: String) => {\n    val originalFunction = parseRatings(_)\n    val originalValue = originalFunction(inputParameter)\n    originalValue.headOption\n  } }\n  val movies: RDD[Movie] = moviesCSV.flatMap(parseMovies)\n  val tags: RDD[Tag] = tagsCSV.flatMap(parseTags)\n  (ratings, movies, tags)\n}",
+      "originalCode" : "def parseRDDs(ratingsCSV: RDD[String], moviesCSV: RDD[String], tagsCSV: RDD[String]): (RDD[Rating], RDD[Movie], RDD[Tag]) = {\n    val ratings: RDD[Rating] = ratingsCSV.flatMap(parseRatings)\n    val movies: RDD[Movie] = moviesCSV.flatMap(parseMovies)\n    val tags: RDD[Tag] = tagsCSV.flatMap(parseTags)\n    (ratings, movies, tags)\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 2,
+      "originalProgramId" : 1,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def parseRDDs(ratingsCSV: RDD[String], moviesCSV: RDD[String], tagsCSV: RDD[String]): (RDD[Rating], RDD[Movie], RDD[Tag]) = {\n  val ratings: RDD[Rating] = ratingsCSV.flatMap { (inputParameter: String) => {\n    val originalFunction = parseRatings(_)\n    val originalValue = originalFunction(inputParameter)\n    originalValue.toList.tail\n  } }\n  val movies: RDD[Movie] = moviesCSV.flatMap(parseMovies)\n  val tags: RDD[Tag] = tagsCSV.flatMap(parseTags)\n  (ratings, movies, tags)\n}",
+      "originalCode" : "def parseRDDs(ratingsCSV: RDD[String], moviesCSV: RDD[String], tagsCSV: RDD[String]): (RDD[Rating], RDD[Movie], RDD[Tag]) = {\n    val ratings: RDD[Rating] = ratingsCSV.flatMap(parseRatings)\n    val movies: RDD[Movie] = moviesCSV.flatMap(parseMovies)\n    val tags: RDD[Tag] = tagsCSV.flatMap(parseTags)\n    (ratings, movies, tags)\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 3,
+      "originalProgramId" : 1,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def parseRDDs(ratingsCSV: RDD[String], moviesCSV: RDD[String], tagsCSV: RDD[String]): (RDD[Rating], RDD[Movie], RDD[Tag]) = {\n  val ratings: RDD[Rating] = ratingsCSV.flatMap { (inputParameter: String) => {\n    val originalFunction = parseRatings(_)\n    val originalValue = originalFunction(inputParameter)\n    originalValue.toList.reverse\n  } }\n  val movies: RDD[Movie] = moviesCSV.flatMap(parseMovies)\n  val tags: RDD[Tag] = tagsCSV.flatMap(parseTags)\n  (ratings, movies, tags)\n}",
+      "originalCode" : "def parseRDDs(ratingsCSV: RDD[String], moviesCSV: RDD[String], tagsCSV: RDD[String]): (RDD[Rating], RDD[Movie], RDD[Tag]) = {\n    val ratings: RDD[Rating] = ratingsCSV.flatMap(parseRatings)\n    val movies: RDD[Movie] = moviesCSV.flatMap(parseMovies)\n    val tags: RDD[Tag] = tagsCSV.flatMap(parseTags)\n    (ratings, movies, tags)\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 4,
+      "originalProgramId" : 1,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def parseRDDs(ratingsCSV: RDD[String], moviesCSV: RDD[String], tagsCSV: RDD[String]): (RDD[Rating], RDD[Movie], RDD[Tag]) = {\n  val ratings: RDD[Rating] = ratingsCSV.flatMap { (inputParameter: String) => {\n    val originalFunction = parseRatings(_)\n    val originalValue = originalFunction(inputParameter)\n    List[Rating]()\n  } }\n  val movies: RDD[Movie] = moviesCSV.flatMap(parseMovies)\n  val tags: RDD[Tag] = tagsCSV.flatMap(parseTags)\n  (ratings, movies, tags)\n}",
+      "originalCode" : "def parseRDDs(ratingsCSV: RDD[String], moviesCSV: RDD[String], tagsCSV: RDD[String]): (RDD[Rating], RDD[Movie], RDD[Tag]) = {\n    val ratings: RDD[Rating] = ratingsCSV.flatMap(parseRatings)\n    val movies: RDD[Movie] = moviesCSV.flatMap(parseMovies)\n    val tags: RDD[Tag] = tagsCSV.flatMap(parseTags)\n    (ratings, movies, tags)\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 5,
+      "originalProgramId" : 1,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def parseRDDs(ratingsCSV: RDD[String], moviesCSV: RDD[String], tagsCSV: RDD[String]): (RDD[Rating], RDD[Movie], RDD[Tag]) = {\n  val ratings: RDD[Rating] = ratingsCSV.flatMap(parseRatings)\n  val movies: RDD[Movie] = moviesCSV.flatMap { (inputParameter: String) => {\n    val originalFunction = parseMovies(_)\n    val originalValue = originalFunction(inputParameter)\n    originalValue.headOption\n  } }\n  val tags: RDD[Tag] = tagsCSV.flatMap(parseTags)\n  (ratings, movies, tags)\n}",
+      "originalCode" : "def parseRDDs(ratingsCSV: RDD[String], moviesCSV: RDD[String], tagsCSV: RDD[String]): (RDD[Rating], RDD[Movie], RDD[Tag]) = {\n    val ratings: RDD[Rating] = ratingsCSV.flatMap(parseRatings)\n    val movies: RDD[Movie] = moviesCSV.flatMap(parseMovies)\n    val tags: RDD[Tag] = tagsCSV.flatMap(parseTags)\n    (ratings, movies, tags)\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 6,
+      "originalProgramId" : 1,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def parseRDDs(ratingsCSV: RDD[String], moviesCSV: RDD[String], tagsCSV: RDD[String]): (RDD[Rating], RDD[Movie], RDD[Tag]) = {\n  val ratings: RDD[Rating] = ratingsCSV.flatMap(parseRatings)\n  val movies: RDD[Movie] = moviesCSV.flatMap { (inputParameter: String) => {\n    val originalFunction = parseMovies(_)\n    val originalValue = originalFunction(inputParameter)\n    originalValue.toList.tail\n  } }\n  val tags: RDD[Tag] = tagsCSV.flatMap(parseTags)\n  (ratings, movies, tags)\n}",
+      "originalCode" : "def parseRDDs(ratingsCSV: RDD[String], moviesCSV: RDD[String], tagsCSV: RDD[String]): (RDD[Rating], RDD[Movie], RDD[Tag]) = {\n    val ratings: RDD[Rating] = ratingsCSV.flatMap(parseRatings)\n    val movies: RDD[Movie] = moviesCSV.flatMap(parseMovies)\n    val tags: RDD[Tag] = tagsCSV.flatMap(parseTags)\n    (ratings, movies, tags)\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 7,
+      "originalProgramId" : 1,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def parseRDDs(ratingsCSV: RDD[String], moviesCSV: RDD[String], tagsCSV: RDD[String]): (RDD[Rating], RDD[Movie], RDD[Tag]) = {\n  val ratings: RDD[Rating] = ratingsCSV.flatMap(parseRatings)\n  val movies: RDD[Movie] = moviesCSV.flatMap { (inputParameter: String) => {\n    val originalFunction = parseMovies(_)\n    val originalValue = originalFunction(inputParameter)\n    originalValue.toList.reverse\n  } }\n  val tags: RDD[Tag] = tagsCSV.flatMap(parseTags)\n  (ratings, movies, tags)\n}",
+      "originalCode" : "def parseRDDs(ratingsCSV: RDD[String], moviesCSV: RDD[String], tagsCSV: RDD[String]): (RDD[Rating], RDD[Movie], RDD[Tag]) = {\n    val ratings: RDD[Rating] = ratingsCSV.flatMap(parseRatings)\n    val movies: RDD[Movie] = moviesCSV.flatMap(parseMovies)\n    val tags: RDD[Tag] = tagsCSV.flatMap(parseTags)\n    (ratings, movies, tags)\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 8,
+      "originalProgramId" : 1,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def parseRDDs(ratingsCSV: RDD[String], moviesCSV: RDD[String], tagsCSV: RDD[String]): (RDD[Rating], RDD[Movie], RDD[Tag]) = {\n  val ratings: RDD[Rating] = ratingsCSV.flatMap(parseRatings)\n  val movies: RDD[Movie] = moviesCSV.flatMap { (inputParameter: String) => {\n    val originalFunction = parseMovies(_)\n    val originalValue = originalFunction(inputParameter)\n    List[Movie]()\n  } }\n  val tags: RDD[Tag] = tagsCSV.flatMap(parseTags)\n  (ratings, movies, tags)\n}",
+      "originalCode" : "def parseRDDs(ratingsCSV: RDD[String], moviesCSV: RDD[String], tagsCSV: RDD[String]): (RDD[Rating], RDD[Movie], RDD[Tag]) = {\n    val ratings: RDD[Rating] = ratingsCSV.flatMap(parseRatings)\n    val movies: RDD[Movie] = moviesCSV.flatMap(parseMovies)\n    val tags: RDD[Tag] = tagsCSV.flatMap(parseTags)\n    (ratings, movies, tags)\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 9,
+      "originalProgramId" : 1,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def parseRDDs(ratingsCSV: RDD[String], moviesCSV: RDD[String], tagsCSV: RDD[String]): (RDD[Rating], RDD[Movie], RDD[Tag]) = {\n  val ratings: RDD[Rating] = ratingsCSV.flatMap(parseRatings)\n  val movies: RDD[Movie] = moviesCSV.flatMap(parseMovies)\n  val tags: RDD[Tag] = tagsCSV.flatMap { (inputParameter: String) => {\n    val originalFunction = parseTags(_)\n    val originalValue = originalFunction(inputParameter)\n    originalValue.headOption\n  } }\n  (ratings, movies, tags)\n}",
+      "originalCode" : "def parseRDDs(ratingsCSV: RDD[String], moviesCSV: RDD[String], tagsCSV: RDD[String]): (RDD[Rating], RDD[Movie], RDD[Tag]) = {\n    val ratings: RDD[Rating] = ratingsCSV.flatMap(parseRatings)\n    val movies: RDD[Movie] = moviesCSV.flatMap(parseMovies)\n    val tags: RDD[Tag] = tagsCSV.flatMap(parseTags)\n    (ratings, movies, tags)\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 10,
+      "originalProgramId" : 1,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def parseRDDs(ratingsCSV: RDD[String], moviesCSV: RDD[String], tagsCSV: RDD[String]): (RDD[Rating], RDD[Movie], RDD[Tag]) = {\n  val ratings: RDD[Rating] = ratingsCSV.flatMap(parseRatings)\n  val movies: RDD[Movie] = moviesCSV.flatMap(parseMovies)\n  val tags: RDD[Tag] = tagsCSV.flatMap { (inputParameter: String) => {\n    val originalFunction = parseTags(_)\n    val originalValue = originalFunction(inputParameter)\n    originalValue.toList.tail\n  } }\n  (ratings, movies, tags)\n}",
+      "originalCode" : "def parseRDDs(ratingsCSV: RDD[String], moviesCSV: RDD[String], tagsCSV: RDD[String]): (RDD[Rating], RDD[Movie], RDD[Tag]) = {\n    val ratings: RDD[Rating] = ratingsCSV.flatMap(parseRatings)\n    val movies: RDD[Movie] = moviesCSV.flatMap(parseMovies)\n    val tags: RDD[Tag] = tagsCSV.flatMap(parseTags)\n    (ratings, movies, tags)\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 11,
+      "originalProgramId" : 1,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def parseRDDs(ratingsCSV: RDD[String], moviesCSV: RDD[String], tagsCSV: RDD[String]): (RDD[Rating], RDD[Movie], RDD[Tag]) = {\n  val ratings: RDD[Rating] = ratingsCSV.flatMap(parseRatings)\n  val movies: RDD[Movie] = moviesCSV.flatMap(parseMovies)\n  val tags: RDD[Tag] = tagsCSV.flatMap { (inputParameter: String) => {\n    val originalFunction = parseTags(_)\n    val originalValue = originalFunction(inputParameter)\n    originalValue.toList.reverse\n  } }\n  (ratings, movies, tags)\n}",
+      "originalCode" : "def parseRDDs(ratingsCSV: RDD[String], moviesCSV: RDD[String], tagsCSV: RDD[String]): (RDD[Rating], RDD[Movie], RDD[Tag]) = {\n    val ratings: RDD[Rating] = ratingsCSV.flatMap(parseRatings)\n    val movies: RDD[Movie] = moviesCSV.flatMap(parseMovies)\n    val tags: RDD[Tag] = tagsCSV.flatMap(parseTags)\n    (ratings, movies, tags)\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 12,
+      "originalProgramId" : 1,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def parseRDDs(ratingsCSV: RDD[String], moviesCSV: RDD[String], tagsCSV: RDD[String]): (RDD[Rating], RDD[Movie], RDD[Tag]) = {\n  val ratings: RDD[Rating] = ratingsCSV.flatMap(parseRatings)\n  val movies: RDD[Movie] = moviesCSV.flatMap(parseMovies)\n  val tags: RDD[Tag] = tagsCSV.flatMap { (inputParameter: String) => {\n    val originalFunction = parseTags(_)\n    val originalValue = originalFunction(inputParameter)\n    List[Tag]()\n  } }\n  (ratings, movies, tags)\n}",
+      "originalCode" : "def parseRDDs(ratingsCSV: RDD[String], moviesCSV: RDD[String], tagsCSV: RDD[String]): (RDD[Rating], RDD[Movie], RDD[Tag]) = {\n    val ratings: RDD[Rating] = ratingsCSV.flatMap(parseRatings)\n    val movies: RDD[Movie] = moviesCSV.flatMap(parseMovies)\n    val tags: RDD[Tag] = tagsCSV.flatMap(parseTags)\n    (ratings, movies, tags)\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 13,
+      "originalProgramId" : 1,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def parseRDDs(ratingsCSV: RDD[String], moviesCSV: RDD[String], tagsCSV: RDD[String]): (RDD[Rating], RDD[Movie], RDD[Tag]) = {\n  val ratings: RDD[Rating] = ratingsCSV.flatMap(parseRatings).distinct()\n  val movies: RDD[Movie] = moviesCSV.flatMap(parseMovies)\n  val tags: RDD[Tag] = tagsCSV.flatMap(parseTags)\n  (ratings, movies, tags)\n}",
+      "originalCode" : "def parseRDDs(ratingsCSV: RDD[String], moviesCSV: RDD[String], tagsCSV: RDD[String]): (RDD[Rating], RDD[Movie], RDD[Tag]) = {\n    val ratings: RDD[Rating] = ratingsCSV.flatMap(parseRatings)\n    val movies: RDD[Movie] = moviesCSV.flatMap(parseMovies)\n    val tags: RDD[Tag] = tagsCSV.flatMap(parseTags)\n    (ratings, movies, tags)\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 14,
+      "originalProgramId" : 1,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def parseRDDs(ratingsCSV: RDD[String], moviesCSV: RDD[String], tagsCSV: RDD[String]): (RDD[Rating], RDD[Movie], RDD[Tag]) = {\n  val ratings: RDD[Rating] = ratingsCSV.flatMap(parseRatings)\n  val movies: RDD[Movie] = moviesCSV.flatMap(parseMovies).distinct()\n  val tags: RDD[Tag] = tagsCSV.flatMap(parseTags)\n  (ratings, movies, tags)\n}",
+      "originalCode" : "def parseRDDs(ratingsCSV: RDD[String], moviesCSV: RDD[String], tagsCSV: RDD[String]): (RDD[Rating], RDD[Movie], RDD[Tag]) = {\n    val ratings: RDD[Rating] = ratingsCSV.flatMap(parseRatings)\n    val movies: RDD[Movie] = moviesCSV.flatMap(parseMovies)\n    val tags: RDD[Tag] = tagsCSV.flatMap(parseTags)\n    (ratings, movies, tags)\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 15,
+      "originalProgramId" : 1,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def parseRDDs(ratingsCSV: RDD[String], moviesCSV: RDD[String], tagsCSV: RDD[String]): (RDD[Rating], RDD[Movie], RDD[Tag]) = {\n  val ratings: RDD[Rating] = ratingsCSV.flatMap(parseRatings)\n  val movies: RDD[Movie] = moviesCSV.flatMap(parseMovies)\n  val tags: RDD[Tag] = tagsCSV.flatMap(parseTags).distinct()\n  (ratings, movies, tags)\n}",
+      "originalCode" : "def parseRDDs(ratingsCSV: RDD[String], moviesCSV: RDD[String], tagsCSV: RDD[String]): (RDD[Rating], RDD[Movie], RDD[Tag]) = {\n    val ratings: RDD[Rating] = ratingsCSV.flatMap(parseRatings)\n    val movies: RDD[Movie] = moviesCSV.flatMap(parseMovies)\n    val tags: RDD[Tag] = tagsCSV.flatMap(parseTags)\n    (ratings, movies, tags)\n  }",
+      "status" : "Killed"
+    }
+  ],
+  "removedMutants" : [
+  ],
+  "mutationOperatorsMetrics" : {
+    "totalMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 12,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 3,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalKilledMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 6,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 3,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalLivedMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 0,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalEquivalentMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 6,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalErrorMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 0,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalRemovedMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 0,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "descriptionPerOperator" : {
+      "FTD" : "Filter Transformation Deletion",
+      "JTR" : "Join Transformation Replacement",
+      "UTR" : "Unary Transformation Replacement",
+      "MTR" : "Mapping Transformation Replacement",
+      "UTD" : "Unary Transformation Deletion",
+      "OTD" : "Order Transformation Deletion",
+      "BTR" : "Binary Transformation Replacement",
+      "STR" : "Set Transformation Replacement",
+      "BTS" : "Binary Transformation Swap",
+      "ATR" : "Aggregation Transformation Replacement",
+      "OTI" : "Order Transformation Inversion",
+      "DTI" : "Distinct Transformation Insertion",
+      "DTD" : "Distinct Transformation Deletion",
+      "NFTP" : "Negation of Filter Transformation Predicate",
+      "UTS" : "Unary Transformation Swap"
+    }
+  },
+  "totalDatasets" : 6,
+  "totalTransformations" : 3,
+  "totalMutants" : 15,
+  "totalKilledMutants" : 9,
+  "totalLivedMutants" : 0,
+  "totalEquivalentMutants" : 6,
+  "totalErrorMutants" : 0,
+  "totalRemovedMutants" : 0,
+  "mutationScore" : 1.0
+}

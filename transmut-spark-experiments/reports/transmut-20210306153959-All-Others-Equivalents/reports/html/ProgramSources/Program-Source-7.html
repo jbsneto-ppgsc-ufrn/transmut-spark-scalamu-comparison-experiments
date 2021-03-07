@@ -1,0 +1,2241 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/scripts/shCore.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/scripts/shBrushScala.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/styles/shCoreEclipse.css" rel="stylesheet" type="text/css" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/styles/shThemeEclipse.min.css" rel="stylesheet" type="text/css" />
+<!-- Cytoscape -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/2.5.1/cytoscape.min.js"></script>
+<!-- DataTable -->
+<link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<style>
+#cy {
+  width: 1100px;
+  height: 300px;
+  background-color: white;
+}
+body {
+  padding-top: 5rem;
+}
+.starter-template {
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+.section-title {
+  padding-top: 3.5rem;
+}
+</style>
+<title>TRANSMUT-Spark Mutation Testing Report</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+<a class="navbar-brand" href="../index.html">TRANSMUT-Spark</a>
+<div class="collapse navbar-collapse" id="navbarNav">
+  <ul class="navbar-nav mr-auto">
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Section</a>
+      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <a class="dropdown-item" href="#programs">Programs</a>
+        <a class="dropdown-item" href="#mutants">Mutants</a>
+        <a class="dropdown-item" href="#removedMutants">Removed Mutants</a>
+        <a class="dropdown-item" href="#mutationOperators">Mutation Operators</a>
+      </div>
+    </li>
+  </ul>
+</div>
+</nav>
+<main role"main" class="container">  
+<div class="starter-template">
+  <h2><a href="../index.html" class="text-dark">Mutation Testing Report</a></h2>
+  <h3><a href="#" class="text-dark">Program Source ID: 7</a></h3>
+  <h3><a href="#" class="text-dark">Program Source: NGramsCount</a></h3>
+</div>    
+<!-- Programs -->
+<div class="row" id="programs">
+<div class="col">
+<h3 class="section-title">Programs</h3>
+<hr class="my-4">
+<table class="display table table-striped table-hover" id="programsTable">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Program</th>
+      <th scope="col">Datasets</th>
+      <th scope="col">Transformations</th>
+      <th scope="col">Mutants</th>
+      <th scope="col">Killed</th>
+      <th scope="col">Lived</th>
+      <th scope="col">Equivalent</th>
+      <th scope="col">Error</th>
+      <th scope="col">Removed</th>
+      <th scope="col">Mutation Score</th>
+      </tr>
+  </thead>
+  <tbody>
+    <tr>
+  <th scope="row"><a href="../Programs/Program-9.html" class="text-dark">9</a></th>
+  <td><a href="../Programs/Program-9.html" class="text-dark">countNGrams</a></td>
+  <td>6</td>
+  <td>5</td>
+  <td>32</td>
+  <td>27</td>
+  <td>0</td>
+  <td>5</td>
+  <td>0</td>
+  <td>0</td>
+  <td>
+    <div class="progress">
+      <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 100.00%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><span class="font-weight-bold text-dark">1.00</span></div>
+    </div>
+ </td>
+</tr>
+  </tbody>
+  <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+      <th scope="row">#</th>
+      <td>Total</td>
+      <td>6</td>
+      <td>5</td>
+      <td>32</td>
+      <td>27</td>
+      <td>0</td>
+      <td>5</td>
+      <td>0</td>
+      <td>0</td>
+      <td>
+        <div class="progress">
+          <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 100.00%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><span class="font-weight-bold text-dark">1.00</span></div>
+        </div>
+      </td>
+    </tr>
+  </tfoot>
+</table>   
+   
+<hr class="my-4">
+</div>
+</div>
+<!-- Mutants -->
+<div class="row" id="mutants">
+<div class="col">
+<h3 class="section-title">Mutants</h3>
+<hr class="my-4">
+<table class="display table table-striped table-hover" id="programsTable">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Program</th>
+      <th scope="col">Mutation Operator</th>
+      <th scope="col">Status</th>
+      <th scope="col">Code</th>
+     </tr>
+  </thead>
+  <tbody>
+    <tr>
+  <th scope="row"><a href="../Mutants/Mutant-184.html" class="text-dark">184</a></th>
+  <td><a href="../Programs/Program-9.html" class="text-dark">countNGrams</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Deletion">UTD</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant184">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-185.html" class="text-dark">185</a></th>
+  <td><a href="../Programs/Program-9.html" class="text-dark">countNGrams</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Deletion">UTD</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant185">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-186.html" class="text-dark">186</a></th>
+  <td><a href="../Programs/Program-9.html" class="text-dark">countNGrams</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Deletion">UTD</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant186">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-187.html" class="text-dark">187</a></th>
+  <td><a href="../Programs/Program-9.html" class="text-dark">countNGrams</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant187">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-188.html" class="text-dark">188</a></th>
+  <td><a href="../Programs/Program-9.html" class="text-dark">countNGrams</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant188">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-189.html" class="text-dark">189</a></th>
+  <td><a href="../Programs/Program-9.html" class="text-dark">countNGrams</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Equivalent</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant189">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-190.html" class="text-dark">190</a></th>
+  <td><a href="../Programs/Program-9.html" class="text-dark">countNGrams</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant190">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-191.html" class="text-dark">191</a></th>
+  <td><a href="../Programs/Program-9.html" class="text-dark">countNGrams</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant191">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-192.html" class="text-dark">192</a></th>
+  <td><a href="../Programs/Program-9.html" class="text-dark">countNGrams</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant192">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-193.html" class="text-dark">193</a></th>
+  <td><a href="../Programs/Program-9.html" class="text-dark">countNGrams</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Equivalent</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant193">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-194.html" class="text-dark">194</a></th>
+  <td><a href="../Programs/Program-9.html" class="text-dark">countNGrams</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant194">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-195.html" class="text-dark">195</a></th>
+  <td><a href="../Programs/Program-9.html" class="text-dark">countNGrams</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant195">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-196.html" class="text-dark">196</a></th>
+  <td><a href="../Programs/Program-9.html" class="text-dark">countNGrams</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant196">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-197.html" class="text-dark">197</a></th>
+  <td><a href="../Programs/Program-9.html" class="text-dark">countNGrams</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant197">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-198.html" class="text-dark">198</a></th>
+  <td><a href="../Programs/Program-9.html" class="text-dark">countNGrams</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant198">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-199.html" class="text-dark">199</a></th>
+  <td><a href="../Programs/Program-9.html" class="text-dark">countNGrams</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant199">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-200.html" class="text-dark">200</a></th>
+  <td><a href="../Programs/Program-9.html" class="text-dark">countNGrams</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Equivalent</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant200">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-201.html" class="text-dark">201</a></th>
+  <td><a href="../Programs/Program-9.html" class="text-dark">countNGrams</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant201">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-202.html" class="text-dark">202</a></th>
+  <td><a href="../Programs/Program-9.html" class="text-dark">countNGrams</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant202">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-203.html" class="text-dark">203</a></th>
+  <td><a href="../Programs/Program-9.html" class="text-dark">countNGrams</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant203">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-204.html" class="text-dark">204</a></th>
+  <td><a href="../Programs/Program-9.html" class="text-dark">countNGrams</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Filter Transformation Deletion">FTD</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant204">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-205.html" class="text-dark">205</a></th>
+  <td><a href="../Programs/Program-9.html" class="text-dark">countNGrams</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant205">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-206.html" class="text-dark">206</a></th>
+  <td><a href="../Programs/Program-9.html" class="text-dark">countNGrams</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant206">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-207.html" class="text-dark">207</a></th>
+  <td><a href="../Programs/Program-9.html" class="text-dark">countNGrams</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant207">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-208.html" class="text-dark">208</a></th>
+  <td><a href="../Programs/Program-9.html" class="text-dark">countNGrams</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant208">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-209.html" class="text-dark">209</a></th>
+  <td><a href="../Programs/Program-9.html" class="text-dark">countNGrams</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></td>
+  <td>Equivalent</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant209">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-210.html" class="text-dark">210</a></th>
+  <td><a href="../Programs/Program-9.html" class="text-dark">countNGrams</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant210">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-211.html" class="text-dark">211</a></th>
+  <td><a href="../Programs/Program-9.html" class="text-dark">countNGrams</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant211">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-212.html" class="text-dark">212</a></th>
+  <td><a href="../Programs/Program-9.html" class="text-dark">countNGrams</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant212">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-213.html" class="text-dark">213</a></th>
+  <td><a href="../Programs/Program-9.html" class="text-dark">countNGrams</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant213">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-214.html" class="text-dark">214</a></th>
+  <td><a href="../Programs/Program-9.html" class="text-dark">countNGrams</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></td>
+  <td>Equivalent</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant214">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-215.html" class="text-dark">215</a></th>
+  <td><a href="../Programs/Program-9.html" class="text-dark">countNGrams</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Negation of Filter Transformation Predicate">NFTP</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant215">Show</button></td>
+</tr>
+  </tbody>
+  <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+      <th scope="row" colspan="2">Mutation Score</th>
+      <td colspan="3">
+        <div class="progress">
+          <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 100.00%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><span class="font-weight-bold text-dark">1.00</span></div>
+        </div>
+      </td>
+    </tr>
+  </tfoot>
+</table>   
+   
+<hr class="my-4">
+</div>
+</div>
+<!-- Removed Mutants -->
+<div class="row" id="removedMutants">
+<div class="col">
+<h3 class="section-title">Removed Mutants</h3>
+<hr class="my-4">
+<table class="display table table-striped table-hover" id="removedMutantsTable">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Program</th>
+      <th scope="col">Mutation Operator</th>
+      <th scope="col">Reduction Rule</th>
+      <th scope="col">Code</th>
+     </tr>
+  </thead>
+  <tbody>
+    
+  </tbody>
+  <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+      <th scope="row" colspan="2">Total Removed Mutants</th>
+      <td colspan="3">0</td>
+    </tr>
+  </tfoot>
+</table>   
+   
+<hr class="my-4">
+</div>
+</div>
+<!-- Mutation Operators -->
+<div class="row" id="mutationOperators">
+<div class="col">
+<h3 class="section-title">Mutation Operators</h3>
+<hr class="my-4">
+<table class="display table table-striped table-hover" id="programSourcesTable">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Mutation Operator</th>
+      <th scope="col">Mutants</th>
+      <th scope="col">Killed</th>
+      <th scope="col">Lived</th>
+      <th scope="col">Equivalent</th>
+      <th scope="col">Error</th>
+      <th scope="col">Removed</th>
+      </tr>
+  </thead>
+  <tbody>
+    <tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></th>
+  <td>5</td>
+  <td>4</td>
+  <td>0</td>
+  <td>1</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+<tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Negation of Filter Transformation Predicate">NFTP</a></th>
+  <td>1</td>
+  <td>1</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+<tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Filter Transformation Deletion">FTD</a></th>
+  <td>1</td>
+  <td>1</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+<tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></th>
+  <td>17</td>
+  <td>14</td>
+  <td>0</td>
+  <td>3</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+<tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></th>
+  <td>5</td>
+  <td>4</td>
+  <td>0</td>
+  <td>1</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+<tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Deletion">UTD</a></th>
+  <td>3</td>
+  <td>3</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+  </tbody>
+  <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+      <th scope="row">Total</th>
+      <td>32</td>
+      <td>27</td>
+      <td>0</td>
+      <td>5</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+  </tfoot>
+</table>   
+   
+<hr class="my-4">
+</div>
+</div>
+<!-- Mutant Modals -->
+<div class="modal fade" id="modalMutant184" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel184" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-184.html" class="text-dark">184</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Deletion">UTD</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def countNGrams(input: RDD[String]) = {
+    
+    val sentences = input.flatMap(tokenize)
+
+    val ngrams = sentences.flatMap((s: String) => nGrams(s))
+
+    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))
+
+    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))
+
+    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)
+
+    ngramsCount
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def countNGrams(input: RDD[String]) = {
+  val sentences = input
+  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }
+  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }
+  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }
+  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }
+  ngramsCount
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant185" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel185" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-185.html" class="text-dark">185</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Deletion">UTD</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [7]">
+def countNGrams(input: RDD[String]) = {
+    
+    val sentences = input.flatMap(tokenize)
+
+    val ngrams = sentences.flatMap((s: String) => nGrams(s))
+
+    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))
+
+    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))
+
+    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)
+
+    ngramsCount
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def countNGrams(input: RDD[String]) = {
+  val sentences = input.flatMap(tokenize)
+  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }
+  val ngramsFiltered = ngrams
+  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }
+  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }
+  ngramsCount
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant186" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel186" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-186.html" class="text-dark">186</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Deletion">UTD</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [11]">
+def countNGrams(input: RDD[String]) = {
+    
+    val sentences = input.flatMap(tokenize)
+
+    val ngrams = sentences.flatMap((s: String) => nGrams(s))
+
+    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))
+
+    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))
+
+    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)
+
+    ngramsCount
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [6]">
+def countNGrams(input: RDD[String]) = {
+  val sentences = input.flatMap(tokenize)
+  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }
+  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }
+  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }
+  val ngramsCount = ngramsPairs
+  ngramsCount
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant187" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel187" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-187.html" class="text-dark">187</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def countNGrams(input: RDD[String]) = {
+    
+    val sentences = input.flatMap(tokenize)
+
+    val ngrams = sentences.flatMap((s: String) => nGrams(s))
+
+    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))
+
+    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))
+
+    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)
+
+    ngramsCount
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2, 3, 4, 5, 6]">
+def countNGrams(input: RDD[String]) = {
+  val sentences = input.flatMap { (inputParameter: String) => {
+    val originalFunction = tokenize(_)
+    val originalValue = originalFunction(inputParameter)
+    originalValue.headOption
+  } }
+  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }
+  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }
+  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }
+  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }
+  ngramsCount
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant188" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel188" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-188.html" class="text-dark">188</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def countNGrams(input: RDD[String]) = {
+    
+    val sentences = input.flatMap(tokenize)
+
+    val ngrams = sentences.flatMap((s: String) => nGrams(s))
+
+    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))
+
+    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))
+
+    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)
+
+    ngramsCount
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2, 3, 4, 5, 6]">
+def countNGrams(input: RDD[String]) = {
+  val sentences = input.flatMap { (inputParameter: String) => {
+    val originalFunction = tokenize(_)
+    val originalValue = originalFunction(inputParameter)
+    originalValue.toList.tail
+  } }
+  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }
+  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }
+  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }
+  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }
+  ngramsCount
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant189" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel189" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-189.html" class="text-dark">189</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Equivalent</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def countNGrams(input: RDD[String]) = {
+    
+    val sentences = input.flatMap(tokenize)
+
+    val ngrams = sentences.flatMap((s: String) => nGrams(s))
+
+    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))
+
+    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))
+
+    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)
+
+    ngramsCount
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2, 3, 4, 5, 6]">
+def countNGrams(input: RDD[String]) = {
+  val sentences = input.flatMap { (inputParameter: String) => {
+    val originalFunction = tokenize(_)
+    val originalValue = originalFunction(inputParameter)
+    originalValue.toList.reverse
+  } }
+  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }
+  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }
+  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }
+  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }
+  ngramsCount
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant190" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel190" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-190.html" class="text-dark">190</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def countNGrams(input: RDD[String]) = {
+    
+    val sentences = input.flatMap(tokenize)
+
+    val ngrams = sentences.flatMap((s: String) => nGrams(s))
+
+    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))
+
+    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))
+
+    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)
+
+    ngramsCount
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2, 3, 4, 5, 6]">
+def countNGrams(input: RDD[String]) = {
+  val sentences = input.flatMap { (inputParameter: String) => {
+    val originalFunction = tokenize(_)
+    val originalValue = originalFunction(inputParameter)
+    List[String]()
+  } }
+  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }
+  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }
+  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }
+  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }
+  ngramsCount
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant191" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel191" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-191.html" class="text-dark">191</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5]">
+def countNGrams(input: RDD[String]) = {
+    
+    val sentences = input.flatMap(tokenize)
+
+    val ngrams = sentences.flatMap((s: String) => nGrams(s))
+
+    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))
+
+    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))
+
+    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)
+
+    ngramsCount
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3, 4, 5, 6, 7]">
+def countNGrams(input: RDD[String]) = {
+  val sentences = input.flatMap(tokenize)
+  val ngrams = sentences.flatMap { (inputParameter: String) => {
+    val originalFunction = ((s: String) => nGrams(s))(_)
+    val originalValue = originalFunction(inputParameter)
+    originalValue.headOption
+  } }
+  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }
+  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }
+  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }
+  ngramsCount
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant192" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel192" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-192.html" class="text-dark">192</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5]">
+def countNGrams(input: RDD[String]) = {
+    
+    val sentences = input.flatMap(tokenize)
+
+    val ngrams = sentences.flatMap((s: String) => nGrams(s))
+
+    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))
+
+    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))
+
+    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)
+
+    ngramsCount
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3, 4, 5, 6, 7]">
+def countNGrams(input: RDD[String]) = {
+  val sentences = input.flatMap(tokenize)
+  val ngrams = sentences.flatMap { (inputParameter: String) => {
+    val originalFunction = ((s: String) => nGrams(s))(_)
+    val originalValue = originalFunction(inputParameter)
+    originalValue.toList.tail
+  } }
+  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }
+  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }
+  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }
+  ngramsCount
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant193" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel193" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-193.html" class="text-dark">193</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Equivalent</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5]">
+def countNGrams(input: RDD[String]) = {
+    
+    val sentences = input.flatMap(tokenize)
+
+    val ngrams = sentences.flatMap((s: String) => nGrams(s))
+
+    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))
+
+    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))
+
+    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)
+
+    ngramsCount
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3, 4, 5, 6, 7]">
+def countNGrams(input: RDD[String]) = {
+  val sentences = input.flatMap(tokenize)
+  val ngrams = sentences.flatMap { (inputParameter: String) => {
+    val originalFunction = ((s: String) => nGrams(s))(_)
+    val originalValue = originalFunction(inputParameter)
+    originalValue.toList.reverse
+  } }
+  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }
+  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }
+  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }
+  ngramsCount
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant194" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel194" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-194.html" class="text-dark">194</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5]">
+def countNGrams(input: RDD[String]) = {
+    
+    val sentences = input.flatMap(tokenize)
+
+    val ngrams = sentences.flatMap((s: String) => nGrams(s))
+
+    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))
+
+    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))
+
+    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)
+
+    ngramsCount
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3, 4, 5, 6, 7]">
+def countNGrams(input: RDD[String]) = {
+  val sentences = input.flatMap(tokenize)
+  val ngrams = sentences.flatMap { (inputParameter: String) => {
+    val originalFunction = ((s: String) => nGrams(s))(_)
+    val originalValue = originalFunction(inputParameter)
+    List[List[String]]()
+  } }
+  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }
+  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }
+  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }
+  ngramsCount
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant195" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel195" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-195.html" class="text-dark">195</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [9]">
+def countNGrams(input: RDD[String]) = {
+    
+    val sentences = input.flatMap(tokenize)
+
+    val ngrams = sentences.flatMap((s: String) => nGrams(s))
+
+    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))
+
+    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))
+
+    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)
+
+    ngramsCount
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5, 6, 7, 8, 9]">
+def countNGrams(input: RDD[String]) = {
+  val sentences = input.flatMap(tokenize)
+  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }
+  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }
+  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (inputParameter: List[String]) => {
+    val originalFunction = ((ngram: List[String]) => (ngram, 1))(_)
+    val originalValue = originalFunction(inputParameter)
+    (List[String](originalValue._1.head), originalValue._2)
+  } }
+  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }
+  ngramsCount
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant196" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel196" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-196.html" class="text-dark">196</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [9]">
+def countNGrams(input: RDD[String]) = {
+    
+    val sentences = input.flatMap(tokenize)
+
+    val ngrams = sentences.flatMap((s: String) => nGrams(s))
+
+    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))
+
+    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))
+
+    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)
+
+    ngramsCount
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5, 6, 7, 8, 9]">
+def countNGrams(input: RDD[String]) = {
+  val sentences = input.flatMap(tokenize)
+  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }
+  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }
+  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (inputParameter: List[String]) => {
+    val originalFunction = ((ngram: List[String]) => (ngram, 1))(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1.tail, originalValue._2)
+  } }
+  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }
+  ngramsCount
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant197" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel197" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-197.html" class="text-dark">197</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [9]">
+def countNGrams(input: RDD[String]) = {
+    
+    val sentences = input.flatMap(tokenize)
+
+    val ngrams = sentences.flatMap((s: String) => nGrams(s))
+
+    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))
+
+    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))
+
+    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)
+
+    ngramsCount
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5, 6, 7, 8, 9]">
+def countNGrams(input: RDD[String]) = {
+  val sentences = input.flatMap(tokenize)
+  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }
+  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }
+  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (inputParameter: List[String]) => {
+    val originalFunction = ((ngram: List[String]) => (ngram, 1))(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1.reverse, originalValue._2)
+  } }
+  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }
+  ngramsCount
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant198" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel198" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-198.html" class="text-dark">198</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [9]">
+def countNGrams(input: RDD[String]) = {
+    
+    val sentences = input.flatMap(tokenize)
+
+    val ngrams = sentences.flatMap((s: String) => nGrams(s))
+
+    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))
+
+    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))
+
+    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)
+
+    ngramsCount
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5, 6, 7, 8, 9]">
+def countNGrams(input: RDD[String]) = {
+  val sentences = input.flatMap(tokenize)
+  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }
+  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }
+  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (inputParameter: List[String]) => {
+    val originalFunction = ((ngram: List[String]) => (ngram, 1))(_)
+    val originalValue = originalFunction(inputParameter)
+    (List[String](), originalValue._2)
+  } }
+  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }
+  ngramsCount
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant199" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel199" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-199.html" class="text-dark">199</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [9]">
+def countNGrams(input: RDD[String]) = {
+    
+    val sentences = input.flatMap(tokenize)
+
+    val ngrams = sentences.flatMap((s: String) => nGrams(s))
+
+    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))
+
+    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))
+
+    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)
+
+    ngramsCount
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5, 6, 7, 8, 9]">
+def countNGrams(input: RDD[String]) = {
+  val sentences = input.flatMap(tokenize)
+  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }
+  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }
+  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (inputParameter: List[String]) => {
+    val originalFunction = ((ngram: List[String]) => (ngram, 1))(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, 0)
+  } }
+  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }
+  ngramsCount
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant200" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel200" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-200.html" class="text-dark">200</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Equivalent</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [9]">
+def countNGrams(input: RDD[String]) = {
+    
+    val sentences = input.flatMap(tokenize)
+
+    val ngrams = sentences.flatMap((s: String) => nGrams(s))
+
+    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))
+
+    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))
+
+    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)
+
+    ngramsCount
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5, 6, 7, 8, 9]">
+def countNGrams(input: RDD[String]) = {
+  val sentences = input.flatMap(tokenize)
+  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }
+  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }
+  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (inputParameter: List[String]) => {
+    val originalFunction = ((ngram: List[String]) => (ngram, 1))(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, 1)
+  } }
+  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }
+  ngramsCount
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant201" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel201" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-201.html" class="text-dark">201</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [9]">
+def countNGrams(input: RDD[String]) = {
+    
+    val sentences = input.flatMap(tokenize)
+
+    val ngrams = sentences.flatMap((s: String) => nGrams(s))
+
+    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))
+
+    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))
+
+    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)
+
+    ngramsCount
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5, 6, 7, 8, 9]">
+def countNGrams(input: RDD[String]) = {
+  val sentences = input.flatMap(tokenize)
+  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }
+  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }
+  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (inputParameter: List[String]) => {
+    val originalFunction = ((ngram: List[String]) => (ngram, 1))(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, Int.MaxValue)
+  } }
+  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }
+  ngramsCount
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant202" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel202" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-202.html" class="text-dark">202</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [9]">
+def countNGrams(input: RDD[String]) = {
+    
+    val sentences = input.flatMap(tokenize)
+
+    val ngrams = sentences.flatMap((s: String) => nGrams(s))
+
+    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))
+
+    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))
+
+    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)
+
+    ngramsCount
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5, 6, 7, 8, 9]">
+def countNGrams(input: RDD[String]) = {
+  val sentences = input.flatMap(tokenize)
+  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }
+  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }
+  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (inputParameter: List[String]) => {
+    val originalFunction = ((ngram: List[String]) => (ngram, 1))(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, Int.MinValue)
+  } }
+  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }
+  ngramsCount
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant203" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel203" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-203.html" class="text-dark">203</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [9]">
+def countNGrams(input: RDD[String]) = {
+    
+    val sentences = input.flatMap(tokenize)
+
+    val ngrams = sentences.flatMap((s: String) => nGrams(s))
+
+    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))
+
+    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))
+
+    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)
+
+    ngramsCount
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5, 6, 7, 8, 9]">
+def countNGrams(input: RDD[String]) = {
+  val sentences = input.flatMap(tokenize)
+  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }
+  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }
+  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (inputParameter: List[String]) => {
+    val originalFunction = ((ngram: List[String]) => (ngram, 1))(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, -originalValue._2)
+  } }
+  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }
+  ngramsCount
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant204" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel204" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-204.html" class="text-dark">204</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Filter Transformation Deletion">FTD</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [7]">
+def countNGrams(input: RDD[String]) = {
+    
+    val sentences = input.flatMap(tokenize)
+
+    val ngrams = sentences.flatMap((s: String) => nGrams(s))
+
+    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))
+
+    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))
+
+    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)
+
+    ngramsCount
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def countNGrams(input: RDD[String]) = {
+  val sentences = input.flatMap(tokenize)
+  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }
+  val ngramsFiltered = ngrams
+  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }
+  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }
+  ngramsCount
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant205" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel205" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-205.html" class="text-dark">205</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def countNGrams(input: RDD[String]) = {
+    
+    val sentences = input.flatMap(tokenize)
+
+    val ngrams = sentences.flatMap((s: String) => nGrams(s))
+
+    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))
+
+    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))
+
+    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)
+
+    ngramsCount
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def countNGrams(input: RDD[String]) = {
+  val sentences = input.flatMap(tokenize).distinct()
+  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }
+  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }
+  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }
+  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }
+  ngramsCount
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant206" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel206" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-206.html" class="text-dark">206</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5]">
+def countNGrams(input: RDD[String]) = {
+    
+    val sentences = input.flatMap(tokenize)
+
+    val ngrams = sentences.flatMap((s: String) => nGrams(s))
+
+    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))
+
+    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))
+
+    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)
+
+    ngramsCount
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def countNGrams(input: RDD[String]) = {
+  val sentences = input.flatMap(tokenize)
+  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }.distinct()
+  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }
+  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }
+  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }
+  ngramsCount
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant207" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel207" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-207.html" class="text-dark">207</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [7]">
+def countNGrams(input: RDD[String]) = {
+    
+    val sentences = input.flatMap(tokenize)
+
+    val ngrams = sentences.flatMap((s: String) => nGrams(s))
+
+    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))
+
+    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))
+
+    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)
+
+    ngramsCount
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def countNGrams(input: RDD[String]) = {
+  val sentences = input.flatMap(tokenize)
+  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }
+  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }.distinct()
+  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }
+  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }
+  ngramsCount
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant208" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel208" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-208.html" class="text-dark">208</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [9]">
+def countNGrams(input: RDD[String]) = {
+    
+    val sentences = input.flatMap(tokenize)
+
+    val ngrams = sentences.flatMap((s: String) => nGrams(s))
+
+    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))
+
+    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))
+
+    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)
+
+    ngramsCount
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5]">
+def countNGrams(input: RDD[String]) = {
+  val sentences = input.flatMap(tokenize)
+  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }
+  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }
+  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }.distinct()
+  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }
+  ngramsCount
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant209" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel209" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-209.html" class="text-dark">209</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></h5>
+<h5>Status: Equivalent</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [11]">
+def countNGrams(input: RDD[String]) = {
+    
+    val sentences = input.flatMap(tokenize)
+
+    val ngrams = sentences.flatMap((s: String) => nGrams(s))
+
+    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))
+
+    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))
+
+    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)
+
+    ngramsCount
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [6]">
+def countNGrams(input: RDD[String]) = {
+  val sentences = input.flatMap(tokenize)
+  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }
+  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }
+  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }
+  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }.distinct()
+  ngramsCount
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant210" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel210" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-210.html" class="text-dark">210</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [11]">
+def countNGrams(input: RDD[String]) = {
+    
+    val sentences = input.flatMap(tokenize)
+
+    val ngrams = sentences.flatMap((s: String) => nGrams(s))
+
+    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))
+
+    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))
+
+    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)
+
+    ngramsCount
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [6]">
+def countNGrams(input: RDD[String]) = {
+  val sentences = input.flatMap(tokenize)
+  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }
+  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }
+  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }
+  val ngramsCount = ngramsPairs.reduceByKey { (firstParameter: Int, secondParameter: Int) => firstParameter }
+  ngramsCount
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant211" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel211" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-211.html" class="text-dark">211</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [11]">
+def countNGrams(input: RDD[String]) = {
+    
+    val sentences = input.flatMap(tokenize)
+
+    val ngrams = sentences.flatMap((s: String) => nGrams(s))
+
+    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))
+
+    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))
+
+    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)
+
+    ngramsCount
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [6]">
+def countNGrams(input: RDD[String]) = {
+  val sentences = input.flatMap(tokenize)
+  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }
+  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }
+  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }
+  val ngramsCount = ngramsPairs.reduceByKey { (firstParameter: Int, secondParameter: Int) => secondParameter }
+  ngramsCount
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant212" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel212" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-212.html" class="text-dark">212</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [11]">
+def countNGrams(input: RDD[String]) = {
+    
+    val sentences = input.flatMap(tokenize)
+
+    val ngrams = sentences.flatMap((s: String) => nGrams(s))
+
+    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))
+
+    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))
+
+    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)
+
+    ngramsCount
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [6, 7, 8, 9]">
+def countNGrams(input: RDD[String]) = {
+  val sentences = input.flatMap(tokenize)
+  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }
+  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }
+  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }
+  val ngramsCount = ngramsPairs.reduceByKey { (firstParameter: Int, secondParameter: Int) => {
+    val originalFunction = ((x: Int, y: Int) => x + y)(_, _)
+    originalFunction(firstParameter, firstParameter)
+  } }
+  ngramsCount
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant213" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel213" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-213.html" class="text-dark">213</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [11]">
+def countNGrams(input: RDD[String]) = {
+    
+    val sentences = input.flatMap(tokenize)
+
+    val ngrams = sentences.flatMap((s: String) => nGrams(s))
+
+    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))
+
+    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))
+
+    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)
+
+    ngramsCount
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [6, 7, 8, 9]">
+def countNGrams(input: RDD[String]) = {
+  val sentences = input.flatMap(tokenize)
+  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }
+  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }
+  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }
+  val ngramsCount = ngramsPairs.reduceByKey { (firstParameter: Int, secondParameter: Int) => {
+    val originalFunction = ((x: Int, y: Int) => x + y)(_, _)
+    originalFunction(secondParameter, secondParameter)
+  } }
+  ngramsCount
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant214" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel214" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-214.html" class="text-dark">214</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></h5>
+<h5>Status: Equivalent</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [11]">
+def countNGrams(input: RDD[String]) = {
+    
+    val sentences = input.flatMap(tokenize)
+
+    val ngrams = sentences.flatMap((s: String) => nGrams(s))
+
+    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))
+
+    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))
+
+    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)
+
+    ngramsCount
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [6, 7, 8, 9]">
+def countNGrams(input: RDD[String]) = {
+  val sentences = input.flatMap(tokenize)
+  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }
+  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }
+  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }
+  val ngramsCount = ngramsPairs.reduceByKey { (firstParameter: Int, secondParameter: Int) => {
+    val originalFunction = ((x: Int, y: Int) => x + y)(_, _)
+    originalFunction(secondParameter, firstParameter)
+  } }
+  ngramsCount
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant215" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel215" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-215.html" class="text-dark">215</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Negation of Filter Transformation Predicate">NFTP</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [7]">
+def countNGrams(input: RDD[String]) = {
+    
+    val sentences = input.flatMap(tokenize)
+
+    val ngrams = sentences.flatMap((s: String) => nGrams(s))
+
+    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))
+
+    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))
+
+    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)
+
+    ngramsCount
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4, 5, 6, 7, 8]">
+def countNGrams(input: RDD[String]) = {
+  val sentences = input.flatMap(tokenize)
+  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }
+  val ngramsFiltered = ngrams.filter { (inputParameter: List[String]) => {
+    val originalFunction = ((ngram: List[String]) => filterEmpty(ngram))(_)
+    val originalValue = originalFunction(inputParameter)
+    !originalValue
+  } }
+  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }
+  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }
+  ngramsCount
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Removed Mutant Modals -->
+
+</main>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+<script type="text/javascript">
+ SyntaxHighlighter.all()
+</script>
+<script >
+$(document).ready(function() {
+  $('table.display').DataTable( {
+    fixedHeader: {
+      header: true,
+      footer: true
+    },
+    "lengthMenu": [[5, 10, 20, -1], [5, 10, 20, "All"]]
+  } );
+} );
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+});
+</script>
+</body>
+</html>
+    

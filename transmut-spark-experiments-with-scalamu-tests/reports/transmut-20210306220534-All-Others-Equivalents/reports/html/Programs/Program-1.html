@@ -1,0 +1,1271 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/scripts/shCore.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/scripts/shBrushScala.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/styles/shCoreEclipse.css" rel="stylesheet" type="text/css" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/styles/shThemeEclipse.min.css" rel="stylesheet" type="text/css" />
+<!-- Cytoscape -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/2.5.1/cytoscape.min.js"></script>
+<!-- DataTable -->
+<link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<style>
+#cy {
+  width: 1100px;
+  height: 300px;
+  background-color: white;
+}
+body {
+  padding-top: 5rem;
+}
+.starter-template {
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+.section-title {
+  padding-top: 3.5rem;
+}
+</style>
+<title>TRANSMUT-Spark Mutation Testing Report</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+<a class="navbar-brand" href="../index.html">TRANSMUT-Spark</a>
+<div class="collapse navbar-collapse" id="navbarNav">
+  <ul class="navbar-nav mr-auto">
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Section</a>
+      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <a class="dropdown-item" href="#metrics">Metrics</a>
+        <a class="dropdown-item" href="#code">Code</a>
+        <a class="dropdown-item" href="#dag">DAG</a>
+        <a class="dropdown-item" href="#datasets">Datasets</a>
+        <a class="dropdown-item" href="#transformations">Transformations</a>
+        <a class="dropdown-item" href="#mutants">Mutants</a>
+        <a class="dropdown-item" href="#removedMutants">Removed Mutants</a>
+        <a class="dropdown-item" href="#mutationOperators">Mutation Operators</a>
+      </div>
+    </li>
+  </ul>
+</div>
+</nav>
+<main role"main" class="container">  
+<div class="starter-template">
+  <h2><a href="../index.html" class="text-dark">Mutation Testing Report</a></h2>
+  <h3><a href="../ProgramSources/Program-Source-1.html" class="text-dark">Program Source: AggregationQuery</a></h3>
+  <h4><a href="#" class="text-dark">Program ID: 1</a></h4>
+  <h4><a href="#" class="text-dark">Program: aggregation</a></h4>
+</div>    
+<!-- Metrics -->
+<div class="row" id="metrics">
+<div class="col" >
+<h3 class="section-title">Metrics</h3>
+<hr class="my-4">
+<table class="table table-striped table-hover">
+<thead class="thead-dark"><tr><th scope="col">#</th><th scope="col">Total</th></tr></thead>
+<tbody>
+  <tr><th scope="row">Datasets</th><td>4</td></tr>
+  <tr><th scope="row">Transformations</th><td>3</td></tr>
+  <tr><th scope="row">Mutants</th><td>16</td></tr>
+  <tr><th scope="row">Killed Mutants</th><td>11</td></tr>
+  <tr><th scope="row">Lived Mutants</th><td>3</td></tr>
+  <tr><th scope="row">Equivalent Mutants</th><td>2</td></tr>
+  <tr><th scope="row">Error Mutants</th><td>0</td></tr>
+  <tr><th scope="row">Removed Mutants</th><td>0</td></tr>
+  <tr><th scope="row">Mutation Score</th>
+  <td>
+    <div class="progress">
+      <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 78.57%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><span class="font-weight-bold text-dark">0.79</span></div>
+    </div>
+  </td>
+  </tr>
+ </tbody>
+ <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+    <th scope="row"></th>
+    <td></td>
+    </tr>
+  </tfoot>
+</table>
+     
+<hr class="my-4">
+</div>
+</div>
+<!-- Code -->
+<div class="row" id="code">
+<div class="col">
+<h3 class="section-title">Code</h3>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false;">
+def aggregation(input: RDD[String]) = {
+    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)
+    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)
+    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)
+    results
+  }
+</pre>
+<hr class="my-4">
+</div>
+</div>
+<!-- DAG -->
+<div class="row" id="dag">
+<div class="col" >
+<h3 class="section-title">DAG</h3>
+<hr class="my-4">
+<figure class="figure">
+<div id="cy"></div>
+</figure>
+<hr class="my-4">
+</div> 
+</div>
+<!-- Datasets -->
+<div class="row" id="datasets">
+<div class="col" >
+<h3 class="section-title">Datasets</h3>
+<hr class="my-4">
+<table class="table table-striped table-hover">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Reference</th>
+      <th scope="col">Type</th>
+   </tr>
+  </thead>
+  <tbody>
+  <tr>
+  <th scope="row">1</th>
+  <td>input</td>
+  <td>RDD[String]</td>
+</tr>
+<tr>
+  <th scope="row">2</th>
+  <td>userVisits</td>
+  <td>RDD[UserVisit]</td>
+</tr>
+<tr>
+  <th scope="row">3</th>
+  <td>userVisitsTuples</td>
+  <td>RDD[(String, Float)]</td>
+</tr>
+<tr>
+  <th scope="row">4</th>
+  <td>results</td>
+  <td>RDD[(String, Float)]</td>
+</tr>
+  </tbody>
+  <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+    <th scope="row" colspan="2">Total Datasets</th>
+    <td>4</td>
+    </tr>
+  </tfoot>
+</table>      
+    
+<hr class="my-4">
+</div>
+</div>
+<!-- Transformations -->
+<div class="row" id="transformations">
+<div class="col" >
+<h3 class="section-title" id="transformations">Transformations</h3>
+<hr class="my-4">
+<table class="table table-striped table-hover">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Name</th>
+      <th scope="col">Input Type</th>
+      <th scope="col">Output Type</th>
+   </tr>
+  </thead>
+  <tbody>
+  <tr>
+  <th scope="row">1</th>
+  <td>map</td>
+  <td>RDD[String]</td>
+  <td>RDD[UserVisit]</td>
+</tr>
+<tr>
+  <th scope="row">2</th>
+  <td>map</td>
+  <td>RDD[UserVisit]</td>
+  <td>RDD[(String, Float)]</td>
+</tr>
+<tr>
+  <th scope="row">3</th>
+  <td>reduceByKey</td>
+  <td>RDD[(String, Float)]</td>
+  <td>RDD[(String, Float)]</td>
+</tr>
+  </tbody>
+  <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+    <th scope="row" colspan="3">Total Transformations</th>
+    <td>3</td>
+    </tr>
+  </tfoot>
+</table>      
+    
+<hr class="my-4">   
+</div>
+</div>
+<!-- Mutants -->
+<div class="row" id="mutants">
+<div class="col">
+<h3 class="section-title">Mutants</h3>
+<hr class="my-4">
+<table class="display table table-striped table-hover" id="mutantsTable">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Mutation Operator</th>
+      <th scope="col">Status</th>
+      <th scope="col">Code</th>
+     </tr>
+  </thead>
+  <tbody>
+    <tr>
+  <th scope="row"><a href="../Mutants/Mutant-1.html" class="text-dark">1</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Deletion">UTD</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant1">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-2.html" class="text-dark">2</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant2">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-3.html" class="text-dark">3</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant3">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-4.html" class="text-dark">4</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant4">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-5.html" class="text-dark">5</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Lived</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant5">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-6.html" class="text-dark">6</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant6">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-7.html" class="text-dark">7</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant7">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-8.html" class="text-dark">8</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant8">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-9.html" class="text-dark">9</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant9">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-10.html" class="text-dark">10</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant10">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-11.html" class="text-dark">11</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></td>
+  <td>Equivalent</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant11">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-12.html" class="text-dark">12</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant12">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-13.html" class="text-dark">13</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant13">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-14.html" class="text-dark">14</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></td>
+  <td>Lived</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant14">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-15.html" class="text-dark">15</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></td>
+  <td>Lived</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant15">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-16.html" class="text-dark">16</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></td>
+  <td>Equivalent</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant16">Show</button></td>
+</tr>
+  </tbody>
+  <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+      <th scope="row" colspan="2">Mutation Score</th>
+      <td colspan="2">
+        <div class="progress">
+          <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 78.57%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><span class="font-weight-bold text-dark">0.79</span></div>
+        </div>
+      </td>
+    </tr>
+  </tfoot>
+</table>   
+   
+<hr class="my-4">
+</div>
+</div>
+<!-- Removed Mutants -->
+<div class="row" id="removedMutants">
+<div class="col">
+<h3 class="section-title">Removed Mutants</h3>
+<hr class="my-4">
+<table class="display table table-striped table-hover" id="removedMutantsTable">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Mutation Operator</th>
+      <th scope="col">Reduction Rule</th>
+      <th scope="col">Code</th>
+     </tr>
+  </thead>
+  <tbody>
+    
+  </tbody>
+  <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+      <th scope="row" colspan="2">Total Removed Mutants</th>
+      <td colspan="2">0</td>
+    </tr>
+  </tfoot>
+</table>   
+   
+<hr class="my-4">
+</div>
+</div>
+<!-- Mutation Operators -->
+<div class="row" id="mutationOperators">
+<div class="col">
+<h3 class="section-title">Mutation Operators</h3>
+<hr class="my-4">
+<table class="display table table-striped table-hover" id="programSourcesTable">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Mutation Operator</th>
+      <th scope="col">Mutants</th>
+      <th scope="col">Killed</th>
+      <th scope="col">Lived</th>
+      <th scope="col">Equivalent</th>
+      <th scope="col">Error</th>
+      <th scope="col">Removed</th>
+      </tr>
+  </thead>
+  <tbody>
+    <tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></th>
+  <td>5</td>
+  <td>2</td>
+  <td>2</td>
+  <td>1</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+<tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Deletion">UTD</a></th>
+  <td>1</td>
+  <td>1</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+<tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></th>
+  <td>3</td>
+  <td>2</td>
+  <td>0</td>
+  <td>1</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+<tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></th>
+  <td>7</td>
+  <td>6</td>
+  <td>1</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+  </tbody>
+  <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+      <th scope="row">Total</th>
+      <td>16</td>
+      <td>11</td>
+      <td>3</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+  </tfoot>
+</table>   
+   
+<hr class="my-4">
+</div>
+</div>
+<!-- Mutant Modals -->
+<div class="modal fade" id="modalMutant1" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel1" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-1.html" class="text-dark">1</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Deletion">UTD</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def aggregation(input: RDD[String]) = {
+    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)
+    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)
+    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def aggregation(input: RDD[String]) = {
+  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)
+  val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)
+  val results: RDD[(String, Float)] = userVisitsTuples
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant2" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel2" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-2.html" class="text-dark">2</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def aggregation(input: RDD[String]) = {
+    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)
+    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)
+    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2, 3, 4, 5, 6]">
+def aggregation(input: RDD[String]) = {
+  val userVisits: RDD[UserVisit] = input.map { (inputParameter: String) => {
+    val originalFunction = parseUserVisits(_)
+    val originalValue = originalFunction(inputParameter)
+    null.asInstanceOf[UserVisit]
+  } }
+  val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)
+  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (x: Float, y: Float) => x + y }
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant3" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel3" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-3.html" class="text-dark">3</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def aggregation(input: RDD[String]) = {
+    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)
+    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)
+    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3, 4, 5, 6, 7]">
+def aggregation(input: RDD[String]) = {
+  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)
+  val userVisitsTuples: RDD[(String, Float)] = userVisits.map { (inputParameter: UserVisit) => {
+    val originalFunction = mapUserVisitToTuple(_)
+    val originalValue = originalFunction(inputParameter)
+    ("", originalValue._2)
+  } }
+  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (x: Float, y: Float) => x + y }
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant4" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel4" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-4.html" class="text-dark">4</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def aggregation(input: RDD[String]) = {
+    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)
+    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)
+    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3, 4, 5, 6, 7]">
+def aggregation(input: RDD[String]) = {
+  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)
+  val userVisitsTuples: RDD[(String, Float)] = userVisits.map { (inputParameter: UserVisit) => {
+    val originalFunction = mapUserVisitToTuple(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, 0f)
+  } }
+  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (x: Float, y: Float) => x + y }
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant5" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel5" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-5.html" class="text-dark">5</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Lived</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def aggregation(input: RDD[String]) = {
+    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)
+    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)
+    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3, 4, 5, 6, 7]">
+def aggregation(input: RDD[String]) = {
+  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)
+  val userVisitsTuples: RDD[(String, Float)] = userVisits.map { (inputParameter: UserVisit) => {
+    val originalFunction = mapUserVisitToTuple(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, 1f)
+  } }
+  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (x: Float, y: Float) => x + y }
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant6" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel6" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-6.html" class="text-dark">6</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def aggregation(input: RDD[String]) = {
+    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)
+    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)
+    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3, 4, 5, 6, 7]">
+def aggregation(input: RDD[String]) = {
+  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)
+  val userVisitsTuples: RDD[(String, Float)] = userVisits.map { (inputParameter: UserVisit) => {
+    val originalFunction = mapUserVisitToTuple(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, Float.MaxValue)
+  } }
+  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (x: Float, y: Float) => x + y }
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant7" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel7" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-7.html" class="text-dark">7</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def aggregation(input: RDD[String]) = {
+    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)
+    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)
+    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3, 4, 5, 6, 7]">
+def aggregation(input: RDD[String]) = {
+  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)
+  val userVisitsTuples: RDD[(String, Float)] = userVisits.map { (inputParameter: UserVisit) => {
+    val originalFunction = mapUserVisitToTuple(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, Float.MinValue)
+  } }
+  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (x: Float, y: Float) => x + y }
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant8" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel8" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-8.html" class="text-dark">8</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def aggregation(input: RDD[String]) = {
+    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)
+    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)
+    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3, 4, 5, 6, 7]">
+def aggregation(input: RDD[String]) = {
+  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)
+  val userVisitsTuples: RDD[(String, Float)] = userVisits.map { (inputParameter: UserVisit) => {
+    val originalFunction = mapUserVisitToTuple(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, -originalValue._2)
+  } }
+  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (x: Float, y: Float) => x + y }
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant9" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel9" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-9.html" class="text-dark">9</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def aggregation(input: RDD[String]) = {
+    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)
+    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)
+    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def aggregation(input: RDD[String]) = {
+  val userVisits: RDD[UserVisit] = input.map(parseUserVisits).distinct()
+  val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)
+  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (x: Float, y: Float) => x + y }
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant10" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel10" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-10.html" class="text-dark">10</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def aggregation(input: RDD[String]) = {
+    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)
+    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)
+    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def aggregation(input: RDD[String]) = {
+  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)
+  val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple).distinct()
+  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (x: Float, y: Float) => x + y }
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant11" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel11" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-11.html" class="text-dark">11</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></h5>
+<h5>Status: Equivalent</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def aggregation(input: RDD[String]) = {
+    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)
+    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)
+    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def aggregation(input: RDD[String]) = {
+  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)
+  val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)
+  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (x: Float, y: Float) => x + y }.distinct()
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant12" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel12" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-12.html" class="text-dark">12</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def aggregation(input: RDD[String]) = {
+    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)
+    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)
+    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def aggregation(input: RDD[String]) = {
+  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)
+  val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)
+  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (firstParameter: Float, secondParameter: Float) => firstParameter }
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant13" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel13" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-13.html" class="text-dark">13</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def aggregation(input: RDD[String]) = {
+    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)
+    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)
+    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def aggregation(input: RDD[String]) = {
+  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)
+  val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)
+  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (firstParameter: Float, secondParameter: Float) => secondParameter }
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant14" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel14" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-14.html" class="text-dark">14</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></h5>
+<h5>Status: Lived</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def aggregation(input: RDD[String]) = {
+    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)
+    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)
+    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4, 5, 6, 7]">
+def aggregation(input: RDD[String]) = {
+  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)
+  val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)
+  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (firstParameter: Float, secondParameter: Float) => {
+    val originalFunction = ((x: Float, y: Float) => x + y)(_, _)
+    originalFunction(firstParameter, firstParameter)
+  } }
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant15" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel15" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-15.html" class="text-dark">15</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></h5>
+<h5>Status: Lived</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def aggregation(input: RDD[String]) = {
+    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)
+    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)
+    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4, 5, 6, 7]">
+def aggregation(input: RDD[String]) = {
+  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)
+  val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)
+  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (firstParameter: Float, secondParameter: Float) => {
+    val originalFunction = ((x: Float, y: Float) => x + y)(_, _)
+    originalFunction(secondParameter, secondParameter)
+  } }
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant16" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel16" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-16.html" class="text-dark">16</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></h5>
+<h5>Status: Equivalent</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def aggregation(input: RDD[String]) = {
+    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)
+    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)
+    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4, 5, 6, 7]">
+def aggregation(input: RDD[String]) = {
+  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)
+  val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)
+  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (firstParameter: Float, secondParameter: Float) => {
+    val originalFunction = ((x: Float, y: Float) => x + y)(_, _)
+    originalFunction(secondParameter, firstParameter)
+  } }
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Removed Mutant Modals -->
+
+</main>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+<script type="text/javascript">
+ SyntaxHighlighter.all()
+</script>
+<script >
+$(document).ready(function() {
+  $('table.display').DataTable( {
+    fixedHeader: {
+      header: true,
+      footer: true
+    },
+    "lengthMenu": [[5, 10, 20, -1], [5, 10, 20, "All"]]
+  } );
+} );
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+});
+</script>
+
+<script >
+  var cy = cytoscape({
+    container: document.getElementById('cy'), // container to render in
+    elements: [ // list of graph elements to start with
+      { // dataset node 1
+  data: { id: 'dataset_1' , name : 'input' , dataset : 'true' , inputDataset: 'true'  }
+}, 
+{ // transformation node 1
+  data: { id: 'transformation_1' , name : 'map' , transformation : 'true'  }
+}, 
+{ // edge node 1
+  data: { id: 'edge_1' , source: 'dataset_1', target: 'transformation_1'  }
+}, 
+{ // dataset node 2
+  data: { id: 'dataset_2' , name : 'userVisits' , dataset : 'true'   }
+}, 
+{ // edge node 2
+  data: { id: 'edge_2'  , target: 'dataset_2', source: 'transformation_1' }
+}, 
+{ // transformation node 2
+  data: { id: 'transformation_2' , name : 'map' , transformation : 'true'  }
+}, 
+{ // edge node 3
+  data: { id: 'edge_3' , source: 'dataset_2', target: 'transformation_2'  }
+}, 
+{ // dataset node 3
+  data: { id: 'dataset_3' , name : 'userVisitsTuples' , dataset : 'true'   }
+}, 
+{ // edge node 4
+  data: { id: 'edge_4'  , target: 'dataset_3', source: 'transformation_2' }
+}, 
+{ // transformation node 3
+  data: { id: 'transformation_3' , name : 'reduceByKey' , transformation : 'true'  }
+}, 
+{ // edge node 5
+  data: { id: 'edge_5' , source: 'dataset_3', target: 'transformation_3'  }
+}, 
+{ // dataset node 4
+  data: { id: 'dataset_4' , name : 'results' , dataset : 'true'  , outputDataset: 'true' }
+}, 
+{ // edge node 6
+  data: { id: 'edge_6'  , target: 'dataset_4', source: 'transformation_3' }
+}
+    ],
+   style: [ // the stylesheet for the graph
+   {
+     selector: 'node',
+     style: {
+       'label': 'data(name)'
+     }
+   },
+   {
+     selector: 'edge',
+     style: {
+     'width': 3,
+     'line-color': '#ccc',
+     'target-arrow-color': '#ccc',
+     'target-arrow-shape': 'triangle',
+     }
+   },
+   {
+      selector: '[transformation]',
+      style: {
+        'background-color': 'black',
+        'shape': 'rectangle'
+       }
+   },
+   {
+      selector: '[dataset]',
+      style: {
+        'background-color': 'gray',
+        'shape': 'ellipse'
+      }
+   },
+   {
+      selector: '[inputDataset]',
+      style: {
+        'background-color': 'green',
+        'shape': 'ellipse'
+       }
+   },
+   {
+     selector: '[outputDataset]',
+     style: {
+       'background-color': 'red',
+       'shape': 'ellipse'
+      }
+   },
+   {
+      selector: '[loadTransformation]',
+      style: {
+        'background-color': 'red',
+        'shape': 'rectangle'
+       }
+   }
+  ],
+  layout: {
+    name: 'grid',
+    rows: 1
+  }
+});
+</script>
+    
+</body>
+</html>
+    

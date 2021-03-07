@@ -1,0 +1,660 @@
+{
+  "id" : 2,
+  "programSourceId" : 1,
+  "name" : "moviesPerYearCount",
+  "code" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))\n    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)\n    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))\n    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n    moviesPerYearInverseSorted\n  }",
+  "datasets" : [
+    {
+      "id" : 7,
+      "name" : "movies",
+      "datasetType" : "RDD[Movie]",
+      "inputDataset" : true,
+      "outputDataset" : false
+    },
+    {
+      "id" : 8,
+      "name" : "yearTuple",
+      "datasetType" : "RDD[(Int, Int)]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 9,
+      "name" : "moviesPerYear",
+      "datasetType" : "RDD[(Int, Int)]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 10,
+      "name" : "moviesPerYearInverse",
+      "datasetType" : "RDD[(Int, Int)]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 11,
+      "name" : "moviesPerYearInverseSorted",
+      "datasetType" : "RDD[(Int, Int)]",
+      "inputDataset" : false,
+      "outputDataset" : true
+    }
+  ],
+  "transformations" : [
+    {
+      "id" : 4,
+      "name" : "map",
+      "inputTypes" : [
+        "RDD[Movie]"
+      ],
+      "outputTypes" : [
+        "RDD[(Int, Int)]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 5,
+      "name" : "reduceByKey",
+      "inputTypes" : [
+        "RDD[(Int, Int)]"
+      ],
+      "outputTypes" : [
+        "RDD[(Int, Int)]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 6,
+      "name" : "map",
+      "inputTypes" : [
+        "RDD[(Int, Int)]"
+      ],
+      "outputTypes" : [
+        "RDD[(Int, Int)]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 7,
+      "name" : "sortByKey",
+      "inputTypes" : [
+        "RDD[(Int, Int)]"
+      ],
+      "outputTypes" : [
+        "RDD[(Int, Int)]"
+      ],
+      "loadTransformation" : false
+    }
+  ],
+  "edges" : [
+    {
+      "id" : 7,
+      "datasetId" : 7,
+      "transformationId" : 4,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 8,
+      "datasetId" : 8,
+      "transformationId" : 4,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 9,
+      "datasetId" : 8,
+      "transformationId" : 5,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 10,
+      "datasetId" : 9,
+      "transformationId" : 5,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 11,
+      "datasetId" : 9,
+      "transformationId" : 6,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 12,
+      "datasetId" : 10,
+      "transformationId" : 6,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 13,
+      "datasetId" : 10,
+      "transformationId" : 7,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 14,
+      "datasetId" : 11,
+      "transformationId" : 7,
+      "direction" : "TransformationToDataset"
+    }
+  ],
+  "mutants" : [
+    {
+      "id" : 16,
+      "originalProgramId" : 2,
+      "mutationOperator" : "UTS",
+      "mutationOperatorDescription" : "Unary Transformation Swap",
+      "mutantCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }\n  val moviesPerYear: RDD[(Int, Int)] = yearTuple.map { (t: (Int, Int)) => (t._2, t._1) }\n  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.reduceByKey { (a: Int, b: Int) => a + b }\n  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n  moviesPerYearInverseSorted\n}",
+      "originalCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))\n    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)\n    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))\n    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n    moviesPerYearInverseSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 17,
+      "originalProgramId" : 2,
+      "mutationOperator" : "UTS",
+      "mutationOperatorDescription" : "Unary Transformation Swap",
+      "mutantCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }\n  val moviesPerYear: RDD[(Int, Int)] = yearTuple.sortByKey(false)\n  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }\n  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.reduceByKey { (a: Int, b: Int) => a + b }\n  moviesPerYearInverseSorted\n}",
+      "originalCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))\n    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)\n    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))\n    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n    moviesPerYearInverseSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 18,
+      "originalProgramId" : 2,
+      "mutationOperator" : "UTS",
+      "mutationOperatorDescription" : "Unary Transformation Swap",
+      "mutantCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }\n  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }\n  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.sortByKey(false)\n  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.map { (t: (Int, Int)) => (t._2, t._1) }\n  moviesPerYearInverseSorted\n}",
+      "originalCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))\n    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)\n    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))\n    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n    moviesPerYearInverseSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 19,
+      "originalProgramId" : 2,
+      "mutationOperator" : "UTR",
+      "mutationOperatorDescription" : "Unary Transformation Replacement",
+      "mutantCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }\n  val moviesPerYear: RDD[(Int, Int)] = yearTuple.map { (t: (Int, Int)) => (t._2, t._1) }\n  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }\n  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n  moviesPerYearInverseSorted\n}",
+      "originalCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))\n    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)\n    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))\n    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n    moviesPerYearInverseSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 20,
+      "originalProgramId" : 2,
+      "mutationOperator" : "UTR",
+      "mutationOperatorDescription" : "Unary Transformation Replacement",
+      "mutantCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }\n  val moviesPerYear: RDD[(Int, Int)] = yearTuple.sortByKey(false)\n  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }\n  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n  moviesPerYearInverseSorted\n}",
+      "originalCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))\n    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)\n    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))\n    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n    moviesPerYearInverseSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 21,
+      "originalProgramId" : 2,
+      "mutationOperator" : "UTR",
+      "mutationOperatorDescription" : "Unary Transformation Replacement",
+      "mutantCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }\n  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }\n  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.reduceByKey { (a: Int, b: Int) => a + b }\n  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n  moviesPerYearInverseSorted\n}",
+      "originalCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))\n    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)\n    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))\n    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n    moviesPerYearInverseSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 22,
+      "originalProgramId" : 2,
+      "mutationOperator" : "UTR",
+      "mutationOperatorDescription" : "Unary Transformation Replacement",
+      "mutantCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }\n  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }\n  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.sortByKey(false)\n  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n  moviesPerYearInverseSorted\n}",
+      "originalCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))\n    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)\n    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))\n    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n    moviesPerYearInverseSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 23,
+      "originalProgramId" : 2,
+      "mutationOperator" : "UTR",
+      "mutationOperatorDescription" : "Unary Transformation Replacement",
+      "mutantCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }\n  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }\n  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }\n  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.reduceByKey { (a: Int, b: Int) => a + b }\n  moviesPerYearInverseSorted\n}",
+      "originalCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))\n    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)\n    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))\n    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n    moviesPerYearInverseSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 24,
+      "originalProgramId" : 2,
+      "mutationOperator" : "UTR",
+      "mutationOperatorDescription" : "Unary Transformation Replacement",
+      "mutantCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }\n  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }\n  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }\n  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.map { (t: (Int, Int)) => (t._2, t._1) }\n  moviesPerYearInverseSorted\n}",
+      "originalCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))\n    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)\n    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))\n    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n    moviesPerYearInverseSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 25,
+      "originalProgramId" : 2,
+      "mutationOperator" : "UTD",
+      "mutationOperatorDescription" : "Unary Transformation Deletion",
+      "mutantCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }\n  val moviesPerYear: RDD[(Int, Int)] = yearTuple\n  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }\n  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n  moviesPerYearInverseSorted\n}",
+      "originalCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))\n    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)\n    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))\n    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n    moviesPerYearInverseSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 26,
+      "originalProgramId" : 2,
+      "mutationOperator" : "UTD",
+      "mutationOperatorDescription" : "Unary Transformation Deletion",
+      "mutantCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }\n  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }\n  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear\n  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n  moviesPerYearInverseSorted\n}",
+      "originalCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))\n    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)\n    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))\n    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n    moviesPerYearInverseSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 27,
+      "originalProgramId" : 2,
+      "mutationOperator" : "UTD",
+      "mutationOperatorDescription" : "Unary Transformation Deletion",
+      "mutantCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }\n  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }\n  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }\n  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse\n  moviesPerYearInverseSorted\n}",
+      "originalCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))\n    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)\n    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))\n    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n    moviesPerYearInverseSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 28,
+      "originalProgramId" : 2,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n  val yearTuple: RDD[(Int, Int)] = movies.map { (inputParameter: Movie) => {\n    val originalFunction = ((m: Movie) => (m.year, 1))(_)\n    val originalValue = originalFunction(inputParameter)\n    (0, originalValue._2)\n  } }\n  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }\n  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }\n  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n  moviesPerYearInverseSorted\n}",
+      "originalCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))\n    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)\n    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))\n    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n    moviesPerYearInverseSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 29,
+      "originalProgramId" : 2,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n  val yearTuple: RDD[(Int, Int)] = movies.map { (inputParameter: Movie) => {\n    val originalFunction = ((m: Movie) => (m.year, 1))(_)\n    val originalValue = originalFunction(inputParameter)\n    (1, originalValue._2)\n  } }\n  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }\n  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }\n  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n  moviesPerYearInverseSorted\n}",
+      "originalCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))\n    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)\n    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))\n    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n    moviesPerYearInverseSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 30,
+      "originalProgramId" : 2,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n  val yearTuple: RDD[(Int, Int)] = movies.map { (inputParameter: Movie) => {\n    val originalFunction = ((m: Movie) => (m.year, 1))(_)\n    val originalValue = originalFunction(inputParameter)\n    (Int.MaxValue, originalValue._2)\n  } }\n  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }\n  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }\n  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n  moviesPerYearInverseSorted\n}",
+      "originalCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))\n    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)\n    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))\n    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n    moviesPerYearInverseSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 31,
+      "originalProgramId" : 2,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n  val yearTuple: RDD[(Int, Int)] = movies.map { (inputParameter: Movie) => {\n    val originalFunction = ((m: Movie) => (m.year, 1))(_)\n    val originalValue = originalFunction(inputParameter)\n    (Int.MinValue, originalValue._2)\n  } }\n  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }\n  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }\n  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n  moviesPerYearInverseSorted\n}",
+      "originalCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))\n    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)\n    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))\n    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n    moviesPerYearInverseSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 32,
+      "originalProgramId" : 2,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n  val yearTuple: RDD[(Int, Int)] = movies.map { (inputParameter: Movie) => {\n    val originalFunction = ((m: Movie) => (m.year, 1))(_)\n    val originalValue = originalFunction(inputParameter)\n    (-originalValue._1, originalValue._2)\n  } }\n  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }\n  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }\n  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n  moviesPerYearInverseSorted\n}",
+      "originalCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))\n    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)\n    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))\n    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n    moviesPerYearInverseSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 33,
+      "originalProgramId" : 2,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n  val yearTuple: RDD[(Int, Int)] = movies.map { (inputParameter: Movie) => {\n    val originalFunction = ((m: Movie) => (m.year, 1))(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, 0)\n  } }\n  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }\n  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }\n  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n  moviesPerYearInverseSorted\n}",
+      "originalCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))\n    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)\n    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))\n    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n    moviesPerYearInverseSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 34,
+      "originalProgramId" : 2,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n  val yearTuple: RDD[(Int, Int)] = movies.map { (inputParameter: Movie) => {\n    val originalFunction = ((m: Movie) => (m.year, 1))(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, 1)\n  } }\n  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }\n  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }\n  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n  moviesPerYearInverseSorted\n}",
+      "originalCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))\n    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)\n    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))\n    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n    moviesPerYearInverseSorted\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 35,
+      "originalProgramId" : 2,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n  val yearTuple: RDD[(Int, Int)] = movies.map { (inputParameter: Movie) => {\n    val originalFunction = ((m: Movie) => (m.year, 1))(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, Int.MaxValue)\n  } }\n  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }\n  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }\n  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n  moviesPerYearInverseSorted\n}",
+      "originalCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))\n    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)\n    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))\n    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n    moviesPerYearInverseSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 36,
+      "originalProgramId" : 2,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n  val yearTuple: RDD[(Int, Int)] = movies.map { (inputParameter: Movie) => {\n    val originalFunction = ((m: Movie) => (m.year, 1))(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, Int.MinValue)\n  } }\n  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }\n  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }\n  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n  moviesPerYearInverseSorted\n}",
+      "originalCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))\n    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)\n    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))\n    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n    moviesPerYearInverseSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 37,
+      "originalProgramId" : 2,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n  val yearTuple: RDD[(Int, Int)] = movies.map { (inputParameter: Movie) => {\n    val originalFunction = ((m: Movie) => (m.year, 1))(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, -originalValue._2)\n  } }\n  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }\n  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }\n  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n  moviesPerYearInverseSorted\n}",
+      "originalCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))\n    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)\n    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))\n    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n    moviesPerYearInverseSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 38,
+      "originalProgramId" : 2,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }\n  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }\n  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (inputParameter: (Int, Int)) => {\n    val originalFunction = ((t: (Int, Int)) => (t._2, t._1))(_)\n    val originalValue = originalFunction(inputParameter)\n    (0, originalValue._2)\n  } }\n  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n  moviesPerYearInverseSorted\n}",
+      "originalCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))\n    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)\n    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))\n    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n    moviesPerYearInverseSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 39,
+      "originalProgramId" : 2,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }\n  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }\n  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (inputParameter: (Int, Int)) => {\n    val originalFunction = ((t: (Int, Int)) => (t._2, t._1))(_)\n    val originalValue = originalFunction(inputParameter)\n    (1, originalValue._2)\n  } }\n  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n  moviesPerYearInverseSorted\n}",
+      "originalCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))\n    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)\n    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))\n    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n    moviesPerYearInverseSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 40,
+      "originalProgramId" : 2,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }\n  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }\n  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (inputParameter: (Int, Int)) => {\n    val originalFunction = ((t: (Int, Int)) => (t._2, t._1))(_)\n    val originalValue = originalFunction(inputParameter)\n    (Int.MaxValue, originalValue._2)\n  } }\n  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n  moviesPerYearInverseSorted\n}",
+      "originalCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))\n    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)\n    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))\n    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n    moviesPerYearInverseSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 41,
+      "originalProgramId" : 2,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }\n  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }\n  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (inputParameter: (Int, Int)) => {\n    val originalFunction = ((t: (Int, Int)) => (t._2, t._1))(_)\n    val originalValue = originalFunction(inputParameter)\n    (Int.MinValue, originalValue._2)\n  } }\n  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n  moviesPerYearInverseSorted\n}",
+      "originalCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))\n    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)\n    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))\n    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n    moviesPerYearInverseSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 42,
+      "originalProgramId" : 2,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }\n  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }\n  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (inputParameter: (Int, Int)) => {\n    val originalFunction = ((t: (Int, Int)) => (t._2, t._1))(_)\n    val originalValue = originalFunction(inputParameter)\n    (-originalValue._1, originalValue._2)\n  } }\n  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n  moviesPerYearInverseSorted\n}",
+      "originalCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))\n    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)\n    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))\n    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n    moviesPerYearInverseSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 43,
+      "originalProgramId" : 2,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }\n  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }\n  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (inputParameter: (Int, Int)) => {\n    val originalFunction = ((t: (Int, Int)) => (t._2, t._1))(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, 0)\n  } }\n  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n  moviesPerYearInverseSorted\n}",
+      "originalCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))\n    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)\n    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))\n    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n    moviesPerYearInverseSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 44,
+      "originalProgramId" : 2,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }\n  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }\n  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (inputParameter: (Int, Int)) => {\n    val originalFunction = ((t: (Int, Int)) => (t._2, t._1))(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, 1)\n  } }\n  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n  moviesPerYearInverseSorted\n}",
+      "originalCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))\n    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)\n    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))\n    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n    moviesPerYearInverseSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 45,
+      "originalProgramId" : 2,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }\n  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }\n  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (inputParameter: (Int, Int)) => {\n    val originalFunction = ((t: (Int, Int)) => (t._2, t._1))(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, Int.MaxValue)\n  } }\n  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n  moviesPerYearInverseSorted\n}",
+      "originalCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))\n    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)\n    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))\n    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n    moviesPerYearInverseSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 46,
+      "originalProgramId" : 2,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }\n  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }\n  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (inputParameter: (Int, Int)) => {\n    val originalFunction = ((t: (Int, Int)) => (t._2, t._1))(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, Int.MinValue)\n  } }\n  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n  moviesPerYearInverseSorted\n}",
+      "originalCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))\n    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)\n    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))\n    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n    moviesPerYearInverseSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 47,
+      "originalProgramId" : 2,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }\n  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }\n  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (inputParameter: (Int, Int)) => {\n    val originalFunction = ((t: (Int, Int)) => (t._2, t._1))(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, -originalValue._2)\n  } }\n  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n  moviesPerYearInverseSorted\n}",
+      "originalCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))\n    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)\n    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))\n    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n    moviesPerYearInverseSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 48,
+      "originalProgramId" : 2,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }.distinct()\n  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }\n  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }\n  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n  moviesPerYearInverseSorted\n}",
+      "originalCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))\n    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)\n    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))\n    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n    moviesPerYearInverseSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 49,
+      "originalProgramId" : 2,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }\n  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }.distinct()\n  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }\n  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n  moviesPerYearInverseSorted\n}",
+      "originalCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))\n    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)\n    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))\n    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n    moviesPerYearInverseSorted\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 50,
+      "originalProgramId" : 2,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }\n  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }\n  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }.distinct()\n  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n  moviesPerYearInverseSorted\n}",
+      "originalCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))\n    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)\n    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))\n    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n    moviesPerYearInverseSorted\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 51,
+      "originalProgramId" : 2,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }\n  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }\n  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }\n  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false).distinct()\n  moviesPerYearInverseSorted\n}",
+      "originalCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))\n    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)\n    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))\n    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n    moviesPerYearInverseSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 52,
+      "originalProgramId" : 2,
+      "mutationOperator" : "ATR",
+      "mutationOperatorDescription" : "Aggregation Transformation Replacement",
+      "mutantCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }\n  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (firstParameter: Int, secondParameter: Int) => firstParameter }\n  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }\n  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n  moviesPerYearInverseSorted\n}",
+      "originalCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))\n    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)\n    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))\n    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n    moviesPerYearInverseSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 53,
+      "originalProgramId" : 2,
+      "mutationOperator" : "ATR",
+      "mutationOperatorDescription" : "Aggregation Transformation Replacement",
+      "mutantCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }\n  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (firstParameter: Int, secondParameter: Int) => secondParameter }\n  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }\n  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n  moviesPerYearInverseSorted\n}",
+      "originalCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))\n    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)\n    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))\n    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n    moviesPerYearInverseSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 54,
+      "originalProgramId" : 2,
+      "mutationOperator" : "ATR",
+      "mutationOperatorDescription" : "Aggregation Transformation Replacement",
+      "mutantCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }\n  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (firstParameter: Int, secondParameter: Int) => {\n    val originalFunction = ((a: Int, b: Int) => a + b)(_, _)\n    originalFunction(firstParameter, firstParameter)\n  } }\n  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }\n  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n  moviesPerYearInverseSorted\n}",
+      "originalCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))\n    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)\n    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))\n    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n    moviesPerYearInverseSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 55,
+      "originalProgramId" : 2,
+      "mutationOperator" : "ATR",
+      "mutationOperatorDescription" : "Aggregation Transformation Replacement",
+      "mutantCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }\n  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (firstParameter: Int, secondParameter: Int) => {\n    val originalFunction = ((a: Int, b: Int) => a + b)(_, _)\n    originalFunction(secondParameter, secondParameter)\n  } }\n  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }\n  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n  moviesPerYearInverseSorted\n}",
+      "originalCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))\n    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)\n    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))\n    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n    moviesPerYearInverseSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 56,
+      "originalProgramId" : 2,
+      "mutationOperator" : "ATR",
+      "mutationOperatorDescription" : "Aggregation Transformation Replacement",
+      "mutantCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }\n  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (firstParameter: Int, secondParameter: Int) => {\n    val originalFunction = ((a: Int, b: Int) => a + b)(_, _)\n    originalFunction(secondParameter, firstParameter)\n  } }\n  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }\n  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n  moviesPerYearInverseSorted\n}",
+      "originalCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))\n    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)\n    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))\n    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n    moviesPerYearInverseSorted\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 57,
+      "originalProgramId" : 2,
+      "mutationOperator" : "OTD",
+      "mutationOperatorDescription" : "Order Transformation Deletion",
+      "mutantCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }\n  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }\n  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }\n  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse\n  moviesPerYearInverseSorted\n}",
+      "originalCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))\n    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)\n    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))\n    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n    moviesPerYearInverseSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 58,
+      "originalProgramId" : 2,
+      "mutationOperator" : "OTI",
+      "mutationOperatorDescription" : "Order Transformation Inversion",
+      "mutantCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }\n  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }\n  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }\n  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(true)\n  moviesPerYearInverseSorted\n}",
+      "originalCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))\n    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)\n    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))\n    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n    moviesPerYearInverseSorted\n  }",
+      "status" : "Killed"
+    }
+  ],
+  "removedMutants" : [
+  ],
+  "mutationOperatorsMetrics" : {
+    "totalMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 6,
+      "MTR" : 20,
+      "UTD" : 3,
+      "OTD" : 1,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 5,
+      "OTI" : 1,
+      "DTI" : 4,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 3
+    },
+    "totalKilledMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 6,
+      "MTR" : 19,
+      "UTD" : 3,
+      "OTD" : 1,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 4,
+      "OTI" : 1,
+      "DTI" : 2,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 3
+    },
+    "totalLivedMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 0,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalEquivalentMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 1,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 1,
+      "OTI" : 0,
+      "DTI" : 2,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalErrorMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 0,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalRemovedMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 0,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "descriptionPerOperator" : {
+      "FTD" : "Filter Transformation Deletion",
+      "JTR" : "Join Transformation Replacement",
+      "UTR" : "Unary Transformation Replacement",
+      "MTR" : "Mapping Transformation Replacement",
+      "UTD" : "Unary Transformation Deletion",
+      "OTD" : "Order Transformation Deletion",
+      "BTR" : "Binary Transformation Replacement",
+      "STR" : "Set Transformation Replacement",
+      "BTS" : "Binary Transformation Swap",
+      "ATR" : "Aggregation Transformation Replacement",
+      "OTI" : "Order Transformation Inversion",
+      "DTI" : "Distinct Transformation Insertion",
+      "DTD" : "Distinct Transformation Deletion",
+      "NFTP" : "Negation of Filter Transformation Predicate",
+      "UTS" : "Unary Transformation Swap"
+    }
+  },
+  "totalDatasets" : 5,
+  "totalTransformations" : 4,
+  "totalMutants" : 43,
+  "totalKilledMutants" : 39,
+  "totalLivedMutants" : 0,
+  "totalEquivalentMutants" : 4,
+  "totalErrorMutants" : 0,
+  "totalRemovedMutants" : 0,
+  "mutationScore" : 1.0
+}

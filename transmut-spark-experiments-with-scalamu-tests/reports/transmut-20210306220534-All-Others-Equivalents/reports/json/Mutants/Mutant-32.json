@@ -1,0 +1,9 @@
+{
+  "id" : 32,
+  "originalProgramId" : 2,
+  "mutationOperator" : "ATR",
+  "mutationOperatorDescription" : "Aggregation Transformation Replacement",
+  "mutantCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n  val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n  val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey { (firstParameter: Set[String], secondParameter: Set[String]) => {\n    val originalFunction = setUnion(_, _)\n    originalFunction(secondParameter, secondParameter)\n  } }\n  distinctSites\n}",
+  "originalCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n    val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n    val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n    distinctSites\n  }",
+  "status" : "Killed"
+}

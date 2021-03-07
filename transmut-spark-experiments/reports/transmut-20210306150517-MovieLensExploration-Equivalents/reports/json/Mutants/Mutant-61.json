@@ -1,0 +1,9 @@
+{
+  "id" : 61,
+  "originalProgramId" : 3,
+  "mutationOperator" : "MTR",
+  "mutationOperatorDescription" : "Mapping Transformation Replacement",
+  "mutantCode" : "def mostPopularGenresByYear(movies: RDD[Movie]) = {\n  val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap { (inputParameter: Movie) => {\n    val originalFunction = ((m: Movie) => m.genres.map(g => ((m.year, g), 1)))(_)\n    val originalValue = originalFunction(inputParameter)\n    originalValue.headOption\n  } }\n  val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey { (x: Int, y: Int) => x + y }\n  val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map { (g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)) }\n  val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey { (m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2 }\n  popularGenresByYear\n}",
+  "originalCode" : "def mostPopularGenresByYear(movies: RDD[Movie]) = {\n    val yearGenreTuple: RDD[((Int, String), Int)] = movies.flatMap((m: Movie) => m.genres.map(g => ((m.year, g), 1)))\n    val yearGenreCount: RDD[((Int, String), Int)] = yearGenreTuple.reduceByKey((x: Int, y: Int) => x + y)\n    val yearGenreCountTuple: RDD[(Int, (String, Int))] = yearGenreCount.map((g: ((Int, String), Int)) => (g._1._1, (g._1._2, g._2)))\n    val popularGenresByYear: RDD[(Int, (String, Int))] = yearGenreCountTuple.reduceByKey((m1: (String, Int), m2: (String, Int)) => if (m1._2 > m2._2) m1 else m2)\n    popularGenresByYear\n  }",
+  "status" : "Killed"
+}

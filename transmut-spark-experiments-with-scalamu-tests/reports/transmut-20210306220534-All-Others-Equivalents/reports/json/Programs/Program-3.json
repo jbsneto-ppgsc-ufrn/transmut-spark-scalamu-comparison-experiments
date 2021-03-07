@@ -1,0 +1,830 @@
+{
+  "id" : 3,
+  "programSourceId" : 3,
+  "name" : "join",
+  "code" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n    results\n  }",
+  "datasets" : [
+    {
+      "id" : 10,
+      "name" : "rankingsLines",
+      "datasetType" : "RDD[String]",
+      "inputDataset" : true,
+      "outputDataset" : false
+    },
+    {
+      "id" : 11,
+      "name" : "userVisitsLines",
+      "datasetType" : "RDD[String]",
+      "inputDataset" : true,
+      "outputDataset" : false
+    },
+    {
+      "id" : 12,
+      "name" : "rankings",
+      "datasetType" : "RDD[Ranking]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 13,
+      "name" : "userVisits",
+      "datasetType" : "RDD[UserVisit]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 14,
+      "name" : "filteredUV",
+      "datasetType" : "RDD[UserVisit]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 15,
+      "name" : "subqueryUV",
+      "datasetType" : "RDD[(String, UserVisit)]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 16,
+      "name" : "subqueryR",
+      "datasetType" : "RDD[(String, Ranking)]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 17,
+      "name" : "subqueryJoin",
+      "datasetType" : "RDD[(String, (Ranking, UserVisit))]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 18,
+      "name" : "subqueryJoinValues",
+      "datasetType" : "RDD[(Ranking, UserVisit)]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 19,
+      "name" : "subquerySelect",
+      "datasetType" : "RDD[(String, (Float, Int))]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 20,
+      "name" : "subqueryGroup",
+      "datasetType" : "RDD[(String, Iterable[(Float, Int)])]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 21,
+      "name" : "subqueryAggregation",
+      "datasetType" : "RDD[Tuple3[String, Float, Int]]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 22,
+      "name" : "results",
+      "datasetType" : "RDD[Tuple3[String, Float, Int]]",
+      "inputDataset" : false,
+      "outputDataset" : true
+    }
+  ],
+  "transformations" : [
+    {
+      "id" : 8,
+      "name" : "map",
+      "inputTypes" : [
+        "RDD[String]"
+      ],
+      "outputTypes" : [
+        "RDD[Ranking]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 9,
+      "name" : "map",
+      "inputTypes" : [
+        "RDD[String]"
+      ],
+      "outputTypes" : [
+        "RDD[UserVisit]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 10,
+      "name" : "filter",
+      "inputTypes" : [
+        "RDD[UserVisit]"
+      ],
+      "outputTypes" : [
+        "RDD[UserVisit]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 11,
+      "name" : "map",
+      "inputTypes" : [
+        "RDD[UserVisit]"
+      ],
+      "outputTypes" : [
+        "RDD[(String, UserVisit)]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 12,
+      "name" : "map",
+      "inputTypes" : [
+        "RDD[Ranking]"
+      ],
+      "outputTypes" : [
+        "RDD[(String, Ranking)]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 13,
+      "name" : "join",
+      "inputTypes" : [
+        "RDD[(String, Ranking)]",
+        "RDD[(String, UserVisit)]"
+      ],
+      "outputTypes" : [
+        "RDD[(String, (Ranking, UserVisit))]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 14,
+      "name" : "values",
+      "inputTypes" : [
+        "RDD[(String, (Ranking, UserVisit))]"
+      ],
+      "outputTypes" : [
+        "RDD[(Ranking, UserVisit)]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 15,
+      "name" : "map",
+      "inputTypes" : [
+        "RDD[(Ranking, UserVisit)]"
+      ],
+      "outputTypes" : [
+        "RDD[(String, (Float, Int))]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 16,
+      "name" : "groupByKey",
+      "inputTypes" : [
+        "RDD[(String, (Float, Int))]"
+      ],
+      "outputTypes" : [
+        "RDD[(String, Iterable[(Float, Int)])]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 17,
+      "name" : "map",
+      "inputTypes" : [
+        "RDD[(String, Iterable[(Float, Int)])]"
+      ],
+      "outputTypes" : [
+        "RDD[Tuple3[String, Float, Int]]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 18,
+      "name" : "sortBy",
+      "inputTypes" : [
+        "RDD[Tuple3[String, Float, Int]]"
+      ],
+      "outputTypes" : [
+        "RDD[Tuple3[String, Float, Int]]"
+      ],
+      "loadTransformation" : false
+    }
+  ],
+  "edges" : [
+    {
+      "id" : 15,
+      "datasetId" : 10,
+      "transformationId" : 8,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 16,
+      "datasetId" : 12,
+      "transformationId" : 8,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 17,
+      "datasetId" : 11,
+      "transformationId" : 9,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 18,
+      "datasetId" : 13,
+      "transformationId" : 9,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 19,
+      "datasetId" : 13,
+      "transformationId" : 10,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 20,
+      "datasetId" : 14,
+      "transformationId" : 10,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 21,
+      "datasetId" : 14,
+      "transformationId" : 11,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 22,
+      "datasetId" : 15,
+      "transformationId" : 11,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 23,
+      "datasetId" : 12,
+      "transformationId" : 12,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 24,
+      "datasetId" : 16,
+      "transformationId" : 12,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 25,
+      "datasetId" : 16,
+      "transformationId" : 13,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 26,
+      "datasetId" : 15,
+      "transformationId" : 13,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 27,
+      "datasetId" : 17,
+      "transformationId" : 13,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 28,
+      "datasetId" : 17,
+      "transformationId" : 14,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 29,
+      "datasetId" : 18,
+      "transformationId" : 14,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 30,
+      "datasetId" : 18,
+      "transformationId" : 15,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 31,
+      "datasetId" : 19,
+      "transformationId" : 15,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 32,
+      "datasetId" : 19,
+      "transformationId" : 16,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 33,
+      "datasetId" : 20,
+      "transformationId" : 16,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 34,
+      "datasetId" : 20,
+      "transformationId" : 17,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 35,
+      "datasetId" : 21,
+      "transformationId" : 17,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 36,
+      "datasetId" : 21,
+      "transformationId" : 18,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 37,
+      "datasetId" : 22,
+      "transformationId" : 18,
+      "direction" : "TransformationToDataset"
+    }
+  ],
+  "mutants" : [
+    {
+      "id" : 34,
+      "originalProgramId" : 3,
+      "mutationOperator" : "UTD",
+      "mutationOperatorDescription" : "Unary Transformation Deletion",
+      "mutantCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n  val filteredUV: RDD[UserVisit] = userVisits\n  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n  results\n}",
+      "originalCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n    results\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 35,
+      "originalProgramId" : 3,
+      "mutationOperator" : "UTD",
+      "mutationOperatorDescription" : "Unary Transformation Deletion",
+      "mutantCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n  val results: RDD[(String, Float, Int)] = subqueryAggregation\n  results\n}",
+      "originalCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n    results\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 36,
+      "originalProgramId" : 3,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n  val rankings: RDD[Ranking] = rankingsLines.map { (inputParameter: String) => {\n    val originalFunction = parseRankings(_)\n    val originalValue = originalFunction(inputParameter)\n    null.asInstanceOf[Ranking]\n  } }\n  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n  results\n}",
+      "originalCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n    results\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 37,
+      "originalProgramId" : 3,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n  val userVisits: RDD[UserVisit] = userVisitsLines.map { (inputParameter: String) => {\n    val originalFunction = parseUserVisits(_)\n    val originalValue = originalFunction(inputParameter)\n    null.asInstanceOf[UserVisit]\n  } }\n  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n  results\n}",
+      "originalCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n    results\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 38,
+      "originalProgramId" : 3,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map { (inputParameter: UserVisit) => {\n    val originalFunction = mapUserVisitToTuple(_)\n    val originalValue = originalFunction(inputParameter)\n    (\"\", originalValue._2)\n  } }\n  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n  results\n}",
+      "originalCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n    results\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 39,
+      "originalProgramId" : 3,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map { (inputParameter: UserVisit) => {\n    val originalFunction = mapUserVisitToTuple(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, null.asInstanceOf[UserVisit])\n  } }\n  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n  results\n}",
+      "originalCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n    results\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 40,
+      "originalProgramId" : 3,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n  val subqueryR: RDD[(String, Ranking)] = rankings.map { (inputParameter: Ranking) => {\n    val originalFunction = mapRankingToTuple(_)\n    val originalValue = originalFunction(inputParameter)\n    (\"\", originalValue._2)\n  } }\n  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n  results\n}",
+      "originalCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n    results\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 41,
+      "originalProgramId" : 3,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n  val subqueryR: RDD[(String, Ranking)] = rankings.map { (inputParameter: Ranking) => {\n    val originalFunction = mapRankingToTuple(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, null.asInstanceOf[Ranking])\n  } }\n  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n  results\n}",
+      "originalCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n    results\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 42,
+      "originalProgramId" : 3,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map { (inputParameter: (Ranking, UserVisit)) => {\n    val originalFunction = mapRankingAndUserVisitJoinToTuple(_)\n    val originalValue = originalFunction(inputParameter)\n    (\"\", originalValue._2)\n  } }\n  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n  results\n}",
+      "originalCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n    results\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 43,
+      "originalProgramId" : 3,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map { (inputParameter: (Ranking, UserVisit)) => {\n    val originalFunction = mapRankingAndUserVisitJoinToTuple(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, (0f, originalValue._2._2))\n  } }\n  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n  results\n}",
+      "originalCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n    results\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 44,
+      "originalProgramId" : 3,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map { (inputParameter: (Ranking, UserVisit)) => {\n    val originalFunction = mapRankingAndUserVisitJoinToTuple(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, (1f, originalValue._2._2))\n  } }\n  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n  results\n}",
+      "originalCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n    results\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 45,
+      "originalProgramId" : 3,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map { (inputParameter: (Ranking, UserVisit)) => {\n    val originalFunction = mapRankingAndUserVisitJoinToTuple(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, (Float.MaxValue, originalValue._2._2))\n  } }\n  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n  results\n}",
+      "originalCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n    results\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 46,
+      "originalProgramId" : 3,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map { (inputParameter: (Ranking, UserVisit)) => {\n    val originalFunction = mapRankingAndUserVisitJoinToTuple(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, (Float.MinValue, originalValue._2._2))\n  } }\n  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n  results\n}",
+      "originalCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n    results\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 47,
+      "originalProgramId" : 3,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map { (inputParameter: (Ranking, UserVisit)) => {\n    val originalFunction = mapRankingAndUserVisitJoinToTuple(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, (-originalValue._2._1, originalValue._2._2))\n  } }\n  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n  results\n}",
+      "originalCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n    results\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 48,
+      "originalProgramId" : 3,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map { (inputParameter: (Ranking, UserVisit)) => {\n    val originalFunction = mapRankingAndUserVisitJoinToTuple(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, (originalValue._2._1, 0))\n  } }\n  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n  results\n}",
+      "originalCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n    results\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 49,
+      "originalProgramId" : 3,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map { (inputParameter: (Ranking, UserVisit)) => {\n    val originalFunction = mapRankingAndUserVisitJoinToTuple(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, (originalValue._2._1, 1))\n  } }\n  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n  results\n}",
+      "originalCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n    results\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 50,
+      "originalProgramId" : 3,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map { (inputParameter: (Ranking, UserVisit)) => {\n    val originalFunction = mapRankingAndUserVisitJoinToTuple(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, (originalValue._2._1, Int.MaxValue))\n  } }\n  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n  results\n}",
+      "originalCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n    results\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 51,
+      "originalProgramId" : 3,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map { (inputParameter: (Ranking, UserVisit)) => {\n    val originalFunction = mapRankingAndUserVisitJoinToTuple(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, (originalValue._2._1, Int.MinValue))\n  } }\n  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n  results\n}",
+      "originalCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n    results\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 52,
+      "originalProgramId" : 3,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map { (inputParameter: (Ranking, UserVisit)) => {\n    val originalFunction = mapRankingAndUserVisitJoinToTuple(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, (originalValue._2._1, -originalValue._2._2))\n  } }\n  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n  results\n}",
+      "originalCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n    results\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 53,
+      "originalProgramId" : 3,
+      "mutationOperator" : "FTD",
+      "mutationOperatorDescription" : "Filter Transformation Deletion",
+      "mutantCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n  val filteredUV: RDD[UserVisit] = userVisits\n  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n  results\n}",
+      "originalCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n    results\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 54,
+      "originalProgramId" : 3,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings).distinct()\n  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n  results\n}",
+      "originalCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n    results\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 55,
+      "originalProgramId" : 3,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits).distinct()\n  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n  results\n}",
+      "originalCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n    results\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 56,
+      "originalProgramId" : 3,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange).distinct()\n  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n  results\n}",
+      "originalCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n    results\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 57,
+      "originalProgramId" : 3,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple).distinct()\n  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n  results\n}",
+      "originalCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n    results\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 58,
+      "originalProgramId" : 3,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple).distinct()\n  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n  results\n}",
+      "originalCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n    results\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 59,
+      "originalProgramId" : 3,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV).distinct()\n  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n  results\n}",
+      "originalCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n    results\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 60,
+      "originalProgramId" : 3,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values.distinct()\n  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n  results\n}",
+      "originalCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n    results\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 61,
+      "originalProgramId" : 3,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple).distinct()\n  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n  results\n}",
+      "originalCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n    results\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 62,
+      "originalProgramId" : 3,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey().distinct()\n  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n  results\n}",
+      "originalCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n    results\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 63,
+      "originalProgramId" : 3,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation).distinct()\n  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n  results\n}",
+      "originalCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n    results\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 64,
+      "originalProgramId" : 3,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false).distinct()\n  results\n}",
+      "originalCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n    results\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 65,
+      "originalProgramId" : 3,
+      "mutationOperator" : "JTR",
+      "mutationOperatorDescription" : "Join Transformation Replacement",
+      "mutantCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.leftOuterJoin(subqueryUV).map(tuple => (tuple._1, (tuple._2._1, tuple._2._2.getOrElse(null.asInstanceOf[UserVisit]))))\n  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n  results\n}",
+      "originalCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n    results\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 66,
+      "originalProgramId" : 3,
+      "mutationOperator" : "JTR",
+      "mutationOperatorDescription" : "Join Transformation Replacement",
+      "mutantCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.rightOuterJoin(subqueryUV).map(tuple => (tuple._1, (tuple._2._1.getOrElse(null.asInstanceOf[Ranking]), tuple._2._2)))\n  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n  results\n}",
+      "originalCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n    results\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 67,
+      "originalProgramId" : 3,
+      "mutationOperator" : "JTR",
+      "mutationOperatorDescription" : "Join Transformation Replacement",
+      "mutantCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.fullOuterJoin(subqueryUV).map(tuple => (tuple._1, (tuple._2._1.getOrElse(null.asInstanceOf[Ranking]), tuple._2._2.getOrElse(null.asInstanceOf[UserVisit]))))\n  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n  results\n}",
+      "originalCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n    results\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 68,
+      "originalProgramId" : 3,
+      "mutationOperator" : "OTD",
+      "mutationOperatorDescription" : "Order Transformation Deletion",
+      "mutantCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n  val results: RDD[(String, Float, Int)] = subqueryAggregation\n  results\n}",
+      "originalCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n    results\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 69,
+      "originalProgramId" : 3,
+      "mutationOperator" : "NFTP",
+      "mutationOperatorDescription" : "Negation of Filter Transformation Predicate",
+      "mutantCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n  val filteredUV: RDD[UserVisit] = userVisits.filter { (inputParameter: UserVisit) => {\n    val originalFunction = filterUserVisitsDateRange(_)\n    val originalValue = originalFunction(inputParameter)\n    !originalValue\n  } }\n  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n  results\n}",
+      "originalCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n    results\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 70,
+      "originalProgramId" : 3,
+      "mutationOperator" : "OTI",
+      "mutationOperatorDescription" : "Order Transformation Inversion",
+      "mutantCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, true)\n  results\n}",
+      "originalCode" : "def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {\n    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)\n    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)\n    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)\n    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)\n    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)\n    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)\n    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values\n    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)\n    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()\n    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)\n    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)\n    results\n  }",
+      "status" : "Lived"
+    }
+  ],
+  "removedMutants" : [
+  ],
+  "mutationOperatorsMetrics" : {
+    "totalMutantsPerOperator" : {
+      "FTD" : 1,
+      "JTR" : 3,
+      "UTR" : 0,
+      "MTR" : 17,
+      "UTD" : 2,
+      "OTD" : 1,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 1,
+      "DTI" : 11,
+      "DTD" : 0,
+      "NFTP" : 1,
+      "UTS" : 0
+    },
+    "totalKilledMutantsPerOperator" : {
+      "FTD" : 1,
+      "JTR" : 2,
+      "UTR" : 0,
+      "MTR" : 15,
+      "UTD" : 1,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 0,
+      "NFTP" : 1,
+      "UTS" : 0
+    },
+    "totalLivedMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 1,
+      "UTR" : 0,
+      "MTR" : 2,
+      "UTD" : 1,
+      "OTD" : 1,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 1,
+      "DTI" : 9,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalEquivalentMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 0,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 2,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalErrorMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 0,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalRemovedMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 0,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "descriptionPerOperator" : {
+      "FTD" : "Filter Transformation Deletion",
+      "JTR" : "Join Transformation Replacement",
+      "UTR" : "Unary Transformation Replacement",
+      "MTR" : "Mapping Transformation Replacement",
+      "UTD" : "Unary Transformation Deletion",
+      "OTD" : "Order Transformation Deletion",
+      "BTR" : "Binary Transformation Replacement",
+      "STR" : "Set Transformation Replacement",
+      "BTS" : "Binary Transformation Swap",
+      "ATR" : "Aggregation Transformation Replacement",
+      "OTI" : "Order Transformation Inversion",
+      "DTI" : "Distinct Transformation Insertion",
+      "DTD" : "Distinct Transformation Deletion",
+      "NFTP" : "Negation of Filter Transformation Predicate",
+      "UTS" : "Unary Transformation Swap"
+    }
+  },
+  "totalDatasets" : 13,
+  "totalTransformations" : 11,
+  "totalMutants" : 37,
+  "totalKilledMutants" : 20,
+  "totalLivedMutants" : 15,
+  "totalEquivalentMutants" : 2,
+  "totalErrorMutants" : 0,
+  "totalRemovedMutants" : 0,
+  "mutationScore" : 0.5714286
+}

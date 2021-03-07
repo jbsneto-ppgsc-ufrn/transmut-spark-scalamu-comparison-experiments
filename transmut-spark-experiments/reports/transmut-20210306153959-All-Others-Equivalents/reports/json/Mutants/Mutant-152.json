@@ -1,0 +1,9 @@
+{
+  "id" : 152,
+  "originalProgramId" : 7,
+  "mutationOperator" : "UTR",
+  "mutationOperatorDescription" : "Unary Transformation Replacement",
+  "mutantCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n  val firstHosts: RDD[String] = firstLogs.map(parseLogs)\n  val secondHosts: RDD[String] = secondLogs.filter(host => isNotHeaderHost(host))\n  val intersection: RDD[String] = firstHosts.intersection(secondHosts)\n  val cleanedHostIntersection: RDD[String] = intersection.filter(host => isNotHeaderHost(host))\n  cleanedHostIntersection\n}",
+  "originalCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n    val firstHosts: RDD[String] = firstLogs.map(parseLogs)\n    val secondHosts: RDD[String] = secondLogs.map(parseLogs)\n    val intersection: RDD[String] = firstHosts.intersection(secondHosts)\n    val cleanedHostIntersection: RDD[String] = intersection.filter(host => isNotHeaderHost(host))\n    cleanedHostIntersection\n  }",
+  "status" : "Killed"
+}

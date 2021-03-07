@@ -1,0 +1,2762 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/scripts/shCore.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/scripts/shBrushScala.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/styles/shCoreEclipse.css" rel="stylesheet" type="text/css" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/styles/shThemeEclipse.min.css" rel="stylesheet" type="text/css" />
+<!-- Cytoscape -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/2.5.1/cytoscape.min.js"></script>
+<!-- DataTable -->
+<link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<style>
+#cy {
+  width: 1100px;
+  height: 300px;
+  background-color: white;
+}
+body {
+  padding-top: 5rem;
+}
+.starter-template {
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+.section-title {
+  padding-top: 3.5rem;
+}
+</style>
+<title>TRANSMUT-Spark Mutation Testing Report</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+<a class="navbar-brand" href="../index.html">TRANSMUT-Spark</a>
+<div class="collapse navbar-collapse" id="navbarNav">
+  <ul class="navbar-nav mr-auto">
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Section</a>
+      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <a class="dropdown-item" href="#programs">Programs</a>
+        <a class="dropdown-item" href="#mutants">Mutants</a>
+        <a class="dropdown-item" href="#removedMutants">Removed Mutants</a>
+        <a class="dropdown-item" href="#mutationOperators">Mutation Operators</a>
+      </div>
+    </li>
+  </ul>
+</div>
+</nav>
+<main role"main" class="container">  
+<div class="starter-template">
+  <h2><a href="../index.html" class="text-dark">Mutation Testing Report</a></h2>
+  <h3><a href="#" class="text-dark">Program Source ID: 3</a></h3>
+  <h3><a href="#" class="text-dark">Program Source: JoinQuery</a></h3>
+</div>    
+<!-- Programs -->
+<div class="row" id="programs">
+<div class="col">
+<h3 class="section-title">Programs</h3>
+<hr class="my-4">
+<table class="display table table-striped table-hover" id="programsTable">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Program</th>
+      <th scope="col">Datasets</th>
+      <th scope="col">Transformations</th>
+      <th scope="col">Mutants</th>
+      <th scope="col">Killed</th>
+      <th scope="col">Lived</th>
+      <th scope="col">Equivalent</th>
+      <th scope="col">Error</th>
+      <th scope="col">Removed</th>
+      <th scope="col">Mutation Score</th>
+      </tr>
+  </thead>
+  <tbody>
+    <tr>
+  <th scope="row"><a href="../Programs/Program-3.html" class="text-dark">3</a></th>
+  <td><a href="../Programs/Program-3.html" class="text-dark">join</a></td>
+  <td>13</td>
+  <td>11</td>
+  <td>37</td>
+  <td>20</td>
+  <td>15</td>
+  <td>2</td>
+  <td>0</td>
+  <td>0</td>
+  <td>
+    <div class="progress">
+      <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 57.14%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><span class="font-weight-bold text-dark">0.57</span></div>
+    </div>
+ </td>
+</tr>
+  </tbody>
+  <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+      <th scope="row">#</th>
+      <td>Total</td>
+      <td>13</td>
+      <td>11</td>
+      <td>37</td>
+      <td>20</td>
+      <td>15</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>
+        <div class="progress">
+          <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 57.14%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><span class="font-weight-bold text-dark">0.57</span></div>
+        </div>
+      </td>
+    </tr>
+  </tfoot>
+</table>   
+   
+<hr class="my-4">
+</div>
+</div>
+<!-- Mutants -->
+<div class="row" id="mutants">
+<div class="col">
+<h3 class="section-title">Mutants</h3>
+<hr class="my-4">
+<table class="display table table-striped table-hover" id="programsTable">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Program</th>
+      <th scope="col">Mutation Operator</th>
+      <th scope="col">Status</th>
+      <th scope="col">Code</th>
+     </tr>
+  </thead>
+  <tbody>
+    <tr>
+  <th scope="row"><a href="../Mutants/Mutant-34.html" class="text-dark">34</a></th>
+  <td><a href="../Programs/Program-3.html" class="text-dark">join</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Deletion">UTD</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant34">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-35.html" class="text-dark">35</a></th>
+  <td><a href="../Programs/Program-3.html" class="text-dark">join</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Deletion">UTD</a></td>
+  <td>Lived</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant35">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-36.html" class="text-dark">36</a></th>
+  <td><a href="../Programs/Program-3.html" class="text-dark">join</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant36">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-37.html" class="text-dark">37</a></th>
+  <td><a href="../Programs/Program-3.html" class="text-dark">join</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant37">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-38.html" class="text-dark">38</a></th>
+  <td><a href="../Programs/Program-3.html" class="text-dark">join</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant38">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-39.html" class="text-dark">39</a></th>
+  <td><a href="../Programs/Program-3.html" class="text-dark">join</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant39">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-40.html" class="text-dark">40</a></th>
+  <td><a href="../Programs/Program-3.html" class="text-dark">join</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant40">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-41.html" class="text-dark">41</a></th>
+  <td><a href="../Programs/Program-3.html" class="text-dark">join</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant41">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-42.html" class="text-dark">42</a></th>
+  <td><a href="../Programs/Program-3.html" class="text-dark">join</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant42">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-43.html" class="text-dark">43</a></th>
+  <td><a href="../Programs/Program-3.html" class="text-dark">join</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant43">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-44.html" class="text-dark">44</a></th>
+  <td><a href="../Programs/Program-3.html" class="text-dark">join</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Lived</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant44">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-45.html" class="text-dark">45</a></th>
+  <td><a href="../Programs/Program-3.html" class="text-dark">join</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant45">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-46.html" class="text-dark">46</a></th>
+  <td><a href="../Programs/Program-3.html" class="text-dark">join</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant46">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-47.html" class="text-dark">47</a></th>
+  <td><a href="../Programs/Program-3.html" class="text-dark">join</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant47">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-48.html" class="text-dark">48</a></th>
+  <td><a href="../Programs/Program-3.html" class="text-dark">join</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant48">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-49.html" class="text-dark">49</a></th>
+  <td><a href="../Programs/Program-3.html" class="text-dark">join</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Lived</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant49">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-50.html" class="text-dark">50</a></th>
+  <td><a href="../Programs/Program-3.html" class="text-dark">join</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant50">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-51.html" class="text-dark">51</a></th>
+  <td><a href="../Programs/Program-3.html" class="text-dark">join</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant51">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-52.html" class="text-dark">52</a></th>
+  <td><a href="../Programs/Program-3.html" class="text-dark">join</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant52">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-53.html" class="text-dark">53</a></th>
+  <td><a href="../Programs/Program-3.html" class="text-dark">join</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Filter Transformation Deletion">FTD</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant53">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-54.html" class="text-dark">54</a></th>
+  <td><a href="../Programs/Program-3.html" class="text-dark">join</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></td>
+  <td>Lived</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant54">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-55.html" class="text-dark">55</a></th>
+  <td><a href="../Programs/Program-3.html" class="text-dark">join</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></td>
+  <td>Lived</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant55">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-56.html" class="text-dark">56</a></th>
+  <td><a href="../Programs/Program-3.html" class="text-dark">join</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></td>
+  <td>Lived</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant56">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-57.html" class="text-dark">57</a></th>
+  <td><a href="../Programs/Program-3.html" class="text-dark">join</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></td>
+  <td>Lived</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant57">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-58.html" class="text-dark">58</a></th>
+  <td><a href="../Programs/Program-3.html" class="text-dark">join</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></td>
+  <td>Lived</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant58">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-59.html" class="text-dark">59</a></th>
+  <td><a href="../Programs/Program-3.html" class="text-dark">join</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></td>
+  <td>Lived</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant59">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-60.html" class="text-dark">60</a></th>
+  <td><a href="../Programs/Program-3.html" class="text-dark">join</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></td>
+  <td>Lived</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant60">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-61.html" class="text-dark">61</a></th>
+  <td><a href="../Programs/Program-3.html" class="text-dark">join</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></td>
+  <td>Lived</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant61">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-62.html" class="text-dark">62</a></th>
+  <td><a href="../Programs/Program-3.html" class="text-dark">join</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></td>
+  <td>Equivalent</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant62">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-63.html" class="text-dark">63</a></th>
+  <td><a href="../Programs/Program-3.html" class="text-dark">join</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></td>
+  <td>Equivalent</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant63">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-64.html" class="text-dark">64</a></th>
+  <td><a href="../Programs/Program-3.html" class="text-dark">join</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></td>
+  <td>Lived</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant64">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-65.html" class="text-dark">65</a></th>
+  <td><a href="../Programs/Program-3.html" class="text-dark">join</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Join Transformation Replacement">JTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant65">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-66.html" class="text-dark">66</a></th>
+  <td><a href="../Programs/Program-3.html" class="text-dark">join</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Join Transformation Replacement">JTR</a></td>
+  <td>Lived</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant66">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-67.html" class="text-dark">67</a></th>
+  <td><a href="../Programs/Program-3.html" class="text-dark">join</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Join Transformation Replacement">JTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant67">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-68.html" class="text-dark">68</a></th>
+  <td><a href="../Programs/Program-3.html" class="text-dark">join</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Order Transformation Deletion">OTD</a></td>
+  <td>Lived</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant68">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-69.html" class="text-dark">69</a></th>
+  <td><a href="../Programs/Program-3.html" class="text-dark">join</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Negation of Filter Transformation Predicate">NFTP</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant69">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-70.html" class="text-dark">70</a></th>
+  <td><a href="../Programs/Program-3.html" class="text-dark">join</a></td>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Order Transformation Inversion">OTI</a></td>
+  <td>Lived</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant70">Show</button></td>
+</tr>
+  </tbody>
+  <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+      <th scope="row" colspan="2">Mutation Score</th>
+      <td colspan="3">
+        <div class="progress">
+          <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 57.14%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><span class="font-weight-bold text-dark">0.57</span></div>
+        </div>
+      </td>
+    </tr>
+  </tfoot>
+</table>   
+   
+<hr class="my-4">
+</div>
+</div>
+<!-- Removed Mutants -->
+<div class="row" id="removedMutants">
+<div class="col">
+<h3 class="section-title">Removed Mutants</h3>
+<hr class="my-4">
+<table class="display table table-striped table-hover" id="removedMutantsTable">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Program</th>
+      <th scope="col">Mutation Operator</th>
+      <th scope="col">Reduction Rule</th>
+      <th scope="col">Code</th>
+     </tr>
+  </thead>
+  <tbody>
+    
+  </tbody>
+  <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+      <th scope="row" colspan="2">Total Removed Mutants</th>
+      <td colspan="3">0</td>
+    </tr>
+  </tfoot>
+</table>   
+   
+<hr class="my-4">
+</div>
+</div>
+<!-- Mutation Operators -->
+<div class="row" id="mutationOperators">
+<div class="col">
+<h3 class="section-title">Mutation Operators</h3>
+<hr class="my-4">
+<table class="display table table-striped table-hover" id="programSourcesTable">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Mutation Operator</th>
+      <th scope="col">Mutants</th>
+      <th scope="col">Killed</th>
+      <th scope="col">Lived</th>
+      <th scope="col">Equivalent</th>
+      <th scope="col">Error</th>
+      <th scope="col">Removed</th>
+      </tr>
+  </thead>
+  <tbody>
+    <tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Order Transformation Inversion">OTI</a></th>
+  <td>1</td>
+  <td>0</td>
+  <td>1</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+<tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Order Transformation Deletion">OTD</a></th>
+  <td>1</td>
+  <td>0</td>
+  <td>1</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+<tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Deletion">UTD</a></th>
+  <td>2</td>
+  <td>1</td>
+  <td>1</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+<tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Negation of Filter Transformation Predicate">NFTP</a></th>
+  <td>1</td>
+  <td>1</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+<tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Filter Transformation Deletion">FTD</a></th>
+  <td>1</td>
+  <td>1</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+<tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Join Transformation Replacement">JTR</a></th>
+  <td>3</td>
+  <td>2</td>
+  <td>1</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+<tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></th>
+  <td>17</td>
+  <td>15</td>
+  <td>2</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+<tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></th>
+  <td>11</td>
+  <td>0</td>
+  <td>9</td>
+  <td>2</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+  </tbody>
+  <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+      <th scope="row">Total</th>
+      <td>37</td>
+      <td>20</td>
+      <td>15</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+  </tfoot>
+</table>   
+   
+<hr class="my-4">
+</div>
+</div>
+<!-- Mutant Modals -->
+<div class="modal fade" id="modalMutant34" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel34" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-34.html" class="text-dark">34</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Deletion">UTD</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+  val filteredUV: RDD[UserVisit] = userVisits
+  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant35" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel35" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-35.html" class="text-dark">35</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Deletion">UTD</a></h5>
+<h5>Status: Lived</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [12]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [12]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+  val results: RDD[(String, Float, Int)] = subqueryAggregation
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant36" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel36" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-36.html" class="text-dark">36</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2, 3, 4, 5, 6]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+  val rankings: RDD[Ranking] = rankingsLines.map { (inputParameter: String) => {
+    val originalFunction = parseRankings(_)
+    val originalValue = originalFunction(inputParameter)
+    null.asInstanceOf[Ranking]
+  } }
+  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant37" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel37" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-37.html" class="text-dark">37</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3, 4, 5, 6, 7]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+  val userVisits: RDD[UserVisit] = userVisitsLines.map { (inputParameter: String) => {
+    val originalFunction = parseUserVisits(_)
+    val originalValue = originalFunction(inputParameter)
+    null.asInstanceOf[UserVisit]
+  } }
+  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant38" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel38" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-38.html" class="text-dark">38</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5, 6, 7, 8, 9]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map { (inputParameter: UserVisit) => {
+    val originalFunction = mapUserVisitToTuple(_)
+    val originalValue = originalFunction(inputParameter)
+    ("", originalValue._2)
+  } }
+  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant39" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel39" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-39.html" class="text-dark">39</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5, 6, 7, 8, 9]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map { (inputParameter: UserVisit) => {
+    val originalFunction = mapUserVisitToTuple(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, null.asInstanceOf[UserVisit])
+  } }
+  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant40" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel40" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-40.html" class="text-dark">40</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [6]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [6, 7, 8, 9, 10]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+  val subqueryR: RDD[(String, Ranking)] = rankings.map { (inputParameter: Ranking) => {
+    val originalFunction = mapRankingToTuple(_)
+    val originalValue = originalFunction(inputParameter)
+    ("", originalValue._2)
+  } }
+  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant41" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel41" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-41.html" class="text-dark">41</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [6]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [6, 7, 8, 9, 10]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+  val subqueryR: RDD[(String, Ranking)] = rankings.map { (inputParameter: Ranking) => {
+    val originalFunction = mapRankingToTuple(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, null.asInstanceOf[Ranking])
+  } }
+  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant42" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel42" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-42.html" class="text-dark">42</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [9]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [9, 10, 11, 12, 13]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map { (inputParameter: (Ranking, UserVisit)) => {
+    val originalFunction = mapRankingAndUserVisitJoinToTuple(_)
+    val originalValue = originalFunction(inputParameter)
+    ("", originalValue._2)
+  } }
+  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant43" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel43" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-43.html" class="text-dark">43</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [9]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [9, 10, 11, 12, 13]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map { (inputParameter: (Ranking, UserVisit)) => {
+    val originalFunction = mapRankingAndUserVisitJoinToTuple(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, (0f, originalValue._2._2))
+  } }
+  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant44" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel44" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-44.html" class="text-dark">44</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Lived</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [9]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [9, 10, 11, 12, 13]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map { (inputParameter: (Ranking, UserVisit)) => {
+    val originalFunction = mapRankingAndUserVisitJoinToTuple(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, (1f, originalValue._2._2))
+  } }
+  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant45" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel45" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-45.html" class="text-dark">45</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [9]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [9, 10, 11, 12, 13]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map { (inputParameter: (Ranking, UserVisit)) => {
+    val originalFunction = mapRankingAndUserVisitJoinToTuple(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, (Float.MaxValue, originalValue._2._2))
+  } }
+  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant46" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel46" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-46.html" class="text-dark">46</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [9]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [9, 10, 11, 12, 13]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map { (inputParameter: (Ranking, UserVisit)) => {
+    val originalFunction = mapRankingAndUserVisitJoinToTuple(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, (Float.MinValue, originalValue._2._2))
+  } }
+  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant47" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel47" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-47.html" class="text-dark">47</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [9]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [9, 10, 11, 12, 13]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map { (inputParameter: (Ranking, UserVisit)) => {
+    val originalFunction = mapRankingAndUserVisitJoinToTuple(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, (-originalValue._2._1, originalValue._2._2))
+  } }
+  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant48" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel48" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-48.html" class="text-dark">48</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [9]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [9, 10, 11, 12, 13]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map { (inputParameter: (Ranking, UserVisit)) => {
+    val originalFunction = mapRankingAndUserVisitJoinToTuple(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, (originalValue._2._1, 0))
+  } }
+  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant49" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel49" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-49.html" class="text-dark">49</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Lived</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [9]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [9, 10, 11, 12, 13]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map { (inputParameter: (Ranking, UserVisit)) => {
+    val originalFunction = mapRankingAndUserVisitJoinToTuple(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, (originalValue._2._1, 1))
+  } }
+  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant50" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel50" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-50.html" class="text-dark">50</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [9]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [9, 10, 11, 12, 13]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map { (inputParameter: (Ranking, UserVisit)) => {
+    val originalFunction = mapRankingAndUserVisitJoinToTuple(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, (originalValue._2._1, Int.MaxValue))
+  } }
+  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant51" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel51" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-51.html" class="text-dark">51</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [9]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [9, 10, 11, 12, 13]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map { (inputParameter: (Ranking, UserVisit)) => {
+    val originalFunction = mapRankingAndUserVisitJoinToTuple(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, (originalValue._2._1, Int.MinValue))
+  } }
+  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant52" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel52" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-52.html" class="text-dark">52</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [9]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [9, 10, 11, 12, 13]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map { (inputParameter: (Ranking, UserVisit)) => {
+    val originalFunction = mapRankingAndUserVisitJoinToTuple(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, (originalValue._2._1, -originalValue._2._2))
+  } }
+  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant53" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel53" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-53.html" class="text-dark">53</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Filter Transformation Deletion">FTD</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+  val filteredUV: RDD[UserVisit] = userVisits
+  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant54" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel54" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-54.html" class="text-dark">54</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></h5>
+<h5>Status: Lived</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings).distinct()
+  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant55" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel55" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-55.html" class="text-dark">55</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></h5>
+<h5>Status: Lived</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits).distinct()
+  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant56" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel56" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-56.html" class="text-dark">56</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></h5>
+<h5>Status: Lived</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange).distinct()
+  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant57" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel57" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-57.html" class="text-dark">57</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></h5>
+<h5>Status: Lived</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple).distinct()
+  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant58" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel58" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-58.html" class="text-dark">58</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></h5>
+<h5>Status: Lived</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [6]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [6]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple).distinct()
+  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant59" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel59" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-59.html" class="text-dark">59</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></h5>
+<h5>Status: Lived</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [7]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [7]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV).distinct()
+  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant60" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel60" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-60.html" class="text-dark">60</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></h5>
+<h5>Status: Lived</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [8]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [8]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values.distinct()
+  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant61" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel61" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-61.html" class="text-dark">61</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></h5>
+<h5>Status: Lived</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [9]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [9]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple).distinct()
+  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant62" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel62" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-62.html" class="text-dark">62</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></h5>
+<h5>Status: Equivalent</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [10]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [10]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey().distinct()
+  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant63" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel63" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-63.html" class="text-dark">63</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></h5>
+<h5>Status: Equivalent</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [11]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [11]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation).distinct()
+  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant64" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel64" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-64.html" class="text-dark">64</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></h5>
+<h5>Status: Lived</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [12]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [12]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false).distinct()
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant65" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel65" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-65.html" class="text-dark">65</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Join Transformation Replacement">JTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [7]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [7]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.leftOuterJoin(subqueryUV).map(tuple => (tuple._1, (tuple._2._1, tuple._2._2.getOrElse(null.asInstanceOf[UserVisit]))))
+  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant66" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel66" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-66.html" class="text-dark">66</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Join Transformation Replacement">JTR</a></h5>
+<h5>Status: Lived</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [7]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [7]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.rightOuterJoin(subqueryUV).map(tuple => (tuple._1, (tuple._2._1.getOrElse(null.asInstanceOf[Ranking]), tuple._2._2)))
+  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant67" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel67" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-67.html" class="text-dark">67</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Join Transformation Replacement">JTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [7]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [7]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.fullOuterJoin(subqueryUV).map(tuple => (tuple._1, (tuple._2._1.getOrElse(null.asInstanceOf[Ranking]), tuple._2._2.getOrElse(null.asInstanceOf[UserVisit]))))
+  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant68" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel68" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-68.html" class="text-dark">68</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Order Transformation Deletion">OTD</a></h5>
+<h5>Status: Lived</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [12]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [12]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+  val results: RDD[(String, Float, Int)] = subqueryAggregation
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant69" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel69" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-69.html" class="text-dark">69</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Negation of Filter Transformation Predicate">NFTP</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4, 5, 6, 7, 8]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+  val filteredUV: RDD[UserVisit] = userVisits.filter { (inputParameter: UserVisit) => {
+    val originalFunction = filterUserVisitsDateRange(_)
+    val originalValue = originalFunction(inputParameter)
+    !originalValue
+  } }
+  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant70" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel70" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-70.html" class="text-dark">70</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Order Transformation Inversion">OTI</a></h5>
+<h5>Status: Lived</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [12]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+    val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+    val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+    val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+    val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+    val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+    val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+    val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+    val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+    val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+    val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+    val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, false)
+    results
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [12]">
+def join(rankingsLines: RDD[String], userVisitsLines: RDD[String]): RDD[(String, Float, Int)] = {
+  val rankings: RDD[Ranking] = rankingsLines.map(parseRankings)
+  val userVisits: RDD[UserVisit] = userVisitsLines.map(parseUserVisits)
+  val filteredUV: RDD[UserVisit] = userVisits.filter(filterUserVisitsDateRange)
+  val subqueryUV: RDD[(String, UserVisit)] = filteredUV.map(mapUserVisitToTuple)
+  val subqueryR: RDD[(String, Ranking)] = rankings.map(mapRankingToTuple)
+  val subqueryJoin: RDD[(String, (Ranking, UserVisit))] = subqueryR.join(subqueryUV)
+  val subqueryJoinValues: RDD[(Ranking, UserVisit)] = subqueryJoin.values
+  val subquerySelect: RDD[(String, (Float, Int))] = subqueryJoinValues.map(mapRankingAndUserVisitJoinToTuple)
+  val subqueryGroup: RDD[(String, Iterable[(Float, Int)])] = subquerySelect.groupByKey()
+  val subqueryAggregation: RDD[(String, Float, Int)] = subqueryGroup.map(mapAggregation)
+  val results: RDD[(String, Float, Int)] = subqueryAggregation.sortBy(_._2, true)
+  results
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Removed Mutant Modals -->
+
+</main>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+<script type="text/javascript">
+ SyntaxHighlighter.all()
+</script>
+<script >
+$(document).ready(function() {
+  $('table.display').DataTable( {
+    fixedHeader: {
+      header: true,
+      footer: true
+    },
+    "lengthMenu": [[5, 10, 20, -1], [5, 10, 20, "All"]]
+  } );
+} );
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+});
+</script>
+</body>
+</html>
+    

@@ -1,0 +1,9 @@
+{
+  "id" : 2,
+  "originalProgramId" : 1,
+  "mutationOperator" : "MTR",
+  "mutationOperatorDescription" : "Mapping Transformation Replacement",
+  "mutantCode" : "def aggregation(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map { (inputParameter: String) => {\n    val originalFunction = parseUserVisits(_)\n    val originalValue = originalFunction(inputParameter)\n    null.asInstanceOf[UserVisit]\n  } }\n  val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (x: Float, y: Float) => x + y }\n  results\n}",
+  "originalCode" : "def aggregation(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)\n    results\n  }",
+  "status" : "Killed"
+}

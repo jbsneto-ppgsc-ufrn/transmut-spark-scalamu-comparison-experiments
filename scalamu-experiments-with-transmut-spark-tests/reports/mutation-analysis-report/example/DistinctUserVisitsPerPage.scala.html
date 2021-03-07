@@ -1,0 +1,814 @@
+
+
+<html>
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/languages/scala.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/styles/github.min.css">
+    <script>hljs.initHighlightingOnLoad();</script>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" type="text/css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+
+    <style type="text/css">
+        @import url(&#x27;https://fonts.googleapis.com/css?family=Fira+Mono|Raleway&#x27;);
+
+html,
+body,
+div,
+span,
+p,
+blockquote,
+pre {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-weight: inherit;
+    font-style: inherit;
+    font-size: 100%;
+    font-family: inherit;
+    vertical-align: baseline;
+}
+.meter {
+    height: 16px;
+    position: relative;
+    background: #BB2020;
+}
+.meter span {
+    display: block;
+    height: 100%;
+    background-color: rgb(43, 194, 83);
+    background-image: -webkit-gradient( linear, left bottom, left top, color-stop(0, rgb(43, 194, 83)), color-stop(1, rgb(84, 240, 84)));
+    background-image: -webkit-linear-gradient( center bottom, rgb(43, 194, 83) 37%, rgb(84, 240, 84) 69%);
+    background-image: -moz-linear-gradient( center bottom, rgb(43, 194, 83) 37%, rgb(84, 240, 84) 69%);
+    background-image: -ms-linear-gradient( center bottom, rgb(43, 194, 83) 37%, rgb(84, 240, 84) 69%);
+    background-image: -o-linear-gradient( center bottom, rgb(43, 194, 83) 37%, rgb(84, 240, 84) 69%);
+    -webkit-box-shadow: inset 0 2px 9px rgba(255, 255, 255, 0.3), inset 0 -2px 6px rgba(0, 0, 0, 0.4);
+    -moz-box-shadow: inset 0 2px 9px rgba(255, 255, 255, 0.3), inset 0 -2px 6px rgba(0, 0, 0, 0.4);
+    position: relative;
+    overflow: hidden;
+}
+.popover {
+  max-width: 100%;
+}
+.popover-content {
+  font-size: 15px;
+  font-family: Fira Code, Fira Mono, monospace;
+}
+th {
+    text-align: left;
+}
+body {
+    line-height: 1;
+    color: black;
+    background: white;
+    font-family: Raleway, sans-serif;
+}
+code, pre {
+    font-family: Fira Mono, monospace;
+}
+alert { 
+    border: 0;
+    border-radius: 0;
+}
+.src {
+    padding: 0;
+}
+.hljs {
+    padding: 1px;
+}
+.covered {
+    background-color: #aaffaa
+}
+.uncovered {
+    background-color: #ffaaaa
+}
+.na {
+    background-color: #f8f8f8
+}
+.killed {
+    background-color: #aaffaa
+}
+.no_coverage {
+    background-color: #ffaaaa
+}
+.alive {
+    background-color: #ffaaaa
+}
+.failure {
+    background-color: #FFFF4D;
+}
+.timed_out {
+    background-color: #FFFF4D;
+}
+.oom {
+    background-color: #FFFF4D;
+}
+.untested {
+    background-color: #FFFF4D
+}
+.mono {
+    font-family: Fira Mono, monospace;
+}
+
+    </style>
+</head>
+<body>
+<div class="alert alert-info">
+    <strong>DistinctUserVisitsPerPage.scala</strong>
+</div>
+
+<table class="src" style="font-size:13px">
+    
+    
+    <tr id="line1">
+        <td class=na>
+            1
+        </td>
+        <td class="na">
+            <a href="#group1"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">package example </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line2">
+        <td class=na>
+            2
+        </td>
+        <td class="na">
+            <a href="#group2"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na"> </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line3">
+        <td class=na>
+            3
+        </td>
+        <td class="na">
+            <a href="#group3"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">import java.sql.Date </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line4">
+        <td class=na>
+            4
+        </td>
+        <td class="na">
+            <a href="#group4"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na"> </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line5">
+        <td class=na>
+            5
+        </td>
+        <td class="na">
+            <a href="#group5"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">import org.apache.log4j.Level </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line6">
+        <td class=na>
+            6
+        </td>
+        <td class="na">
+            <a href="#group6"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">import org.apache.log4j.Logger </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line7">
+        <td class=na>
+            7
+        </td>
+        <td class="na">
+            <a href="#group7"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">import org.apache.spark.SparkConf </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line8">
+        <td class=na>
+            8
+        </td>
+        <td class="na">
+            <a href="#group8"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">import org.apache.spark.SparkContext </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line9">
+        <td class=na>
+            9
+        </td>
+        <td class="na">
+            <a href="#group9"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">import org.apache.spark.rdd.RDD </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line10">
+        <td class=na>
+            10
+        </td>
+        <td class="na">
+            <a href="#group10"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na"> </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line11">
+        <td class=na>
+            11
+        </td>
+        <td class="na">
+            <a href="#group11"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">object DistinctUserVisitsPerPage { </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line12">
+        <td class=na>
+            12
+        </td>
+        <td class="na">
+            <a href="#group12"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na"> </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line13">
+        <td class=na>
+            13
+        </td>
+        <td class="na">
+            <a href="#group13"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">  /* </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line14">
+        <td class=na>
+            14
+        </td>
+        <td class="na">
+            <a href="#group14"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">   * UserVisits </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line15">
+        <td class=na>
+            15
+        </td>
+        <td class="na">
+            <a href="#group15"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">   *  </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line16">
+        <td class=na>
+            16
+        </td>
+        <td class="na">
+            <a href="#group16"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">   * Stores server logs for each web page </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line17">
+        <td class=na>
+            17
+        </td>
+        <td class="na">
+            <a href="#group17"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">   *  </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line18">
+        <td class=na>
+            18
+        </td>
+        <td class="na">
+            <a href="#group18"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">   * sourceIP VARCHAR(116) </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line19">
+        <td class=na>
+            19
+        </td>
+        <td class="na">
+            <a href="#group19"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">   * destURL VARCHAR(100) </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line20">
+        <td class=na>
+            20
+        </td>
+        <td class="na">
+            <a href="#group20"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">   * visitDate DATE </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line21">
+        <td class=na>
+            21
+        </td>
+        <td class="na">
+            <a href="#group21"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">   * adRevenue FLOAT </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line22">
+        <td class=na>
+            22
+        </td>
+        <td class="na">
+            <a href="#group22"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">   * userAgent VARCHAR(256) </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line23">
+        <td class=na>
+            23
+        </td>
+        <td class="na">
+            <a href="#group23"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">   * countryCode CHAR(3) </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line24">
+        <td class=na>
+            24
+        </td>
+        <td class="na">
+            <a href="#group24"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">   * languageCode CHAR(6) </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line25">
+        <td class=na>
+            25
+        </td>
+        <td class="na">
+            <a href="#group25"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">   * searchWord VARCHAR(32) </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line26">
+        <td class=na>
+            26
+        </td>
+        <td class="na">
+            <a href="#group26"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">   * duration INT </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line27">
+        <td class=na>
+            27
+        </td>
+        <td class="na">
+            <a href="#group27"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">   */ </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line28">
+        <td class=na>
+            28
+        </td>
+        <td class="na">
+            <a href="#group28"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">  case class UserVisit(sourceIP: String, destURL: String, visitDate: Date, </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line29">
+        <td class=na>
+            29
+        </td>
+        <td class="na">
+            <a href="#group29"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">                       adRevenue: Float, userAgent: String, countryCode: String, </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line30">
+        <td class=na>
+            30
+        </td>
+        <td class="na">
+            <a href="#group30"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">                       languageCode: String, searchWord: String, duration: Int) </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line31">
+        <td class=na>
+            31
+        </td>
+        <td class="na">
+            <a href="#group31"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na"> </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line32">
+        <td class=na>
+            32
+        </td>
+        <td class="na">
+            <a href="#group32"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">  def parseUserVisits(line: String): UserVisit = { </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line33">
+        <td class=na>
+            33
+        </td>
+        <td class="na">
+            <a href="#group33"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    val fields = line.split(&#x27;,&#x27;) </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line34">
+        <td class=na>
+            34
+        </td>
+        <td class="na">
+            <a href="#group34"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    val userVisit: UserVisit = UserVisit(fields(0), fields(1), Date.valueOf(fields(2)), </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line35">
+        <td class=na>
+            35
+        </td>
+        <td class="na">
+            <a href="#group35"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">      fields(3).toFloat, fields(4), fields(5), </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line36">
+        <td class=na>
+            36
+        </td>
+        <td class="na">
+            <a href="#group36"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">      fields(6), fields(7), fields(8).toInt) </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line37">
+        <td class=na>
+            37
+        </td>
+        <td class="na">
+            <a href="#group37"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    return userVisit </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line38">
+        <td class=na>
+            38
+        </td>
+        <td class="na">
+            <a href="#group38"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">  } </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line39">
+        <td class=na>
+            39
+        </td>
+        <td class="na">
+            <a href="#group39"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">   </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line40">
+        <td class=na>
+            40
+        </td>
+        <td class="na">
+            <a href="#group40"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">  def mapUserVisitToTuple(u: UserVisit) = (u.destURL, u.sourceIP) </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line41">
+        <td class=na>
+            41
+        </td>
+        <td class="na">
+            <a href="#group41"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">   </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line42">
+        <td class=na>
+            42
+        </td>
+        <td class="na">
+            <a href="#group42"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">  def mapSourceIPToSet(u: (String, String)) = (u._1, Set(u._2)) </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line43">
+        <td class=na>
+            43
+        </td>
+        <td class="na">
+            <a href="#group43"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">   </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line44">
+        <td class=covered>
+            44
+        </td>
+        <td class="covered">
+            <a href="#group44"><b>1</b></a>
+        </td>
+        <td width="99%" class="covered">
+            <pre><code class="scala covered">  def setUnion(a: Set[String], b: Set[String]) = a ++ b </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line45">
+        <td class=na>
+            45
+        </td>
+        <td class="na">
+            <a href="#group45"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na"> </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line46">
+        <td class=na>
+            46
+        </td>
+        <td class="na">
+            <a href="#group46"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">  def distinctUserVisitsPerPage(input: RDD[String]) = { </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line47">
+        <td class=na>
+            47
+        </td>
+        <td class="na">
+            <a href="#group47"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    val userVisits: RDD[UserVisit] = input.map(parseUserVisits) </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line48">
+        <td class=na>
+            48
+        </td>
+        <td class="na">
+            <a href="#group48"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple) </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line49">
+        <td class=na>
+            49
+        </td>
+        <td class="na">
+            <a href="#group49"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet) </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line50">
+        <td class=na>
+            50
+        </td>
+        <td class="na">
+            <a href="#group50"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion) </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line51">
+        <td class=na>
+            51
+        </td>
+        <td class="na">
+            <a href="#group51"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">    distinctSites </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line52">
+        <td class=na>
+            52
+        </td>
+        <td class="na">
+            <a href="#group52"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">  } </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line53">
+        <td class=na>
+            53
+        </td>
+        <td class="na">
+            <a href="#group53"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">   </code></pre>
+        </td>
+    </tr>
+    
+    <tr id="line54">
+        <td class=na>
+            54
+        </td>
+        <td class="na">
+            <a href="#group54"><b></b></a>
+        </td>
+        <td width="99%" class="na">
+            <pre><code class="scala na">} </code></pre>
+        </td>
+    </tr>
+    
+</table>
+
+<h2>Mutants</h2>
+<table class="src" cellpadding="3px">
+    
+    <tr>
+        <td>
+            <a href="#line44" id="group44">44</a>
+        </td>
+        <td width="99%">
+            
+                <pre class="killed mutant" data-toggle="popover" 
+                     data-placement="auto top" data-html="true" 
+                     title="Mutation" data-trigger="hover" 
+                     data-content="
+Original: &lt;pre&gt;&lt;code&gt;a.++(b)&lt;/code&gt;&lt;/pre&gt;
+&lt;br&gt;
+Mutated: &lt;pre&gt;&lt;code&gt;a&lt;/code&gt;&lt;/pre&gt;
+     ">Replaced expression, typed A =&gt; A, with its lhs    -&gt; Killed by example.DistinctUserVisitsPerPageTest</pre>
+            
+        </td>
+    </tr>
+    <tr></tr>
+    
+</table>
+
+<h2>Examined tests</h2>
+<ol>
+    
+      <li class="mono" style="white-space:pre;">ScalaTest test: example.DistinctUserVisitsPerPageTest</li>
+    
+</ol>
+<br/>
+
+<script>
+    $(document).ready(function(){
+      $('[data-toggle="popover"]').popover({ container: 'body' });
+    });
+</script>
+
+</body>
+</html>

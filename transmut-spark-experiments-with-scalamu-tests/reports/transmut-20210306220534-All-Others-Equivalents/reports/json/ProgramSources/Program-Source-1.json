@@ -1,0 +1,673 @@
+{
+  "id" : 1,
+  "source" : "target/transmut-20210306220534/mutated-src/example/AggregationQuery.scala",
+  "sourceName" : "AggregationQuery",
+  "programs" : [
+    {
+      "id" : 1,
+      "programSourceId" : 1,
+      "name" : "aggregation",
+      "code" : "def aggregation(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)\n    results\n  }",
+      "datasets" : [
+        {
+          "id" : 1,
+          "name" : "input",
+          "datasetType" : "RDD[String]",
+          "inputDataset" : true,
+          "outputDataset" : false
+        },
+        {
+          "id" : 2,
+          "name" : "userVisits",
+          "datasetType" : "RDD[UserVisit]",
+          "inputDataset" : false,
+          "outputDataset" : false
+        },
+        {
+          "id" : 3,
+          "name" : "userVisitsTuples",
+          "datasetType" : "RDD[(String, Float)]",
+          "inputDataset" : false,
+          "outputDataset" : false
+        },
+        {
+          "id" : 4,
+          "name" : "results",
+          "datasetType" : "RDD[(String, Float)]",
+          "inputDataset" : false,
+          "outputDataset" : true
+        }
+      ],
+      "transformations" : [
+        {
+          "id" : 1,
+          "name" : "map",
+          "inputTypes" : [
+            "RDD[String]"
+          ],
+          "outputTypes" : [
+            "RDD[UserVisit]"
+          ],
+          "loadTransformation" : false
+        },
+        {
+          "id" : 2,
+          "name" : "map",
+          "inputTypes" : [
+            "RDD[UserVisit]"
+          ],
+          "outputTypes" : [
+            "RDD[(String, Float)]"
+          ],
+          "loadTransformation" : false
+        },
+        {
+          "id" : 3,
+          "name" : "reduceByKey",
+          "inputTypes" : [
+            "RDD[(String, Float)]"
+          ],
+          "outputTypes" : [
+            "RDD[(String, Float)]"
+          ],
+          "loadTransformation" : false
+        }
+      ],
+      "edges" : [
+        {
+          "id" : 1,
+          "datasetId" : 1,
+          "transformationId" : 1,
+          "direction" : "DatasetToTransformation"
+        },
+        {
+          "id" : 2,
+          "datasetId" : 2,
+          "transformationId" : 1,
+          "direction" : "TransformationToDataset"
+        },
+        {
+          "id" : 3,
+          "datasetId" : 2,
+          "transformationId" : 2,
+          "direction" : "DatasetToTransformation"
+        },
+        {
+          "id" : 4,
+          "datasetId" : 3,
+          "transformationId" : 2,
+          "direction" : "TransformationToDataset"
+        },
+        {
+          "id" : 5,
+          "datasetId" : 3,
+          "transformationId" : 3,
+          "direction" : "DatasetToTransformation"
+        },
+        {
+          "id" : 6,
+          "datasetId" : 4,
+          "transformationId" : 3,
+          "direction" : "TransformationToDataset"
+        }
+      ],
+      "mutants" : [
+        {
+          "id" : 1,
+          "originalProgramId" : 1,
+          "mutationOperator" : "UTD",
+          "mutationOperatorDescription" : "Unary Transformation Deletion",
+          "mutantCode" : "def aggregation(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n  val results: RDD[(String, Float)] = userVisitsTuples\n  results\n}",
+          "originalCode" : "def aggregation(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)\n    results\n  }",
+          "status" : "Killed"
+        },
+        {
+          "id" : 2,
+          "originalProgramId" : 1,
+          "mutationOperator" : "MTR",
+          "mutationOperatorDescription" : "Mapping Transformation Replacement",
+          "mutantCode" : "def aggregation(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map { (inputParameter: String) => {\n    val originalFunction = parseUserVisits(_)\n    val originalValue = originalFunction(inputParameter)\n    null.asInstanceOf[UserVisit]\n  } }\n  val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (x: Float, y: Float) => x + y }\n  results\n}",
+          "originalCode" : "def aggregation(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)\n    results\n  }",
+          "status" : "Killed"
+        },
+        {
+          "id" : 3,
+          "originalProgramId" : 1,
+          "mutationOperator" : "MTR",
+          "mutationOperatorDescription" : "Mapping Transformation Replacement",
+          "mutantCode" : "def aggregation(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userVisitsTuples: RDD[(String, Float)] = userVisits.map { (inputParameter: UserVisit) => {\n    val originalFunction = mapUserVisitToTuple(_)\n    val originalValue = originalFunction(inputParameter)\n    (\"\", originalValue._2)\n  } }\n  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (x: Float, y: Float) => x + y }\n  results\n}",
+          "originalCode" : "def aggregation(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)\n    results\n  }",
+          "status" : "Killed"
+        },
+        {
+          "id" : 4,
+          "originalProgramId" : 1,
+          "mutationOperator" : "MTR",
+          "mutationOperatorDescription" : "Mapping Transformation Replacement",
+          "mutantCode" : "def aggregation(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userVisitsTuples: RDD[(String, Float)] = userVisits.map { (inputParameter: UserVisit) => {\n    val originalFunction = mapUserVisitToTuple(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, 0f)\n  } }\n  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (x: Float, y: Float) => x + y }\n  results\n}",
+          "originalCode" : "def aggregation(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)\n    results\n  }",
+          "status" : "Killed"
+        },
+        {
+          "id" : 5,
+          "originalProgramId" : 1,
+          "mutationOperator" : "MTR",
+          "mutationOperatorDescription" : "Mapping Transformation Replacement",
+          "mutantCode" : "def aggregation(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userVisitsTuples: RDD[(String, Float)] = userVisits.map { (inputParameter: UserVisit) => {\n    val originalFunction = mapUserVisitToTuple(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, 1f)\n  } }\n  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (x: Float, y: Float) => x + y }\n  results\n}",
+          "originalCode" : "def aggregation(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)\n    results\n  }",
+          "status" : "Lived"
+        },
+        {
+          "id" : 6,
+          "originalProgramId" : 1,
+          "mutationOperator" : "MTR",
+          "mutationOperatorDescription" : "Mapping Transformation Replacement",
+          "mutantCode" : "def aggregation(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userVisitsTuples: RDD[(String, Float)] = userVisits.map { (inputParameter: UserVisit) => {\n    val originalFunction = mapUserVisitToTuple(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, Float.MaxValue)\n  } }\n  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (x: Float, y: Float) => x + y }\n  results\n}",
+          "originalCode" : "def aggregation(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)\n    results\n  }",
+          "status" : "Killed"
+        },
+        {
+          "id" : 7,
+          "originalProgramId" : 1,
+          "mutationOperator" : "MTR",
+          "mutationOperatorDescription" : "Mapping Transformation Replacement",
+          "mutantCode" : "def aggregation(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userVisitsTuples: RDD[(String, Float)] = userVisits.map { (inputParameter: UserVisit) => {\n    val originalFunction = mapUserVisitToTuple(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, Float.MinValue)\n  } }\n  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (x: Float, y: Float) => x + y }\n  results\n}",
+          "originalCode" : "def aggregation(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)\n    results\n  }",
+          "status" : "Killed"
+        },
+        {
+          "id" : 8,
+          "originalProgramId" : 1,
+          "mutationOperator" : "MTR",
+          "mutationOperatorDescription" : "Mapping Transformation Replacement",
+          "mutantCode" : "def aggregation(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userVisitsTuples: RDD[(String, Float)] = userVisits.map { (inputParameter: UserVisit) => {\n    val originalFunction = mapUserVisitToTuple(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, -originalValue._2)\n  } }\n  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (x: Float, y: Float) => x + y }\n  results\n}",
+          "originalCode" : "def aggregation(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)\n    results\n  }",
+          "status" : "Killed"
+        },
+        {
+          "id" : 9,
+          "originalProgramId" : 1,
+          "mutationOperator" : "DTI",
+          "mutationOperatorDescription" : "Distinct Transformation Insertion",
+          "mutantCode" : "def aggregation(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits).distinct()\n  val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (x: Float, y: Float) => x + y }\n  results\n}",
+          "originalCode" : "def aggregation(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)\n    results\n  }",
+          "status" : "Killed"
+        },
+        {
+          "id" : 10,
+          "originalProgramId" : 1,
+          "mutationOperator" : "DTI",
+          "mutationOperatorDescription" : "Distinct Transformation Insertion",
+          "mutantCode" : "def aggregation(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple).distinct()\n  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (x: Float, y: Float) => x + y }\n  results\n}",
+          "originalCode" : "def aggregation(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)\n    results\n  }",
+          "status" : "Killed"
+        },
+        {
+          "id" : 11,
+          "originalProgramId" : 1,
+          "mutationOperator" : "DTI",
+          "mutationOperatorDescription" : "Distinct Transformation Insertion",
+          "mutantCode" : "def aggregation(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (x: Float, y: Float) => x + y }.distinct()\n  results\n}",
+          "originalCode" : "def aggregation(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)\n    results\n  }",
+          "status" : "Equivalent"
+        },
+        {
+          "id" : 12,
+          "originalProgramId" : 1,
+          "mutationOperator" : "ATR",
+          "mutationOperatorDescription" : "Aggregation Transformation Replacement",
+          "mutantCode" : "def aggregation(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (firstParameter: Float, secondParameter: Float) => firstParameter }\n  results\n}",
+          "originalCode" : "def aggregation(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)\n    results\n  }",
+          "status" : "Killed"
+        },
+        {
+          "id" : 13,
+          "originalProgramId" : 1,
+          "mutationOperator" : "ATR",
+          "mutationOperatorDescription" : "Aggregation Transformation Replacement",
+          "mutantCode" : "def aggregation(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (firstParameter: Float, secondParameter: Float) => secondParameter }\n  results\n}",
+          "originalCode" : "def aggregation(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)\n    results\n  }",
+          "status" : "Killed"
+        },
+        {
+          "id" : 14,
+          "originalProgramId" : 1,
+          "mutationOperator" : "ATR",
+          "mutationOperatorDescription" : "Aggregation Transformation Replacement",
+          "mutantCode" : "def aggregation(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (firstParameter: Float, secondParameter: Float) => {\n    val originalFunction = ((x: Float, y: Float) => x + y)(_, _)\n    originalFunction(firstParameter, firstParameter)\n  } }\n  results\n}",
+          "originalCode" : "def aggregation(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)\n    results\n  }",
+          "status" : "Lived"
+        },
+        {
+          "id" : 15,
+          "originalProgramId" : 1,
+          "mutationOperator" : "ATR",
+          "mutationOperatorDescription" : "Aggregation Transformation Replacement",
+          "mutantCode" : "def aggregation(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (firstParameter: Float, secondParameter: Float) => {\n    val originalFunction = ((x: Float, y: Float) => x + y)(_, _)\n    originalFunction(secondParameter, secondParameter)\n  } }\n  results\n}",
+          "originalCode" : "def aggregation(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)\n    results\n  }",
+          "status" : "Lived"
+        },
+        {
+          "id" : 16,
+          "originalProgramId" : 1,
+          "mutationOperator" : "ATR",
+          "mutationOperatorDescription" : "Aggregation Transformation Replacement",
+          "mutantCode" : "def aggregation(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (firstParameter: Float, secondParameter: Float) => {\n    val originalFunction = ((x: Float, y: Float) => x + y)(_, _)\n    originalFunction(secondParameter, firstParameter)\n  } }\n  results\n}",
+          "originalCode" : "def aggregation(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)\n    results\n  }",
+          "status" : "Equivalent"
+        }
+      ],
+      "removedMutants" : [
+      ],
+      "mutationOperatorsMetrics" : {
+        "totalMutantsPerOperator" : {
+          "FTD" : 0,
+          "JTR" : 0,
+          "UTR" : 0,
+          "MTR" : 7,
+          "UTD" : 1,
+          "OTD" : 0,
+          "BTR" : 0,
+          "STR" : 0,
+          "BTS" : 0,
+          "ATR" : 5,
+          "OTI" : 0,
+          "DTI" : 3,
+          "DTD" : 0,
+          "NFTP" : 0,
+          "UTS" : 0
+        },
+        "totalKilledMutantsPerOperator" : {
+          "FTD" : 0,
+          "JTR" : 0,
+          "UTR" : 0,
+          "MTR" : 6,
+          "UTD" : 1,
+          "OTD" : 0,
+          "BTR" : 0,
+          "STR" : 0,
+          "BTS" : 0,
+          "ATR" : 2,
+          "OTI" : 0,
+          "DTI" : 2,
+          "DTD" : 0,
+          "NFTP" : 0,
+          "UTS" : 0
+        },
+        "totalLivedMutantsPerOperator" : {
+          "FTD" : 0,
+          "JTR" : 0,
+          "UTR" : 0,
+          "MTR" : 1,
+          "UTD" : 0,
+          "OTD" : 0,
+          "BTR" : 0,
+          "STR" : 0,
+          "BTS" : 0,
+          "ATR" : 2,
+          "OTI" : 0,
+          "DTI" : 0,
+          "DTD" : 0,
+          "NFTP" : 0,
+          "UTS" : 0
+        },
+        "totalEquivalentMutantsPerOperator" : {
+          "FTD" : 0,
+          "JTR" : 0,
+          "UTR" : 0,
+          "MTR" : 0,
+          "UTD" : 0,
+          "OTD" : 0,
+          "BTR" : 0,
+          "STR" : 0,
+          "BTS" : 0,
+          "ATR" : 1,
+          "OTI" : 0,
+          "DTI" : 1,
+          "DTD" : 0,
+          "NFTP" : 0,
+          "UTS" : 0
+        },
+        "totalErrorMutantsPerOperator" : {
+          "FTD" : 0,
+          "JTR" : 0,
+          "UTR" : 0,
+          "MTR" : 0,
+          "UTD" : 0,
+          "OTD" : 0,
+          "BTR" : 0,
+          "STR" : 0,
+          "BTS" : 0,
+          "ATR" : 0,
+          "OTI" : 0,
+          "DTI" : 0,
+          "DTD" : 0,
+          "NFTP" : 0,
+          "UTS" : 0
+        },
+        "totalRemovedMutantsPerOperator" : {
+          "FTD" : 0,
+          "JTR" : 0,
+          "UTR" : 0,
+          "MTR" : 0,
+          "UTD" : 0,
+          "OTD" : 0,
+          "BTR" : 0,
+          "STR" : 0,
+          "BTS" : 0,
+          "ATR" : 0,
+          "OTI" : 0,
+          "DTI" : 0,
+          "DTD" : 0,
+          "NFTP" : 0,
+          "UTS" : 0
+        },
+        "descriptionPerOperator" : {
+          "FTD" : "Filter Transformation Deletion",
+          "JTR" : "Join Transformation Replacement",
+          "UTR" : "Unary Transformation Replacement",
+          "MTR" : "Mapping Transformation Replacement",
+          "UTD" : "Unary Transformation Deletion",
+          "OTD" : "Order Transformation Deletion",
+          "BTR" : "Binary Transformation Replacement",
+          "STR" : "Set Transformation Replacement",
+          "BTS" : "Binary Transformation Swap",
+          "ATR" : "Aggregation Transformation Replacement",
+          "OTI" : "Order Transformation Inversion",
+          "DTI" : "Distinct Transformation Insertion",
+          "DTD" : "Distinct Transformation Deletion",
+          "NFTP" : "Negation of Filter Transformation Predicate",
+          "UTS" : "Unary Transformation Swap"
+        }
+      },
+      "totalDatasets" : 4,
+      "totalTransformations" : 3,
+      "totalMutants" : 16,
+      "totalKilledMutants" : 11,
+      "totalLivedMutants" : 3,
+      "totalEquivalentMutants" : 2,
+      "totalErrorMutants" : 0,
+      "totalRemovedMutants" : 0,
+      "mutationScore" : 0.78571427
+    }
+  ],
+  "mutants" : [
+    {
+      "id" : 1,
+      "originalProgramId" : 1,
+      "mutationOperator" : "UTD",
+      "mutationOperatorDescription" : "Unary Transformation Deletion",
+      "mutantCode" : "def aggregation(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n  val results: RDD[(String, Float)] = userVisitsTuples\n  results\n}",
+      "originalCode" : "def aggregation(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)\n    results\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 2,
+      "originalProgramId" : 1,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def aggregation(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map { (inputParameter: String) => {\n    val originalFunction = parseUserVisits(_)\n    val originalValue = originalFunction(inputParameter)\n    null.asInstanceOf[UserVisit]\n  } }\n  val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (x: Float, y: Float) => x + y }\n  results\n}",
+      "originalCode" : "def aggregation(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)\n    results\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 3,
+      "originalProgramId" : 1,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def aggregation(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userVisitsTuples: RDD[(String, Float)] = userVisits.map { (inputParameter: UserVisit) => {\n    val originalFunction = mapUserVisitToTuple(_)\n    val originalValue = originalFunction(inputParameter)\n    (\"\", originalValue._2)\n  } }\n  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (x: Float, y: Float) => x + y }\n  results\n}",
+      "originalCode" : "def aggregation(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)\n    results\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 4,
+      "originalProgramId" : 1,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def aggregation(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userVisitsTuples: RDD[(String, Float)] = userVisits.map { (inputParameter: UserVisit) => {\n    val originalFunction = mapUserVisitToTuple(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, 0f)\n  } }\n  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (x: Float, y: Float) => x + y }\n  results\n}",
+      "originalCode" : "def aggregation(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)\n    results\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 5,
+      "originalProgramId" : 1,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def aggregation(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userVisitsTuples: RDD[(String, Float)] = userVisits.map { (inputParameter: UserVisit) => {\n    val originalFunction = mapUserVisitToTuple(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, 1f)\n  } }\n  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (x: Float, y: Float) => x + y }\n  results\n}",
+      "originalCode" : "def aggregation(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)\n    results\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 6,
+      "originalProgramId" : 1,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def aggregation(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userVisitsTuples: RDD[(String, Float)] = userVisits.map { (inputParameter: UserVisit) => {\n    val originalFunction = mapUserVisitToTuple(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, Float.MaxValue)\n  } }\n  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (x: Float, y: Float) => x + y }\n  results\n}",
+      "originalCode" : "def aggregation(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)\n    results\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 7,
+      "originalProgramId" : 1,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def aggregation(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userVisitsTuples: RDD[(String, Float)] = userVisits.map { (inputParameter: UserVisit) => {\n    val originalFunction = mapUserVisitToTuple(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, Float.MinValue)\n  } }\n  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (x: Float, y: Float) => x + y }\n  results\n}",
+      "originalCode" : "def aggregation(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)\n    results\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 8,
+      "originalProgramId" : 1,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def aggregation(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userVisitsTuples: RDD[(String, Float)] = userVisits.map { (inputParameter: UserVisit) => {\n    val originalFunction = mapUserVisitToTuple(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, -originalValue._2)\n  } }\n  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (x: Float, y: Float) => x + y }\n  results\n}",
+      "originalCode" : "def aggregation(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)\n    results\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 9,
+      "originalProgramId" : 1,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def aggregation(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits).distinct()\n  val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (x: Float, y: Float) => x + y }\n  results\n}",
+      "originalCode" : "def aggregation(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)\n    results\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 10,
+      "originalProgramId" : 1,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def aggregation(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple).distinct()\n  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (x: Float, y: Float) => x + y }\n  results\n}",
+      "originalCode" : "def aggregation(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)\n    results\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 11,
+      "originalProgramId" : 1,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def aggregation(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (x: Float, y: Float) => x + y }.distinct()\n  results\n}",
+      "originalCode" : "def aggregation(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)\n    results\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 12,
+      "originalProgramId" : 1,
+      "mutationOperator" : "ATR",
+      "mutationOperatorDescription" : "Aggregation Transformation Replacement",
+      "mutantCode" : "def aggregation(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (firstParameter: Float, secondParameter: Float) => firstParameter }\n  results\n}",
+      "originalCode" : "def aggregation(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)\n    results\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 13,
+      "originalProgramId" : 1,
+      "mutationOperator" : "ATR",
+      "mutationOperatorDescription" : "Aggregation Transformation Replacement",
+      "mutantCode" : "def aggregation(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (firstParameter: Float, secondParameter: Float) => secondParameter }\n  results\n}",
+      "originalCode" : "def aggregation(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)\n    results\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 14,
+      "originalProgramId" : 1,
+      "mutationOperator" : "ATR",
+      "mutationOperatorDescription" : "Aggregation Transformation Replacement",
+      "mutantCode" : "def aggregation(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (firstParameter: Float, secondParameter: Float) => {\n    val originalFunction = ((x: Float, y: Float) => x + y)(_, _)\n    originalFunction(firstParameter, firstParameter)\n  } }\n  results\n}",
+      "originalCode" : "def aggregation(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)\n    results\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 15,
+      "originalProgramId" : 1,
+      "mutationOperator" : "ATR",
+      "mutationOperatorDescription" : "Aggregation Transformation Replacement",
+      "mutantCode" : "def aggregation(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (firstParameter: Float, secondParameter: Float) => {\n    val originalFunction = ((x: Float, y: Float) => x + y)(_, _)\n    originalFunction(secondParameter, secondParameter)\n  } }\n  results\n}",
+      "originalCode" : "def aggregation(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)\n    results\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 16,
+      "originalProgramId" : 1,
+      "mutationOperator" : "ATR",
+      "mutationOperatorDescription" : "Aggregation Transformation Replacement",
+      "mutantCode" : "def aggregation(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (firstParameter: Float, secondParameter: Float) => {\n    val originalFunction = ((x: Float, y: Float) => x + y)(_, _)\n    originalFunction(secondParameter, firstParameter)\n  } }\n  results\n}",
+      "originalCode" : "def aggregation(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)\n    results\n  }",
+      "status" : "Equivalent"
+    }
+  ],
+  "removedMutants" : [
+  ],
+  "mutationOperatorsMetrics" : {
+    "totalMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 7,
+      "UTD" : 1,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 5,
+      "OTI" : 0,
+      "DTI" : 3,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalKilledMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 6,
+      "UTD" : 1,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 2,
+      "OTI" : 0,
+      "DTI" : 2,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalLivedMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 1,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 2,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalEquivalentMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 0,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 1,
+      "OTI" : 0,
+      "DTI" : 1,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalErrorMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 0,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalRemovedMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 0,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "descriptionPerOperator" : {
+      "FTD" : "Filter Transformation Deletion",
+      "JTR" : "Join Transformation Replacement",
+      "UTR" : "Unary Transformation Replacement",
+      "MTR" : "Mapping Transformation Replacement",
+      "UTD" : "Unary Transformation Deletion",
+      "OTD" : "Order Transformation Deletion",
+      "BTR" : "Binary Transformation Replacement",
+      "STR" : "Set Transformation Replacement",
+      "BTS" : "Binary Transformation Swap",
+      "ATR" : "Aggregation Transformation Replacement",
+      "OTI" : "Order Transformation Inversion",
+      "DTI" : "Distinct Transformation Insertion",
+      "DTD" : "Distinct Transformation Deletion",
+      "NFTP" : "Negation of Filter Transformation Predicate",
+      "UTS" : "Unary Transformation Swap"
+    }
+  },
+  "totalPrograms" : 1,
+  "totalDatasets" : 4,
+  "totalTransformations" : 3,
+  "totalMutants" : 16,
+  "totalKilledMutants" : 11,
+  "totalLivedMutants" : 3,
+  "totalEquivalentMutants" : 2,
+  "totalErrorMutants" : 0,
+  "totalRemovedMutants" : 0,
+  "mutationScore" : 0.78571427
+}

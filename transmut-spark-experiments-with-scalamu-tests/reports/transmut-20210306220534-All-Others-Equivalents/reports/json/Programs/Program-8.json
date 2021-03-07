@@ -1,0 +1,383 @@
+{
+  "id" : 8,
+  "programSourceId" : 6,
+  "name" : "unionLogsProblem",
+  "code" : "def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n    val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)\n    val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()\n    val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))\n    cleanLogLines\n  }",
+  "datasets" : [
+    {
+      "id" : 49,
+      "name" : "firstLogs",
+      "datasetType" : "RDD[String]",
+      "inputDataset" : true,
+      "outputDataset" : false
+    },
+    {
+      "id" : 50,
+      "name" : "secondLogs",
+      "datasetType" : "RDD[String]",
+      "inputDataset" : true,
+      "outputDataset" : false
+    },
+    {
+      "id" : 51,
+      "name" : "aggregatedLogLines",
+      "datasetType" : "RDD[String]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 52,
+      "name" : "uniqueLogLines",
+      "datasetType" : "RDD[String]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 53,
+      "name" : "cleanLogLines",
+      "datasetType" : "RDD[String]",
+      "inputDataset" : false,
+      "outputDataset" : true
+    }
+  ],
+  "transformations" : [
+    {
+      "id" : 40,
+      "name" : "union",
+      "inputTypes" : [
+        "RDD[String]",
+        "RDD[String]"
+      ],
+      "outputTypes" : [
+        "RDD[String]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 41,
+      "name" : "distinct",
+      "inputTypes" : [
+        "RDD[String]"
+      ],
+      "outputTypes" : [
+        "RDD[String]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 42,
+      "name" : "filter",
+      "inputTypes" : [
+        "RDD[String]"
+      ],
+      "outputTypes" : [
+        "RDD[String]"
+      ],
+      "loadTransformation" : false
+    }
+  ],
+  "edges" : [
+    {
+      "id" : 82,
+      "datasetId" : 49,
+      "transformationId" : 40,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 83,
+      "datasetId" : 50,
+      "transformationId" : 40,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 84,
+      "datasetId" : 51,
+      "transformationId" : 40,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 85,
+      "datasetId" : 51,
+      "transformationId" : 41,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 86,
+      "datasetId" : 52,
+      "transformationId" : 41,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 87,
+      "datasetId" : 52,
+      "transformationId" : 42,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 88,
+      "datasetId" : 53,
+      "transformationId" : 42,
+      "direction" : "TransformationToDataset"
+    }
+  ],
+  "mutants" : [
+    {
+      "id" : 170,
+      "originalProgramId" : 8,
+      "mutationOperator" : "UTS",
+      "mutationOperatorDescription" : "Unary Transformation Swap",
+      "mutantCode" : "def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n  val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)\n  val uniqueLogLines: RDD[String] = aggregatedLogLines.filter(line => isNotHeader(line))\n  val cleanLogLines: RDD[String] = uniqueLogLines.distinct()\n  cleanLogLines\n}",
+      "originalCode" : "def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n    val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)\n    val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()\n    val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))\n    cleanLogLines\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 171,
+      "originalProgramId" : 8,
+      "mutationOperator" : "UTR",
+      "mutationOperatorDescription" : "Unary Transformation Replacement",
+      "mutantCode" : "def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n  val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)\n  val uniqueLogLines: RDD[String] = aggregatedLogLines.filter(line => isNotHeader(line))\n  val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))\n  cleanLogLines\n}",
+      "originalCode" : "def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n    val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)\n    val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()\n    val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))\n    cleanLogLines\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 172,
+      "originalProgramId" : 8,
+      "mutationOperator" : "UTR",
+      "mutationOperatorDescription" : "Unary Transformation Replacement",
+      "mutantCode" : "def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n  val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)\n  val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()\n  val cleanLogLines: RDD[String] = uniqueLogLines.distinct()\n  cleanLogLines\n}",
+      "originalCode" : "def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n    val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)\n    val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()\n    val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))\n    cleanLogLines\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 173,
+      "originalProgramId" : 8,
+      "mutationOperator" : "UTD",
+      "mutationOperatorDescription" : "Unary Transformation Deletion",
+      "mutantCode" : "def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n  val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)\n  val uniqueLogLines: RDD[String] = aggregatedLogLines\n  val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))\n  cleanLogLines\n}",
+      "originalCode" : "def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n    val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)\n    val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()\n    val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))\n    cleanLogLines\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 174,
+      "originalProgramId" : 8,
+      "mutationOperator" : "UTD",
+      "mutationOperatorDescription" : "Unary Transformation Deletion",
+      "mutantCode" : "def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n  val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)\n  val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()\n  val cleanLogLines: RDD[String] = uniqueLogLines\n  cleanLogLines\n}",
+      "originalCode" : "def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n    val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)\n    val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()\n    val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))\n    cleanLogLines\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 175,
+      "originalProgramId" : 8,
+      "mutationOperator" : "FTD",
+      "mutationOperatorDescription" : "Filter Transformation Deletion",
+      "mutantCode" : "def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n  val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)\n  val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()\n  val cleanLogLines: RDD[String] = uniqueLogLines\n  cleanLogLines\n}",
+      "originalCode" : "def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n    val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)\n    val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()\n    val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))\n    cleanLogLines\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 176,
+      "originalProgramId" : 8,
+      "mutationOperator" : "STR",
+      "mutationOperatorDescription" : "Set Transformation Replacement",
+      "mutantCode" : "def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n  val aggregatedLogLines: RDD[String] = firstLogs.intersection(secondLogs)\n  val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()\n  val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))\n  cleanLogLines\n}",
+      "originalCode" : "def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n    val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)\n    val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()\n    val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))\n    cleanLogLines\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 177,
+      "originalProgramId" : 8,
+      "mutationOperator" : "STR",
+      "mutationOperatorDescription" : "Set Transformation Replacement",
+      "mutantCode" : "def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n  val aggregatedLogLines: RDD[String] = firstLogs.subtract(secondLogs)\n  val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()\n  val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))\n  cleanLogLines\n}",
+      "originalCode" : "def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n    val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)\n    val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()\n    val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))\n    cleanLogLines\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 178,
+      "originalProgramId" : 8,
+      "mutationOperator" : "STR",
+      "mutationOperatorDescription" : "Set Transformation Replacement",
+      "mutantCode" : "def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n  val aggregatedLogLines: RDD[String] = firstLogs\n  val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()\n  val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))\n  cleanLogLines\n}",
+      "originalCode" : "def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n    val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)\n    val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()\n    val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))\n    cleanLogLines\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 179,
+      "originalProgramId" : 8,
+      "mutationOperator" : "STR",
+      "mutationOperatorDescription" : "Set Transformation Replacement",
+      "mutantCode" : "def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n  val aggregatedLogLines: RDD[String] = secondLogs\n  val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()\n  val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))\n  cleanLogLines\n}",
+      "originalCode" : "def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n    val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)\n    val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()\n    val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))\n    cleanLogLines\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 180,
+      "originalProgramId" : 8,
+      "mutationOperator" : "DTD",
+      "mutationOperatorDescription" : "Distinct Transformation Deletion",
+      "mutantCode" : "def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n  val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)\n  val uniqueLogLines: RDD[String] = aggregatedLogLines\n  val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))\n  cleanLogLines\n}",
+      "originalCode" : "def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n    val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)\n    val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()\n    val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))\n    cleanLogLines\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 181,
+      "originalProgramId" : 8,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n  val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs).distinct()\n  val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()\n  val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))\n  cleanLogLines\n}",
+      "originalCode" : "def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n    val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)\n    val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()\n    val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))\n    cleanLogLines\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 182,
+      "originalProgramId" : 8,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n  val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)\n  val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()\n  val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line)).distinct()\n  cleanLogLines\n}",
+      "originalCode" : "def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n    val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)\n    val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()\n    val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))\n    cleanLogLines\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 183,
+      "originalProgramId" : 8,
+      "mutationOperator" : "NFTP",
+      "mutationOperatorDescription" : "Negation of Filter Transformation Predicate",
+      "mutantCode" : "def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n  val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)\n  val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()\n  val cleanLogLines: RDD[String] = uniqueLogLines.filter { (inputParameter: String) => {\n    val originalFunction = (line => isNotHeader(line))(_)\n    val originalValue = originalFunction(inputParameter)\n    !originalValue\n  } }\n  cleanLogLines\n}",
+      "originalCode" : "def unionLogsProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n    val aggregatedLogLines: RDD[String] = firstLogs.union(secondLogs)\n    val uniqueLogLines: RDD[String] = aggregatedLogLines.distinct()\n    val cleanLogLines: RDD[String] = uniqueLogLines.filter(line => isNotHeader(line))\n    cleanLogLines\n  }",
+      "status" : "Killed"
+    }
+  ],
+  "removedMutants" : [
+  ],
+  "mutationOperatorsMetrics" : {
+    "totalMutantsPerOperator" : {
+      "FTD" : 1,
+      "JTR" : 0,
+      "UTR" : 2,
+      "MTR" : 0,
+      "UTD" : 2,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 4,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 2,
+      "DTD" : 1,
+      "NFTP" : 1,
+      "UTS" : 1
+    },
+    "totalKilledMutantsPerOperator" : {
+      "FTD" : 1,
+      "JTR" : 0,
+      "UTR" : 2,
+      "MTR" : 0,
+      "UTD" : 2,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 4,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 1,
+      "NFTP" : 1,
+      "UTS" : 0
+    },
+    "totalLivedMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 0,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalEquivalentMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 0,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 2,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 1
+    },
+    "totalErrorMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 0,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalRemovedMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 0,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "descriptionPerOperator" : {
+      "FTD" : "Filter Transformation Deletion",
+      "JTR" : "Join Transformation Replacement",
+      "UTR" : "Unary Transformation Replacement",
+      "MTR" : "Mapping Transformation Replacement",
+      "UTD" : "Unary Transformation Deletion",
+      "OTD" : "Order Transformation Deletion",
+      "BTR" : "Binary Transformation Replacement",
+      "STR" : "Set Transformation Replacement",
+      "BTS" : "Binary Transformation Swap",
+      "ATR" : "Aggregation Transformation Replacement",
+      "OTI" : "Order Transformation Inversion",
+      "DTI" : "Distinct Transformation Insertion",
+      "DTD" : "Distinct Transformation Deletion",
+      "NFTP" : "Negation of Filter Transformation Predicate",
+      "UTS" : "Unary Transformation Swap"
+    }
+  },
+  "totalDatasets" : 5,
+  "totalTransformations" : 3,
+  "totalMutants" : 14,
+  "totalKilledMutants" : 11,
+  "totalLivedMutants" : 0,
+  "totalEquivalentMutants" : 3,
+  "totalErrorMutants" : 0,
+  "totalRemovedMutants" : 0,
+  "mutationScore" : 1.0
+}

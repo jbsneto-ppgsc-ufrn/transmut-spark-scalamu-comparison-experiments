@@ -1,0 +1,483 @@
+{
+  "id" : 6,
+  "programSourceId" : 1,
+  "name" : "bestMoviesDecade",
+  "code" : "def bestMoviesDecade(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))], minimumVotesRequired: Double, meanOfMeansRatingsOfAllMovies: Double) = {\n    val ratingsStatisticsWithWR: RDD[((Int, String, Int), (Int, Double, Double, Double, Double))] = ratingsStats.map((s: ((Int, String, Int), (Int, Double, Double, Double))) => (s._1, (s._2._1, s._2._2, s._2._3, s._2._4, weighted_rating(s._2._2, s._2._1.toDouble, minimumVotesRequired, meanOfMeansRatingsOfAllMovies))))\n    val ratingsStatisticsWithWRDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = ratingsStatisticsWithWR.map((m: (((Int, String, Int), (Int, Double, Double, Double, Double)))) => (m._1._3 / 10 * 10, (m._1._2, m._2)))\n    val groupByDecade: RDD[(Int, Iterable[(String, (Int, Double, Double, Double, Double))])] = ratingsStatisticsWithWRDecade.groupByKey()\n    val bestMoviesDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = groupByDecade.map((j: (Int, Iterable[(String, (Int, Double, Double, Double, Double))])) => (j._1, j._2.reduce((j1, j2) => if (j1._2._5 > j2._2._5) j1 else j2)))\n    val bestMoviesDecadeSorted: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = bestMoviesDecade.sortByKey(true)\n    bestMoviesDecadeSorted\n  }",
+  "datasets" : [
+    {
+      "id" : 27,
+      "name" : "ratingsStats",
+      "datasetType" : "RDD[(Tuple3[Int, String, Int], Tuple4[Int, Double, Double, Double])]",
+      "inputDataset" : true,
+      "outputDataset" : false
+    },
+    {
+      "id" : 28,
+      "name" : "ratingsStatisticsWithWR",
+      "datasetType" : "RDD[(Tuple3[Int, String, Int], Tuple5[Int, Double, Double, Double, Double])]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 29,
+      "name" : "ratingsStatisticsWithWRDecade",
+      "datasetType" : "RDD[(Int, (String, Tuple5[Int, Double, Double, Double, Double]))]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 30,
+      "name" : "groupByDecade",
+      "datasetType" : "RDD[(Int, Iterable[(String, Tuple5[Int, Double, Double, Double, Double])])]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 31,
+      "name" : "bestMoviesDecade",
+      "datasetType" : "RDD[(Int, (String, Tuple5[Int, Double, Double, Double, Double]))]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 32,
+      "name" : "bestMoviesDecadeSorted",
+      "datasetType" : "RDD[(Int, (String, Tuple5[Int, Double, Double, Double, Double]))]",
+      "inputDataset" : false,
+      "outputDataset" : true
+    }
+  ],
+  "transformations" : [
+    {
+      "id" : 20,
+      "name" : "map",
+      "inputTypes" : [
+        "RDD[(Tuple3[Int, String, Int], Tuple4[Int, Double, Double, Double])]"
+      ],
+      "outputTypes" : [
+        "RDD[(Tuple3[Int, String, Int], Tuple5[Int, Double, Double, Double, Double])]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 21,
+      "name" : "map",
+      "inputTypes" : [
+        "RDD[(Tuple3[Int, String, Int], Tuple5[Int, Double, Double, Double, Double])]"
+      ],
+      "outputTypes" : [
+        "RDD[(Int, (String, Tuple5[Int, Double, Double, Double, Double]))]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 22,
+      "name" : "groupByKey",
+      "inputTypes" : [
+        "RDD[(Int, (String, Tuple5[Int, Double, Double, Double, Double]))]"
+      ],
+      "outputTypes" : [
+        "RDD[(Int, Iterable[(String, Tuple5[Int, Double, Double, Double, Double])])]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 23,
+      "name" : "map",
+      "inputTypes" : [
+        "RDD[(Int, Iterable[(String, Tuple5[Int, Double, Double, Double, Double])])]"
+      ],
+      "outputTypes" : [
+        "RDD[(Int, (String, Tuple5[Int, Double, Double, Double, Double]))]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 24,
+      "name" : "sortByKey",
+      "inputTypes" : [
+        "RDD[(Int, (String, Tuple5[Int, Double, Double, Double, Double]))]"
+      ],
+      "outputTypes" : [
+        "RDD[(Int, (String, Tuple5[Int, Double, Double, Double, Double]))]"
+      ],
+      "loadTransformation" : false
+    }
+  ],
+  "edges" : [
+    {
+      "id" : 39,
+      "datasetId" : 27,
+      "transformationId" : 20,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 40,
+      "datasetId" : 28,
+      "transformationId" : 20,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 41,
+      "datasetId" : 28,
+      "transformationId" : 21,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 42,
+      "datasetId" : 29,
+      "transformationId" : 21,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 43,
+      "datasetId" : 29,
+      "transformationId" : 22,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 44,
+      "datasetId" : 30,
+      "transformationId" : 22,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 45,
+      "datasetId" : 30,
+      "transformationId" : 23,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 46,
+      "datasetId" : 31,
+      "transformationId" : 23,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 47,
+      "datasetId" : 31,
+      "transformationId" : 24,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 48,
+      "datasetId" : 32,
+      "transformationId" : 24,
+      "direction" : "TransformationToDataset"
+    }
+  ],
+  "mutants" : [
+    {
+      "id" : 127,
+      "originalProgramId" : 6,
+      "mutationOperator" : "UTD",
+      "mutationOperatorDescription" : "Unary Transformation Deletion",
+      "mutantCode" : "def bestMoviesDecade(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))], minimumVotesRequired: Double, meanOfMeansRatingsOfAllMovies: Double) = {\n  val ratingsStatisticsWithWR: RDD[((Int, String, Int), (Int, Double, Double, Double, Double))] = ratingsStats.map { (s: ((Int, String, Int), (Int, Double, Double, Double))) => (s._1, (s._2._1, s._2._2, s._2._3, s._2._4, weighted_rating(s._2._2, s._2._1.toDouble, minimumVotesRequired, meanOfMeansRatingsOfAllMovies))) }\n  val ratingsStatisticsWithWRDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = ratingsStatisticsWithWR.map { (m: ((Int, String, Int), (Int, Double, Double, Double, Double))) => (m._1._3 / 10 * 10, (m._1._2, m._2)) }\n  val groupByDecade: RDD[(Int, Iterable[(String, (Int, Double, Double, Double, Double))])] = ratingsStatisticsWithWRDecade.groupByKey()\n  val bestMoviesDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = groupByDecade.map { (j: (Int, Iterable[(String, (Int, Double, Double, Double, Double))])) => (j._1, j._2.reduce((j1, j2) => if (j1._2._5 > j2._2._5) j1 else j2)) }\n  val bestMoviesDecadeSorted: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = bestMoviesDecade\n  bestMoviesDecadeSorted\n}",
+      "originalCode" : "def bestMoviesDecade(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))], minimumVotesRequired: Double, meanOfMeansRatingsOfAllMovies: Double) = {\n    val ratingsStatisticsWithWR: RDD[((Int, String, Int), (Int, Double, Double, Double, Double))] = ratingsStats.map((s: ((Int, String, Int), (Int, Double, Double, Double))) => (s._1, (s._2._1, s._2._2, s._2._3, s._2._4, weighted_rating(s._2._2, s._2._1.toDouble, minimumVotesRequired, meanOfMeansRatingsOfAllMovies))))\n    val ratingsStatisticsWithWRDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = ratingsStatisticsWithWR.map((m: (((Int, String, Int), (Int, Double, Double, Double, Double)))) => (m._1._3 / 10 * 10, (m._1._2, m._2)))\n    val groupByDecade: RDD[(Int, Iterable[(String, (Int, Double, Double, Double, Double))])] = ratingsStatisticsWithWRDecade.groupByKey()\n    val bestMoviesDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = groupByDecade.map((j: (Int, Iterable[(String, (Int, Double, Double, Double, Double))])) => (j._1, j._2.reduce((j1, j2) => if (j1._2._5 > j2._2._5) j1 else j2)))\n    val bestMoviesDecadeSorted: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = bestMoviesDecade.sortByKey(true)\n    bestMoviesDecadeSorted\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 128,
+      "originalProgramId" : 6,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def bestMoviesDecade(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))], minimumVotesRequired: Double, meanOfMeansRatingsOfAllMovies: Double) = {\n  val ratingsStatisticsWithWR: RDD[((Int, String, Int), (Int, Double, Double, Double, Double))] = ratingsStats.map { (s: ((Int, String, Int), (Int, Double, Double, Double))) => (s._1, (s._2._1, s._2._2, s._2._3, s._2._4, weighted_rating(s._2._2, s._2._1.toDouble, minimumVotesRequired, meanOfMeansRatingsOfAllMovies))) }\n  val ratingsStatisticsWithWRDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = ratingsStatisticsWithWR.map { (inputParameter: (Tuple3[Int, String, Int], Tuple5[Int, Double, Double, Double, Double])) => {\n    val originalFunction = ((m: ((Int, String, Int), (Int, Double, Double, Double, Double))) => (m._1._3 / 10 * 10, (m._1._2, m._2)))(_)\n    val originalValue = originalFunction(inputParameter)\n    (0, originalValue._2)\n  } }\n  val groupByDecade: RDD[(Int, Iterable[(String, (Int, Double, Double, Double, Double))])] = ratingsStatisticsWithWRDecade.groupByKey()\n  val bestMoviesDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = groupByDecade.map { (j: (Int, Iterable[(String, (Int, Double, Double, Double, Double))])) => (j._1, j._2.reduce((j1, j2) => if (j1._2._5 > j2._2._5) j1 else j2)) }\n  val bestMoviesDecadeSorted: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = bestMoviesDecade.sortByKey(true)\n  bestMoviesDecadeSorted\n}",
+      "originalCode" : "def bestMoviesDecade(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))], minimumVotesRequired: Double, meanOfMeansRatingsOfAllMovies: Double) = {\n    val ratingsStatisticsWithWR: RDD[((Int, String, Int), (Int, Double, Double, Double, Double))] = ratingsStats.map((s: ((Int, String, Int), (Int, Double, Double, Double))) => (s._1, (s._2._1, s._2._2, s._2._3, s._2._4, weighted_rating(s._2._2, s._2._1.toDouble, minimumVotesRequired, meanOfMeansRatingsOfAllMovies))))\n    val ratingsStatisticsWithWRDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = ratingsStatisticsWithWR.map((m: (((Int, String, Int), (Int, Double, Double, Double, Double)))) => (m._1._3 / 10 * 10, (m._1._2, m._2)))\n    val groupByDecade: RDD[(Int, Iterable[(String, (Int, Double, Double, Double, Double))])] = ratingsStatisticsWithWRDecade.groupByKey()\n    val bestMoviesDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = groupByDecade.map((j: (Int, Iterable[(String, (Int, Double, Double, Double, Double))])) => (j._1, j._2.reduce((j1, j2) => if (j1._2._5 > j2._2._5) j1 else j2)))\n    val bestMoviesDecadeSorted: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = bestMoviesDecade.sortByKey(true)\n    bestMoviesDecadeSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 129,
+      "originalProgramId" : 6,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def bestMoviesDecade(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))], minimumVotesRequired: Double, meanOfMeansRatingsOfAllMovies: Double) = {\n  val ratingsStatisticsWithWR: RDD[((Int, String, Int), (Int, Double, Double, Double, Double))] = ratingsStats.map { (s: ((Int, String, Int), (Int, Double, Double, Double))) => (s._1, (s._2._1, s._2._2, s._2._3, s._2._4, weighted_rating(s._2._2, s._2._1.toDouble, minimumVotesRequired, meanOfMeansRatingsOfAllMovies))) }\n  val ratingsStatisticsWithWRDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = ratingsStatisticsWithWR.map { (inputParameter: (Tuple3[Int, String, Int], Tuple5[Int, Double, Double, Double, Double])) => {\n    val originalFunction = ((m: ((Int, String, Int), (Int, Double, Double, Double, Double))) => (m._1._3 / 10 * 10, (m._1._2, m._2)))(_)\n    val originalValue = originalFunction(inputParameter)\n    (1, originalValue._2)\n  } }\n  val groupByDecade: RDD[(Int, Iterable[(String, (Int, Double, Double, Double, Double))])] = ratingsStatisticsWithWRDecade.groupByKey()\n  val bestMoviesDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = groupByDecade.map { (j: (Int, Iterable[(String, (Int, Double, Double, Double, Double))])) => (j._1, j._2.reduce((j1, j2) => if (j1._2._5 > j2._2._5) j1 else j2)) }\n  val bestMoviesDecadeSorted: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = bestMoviesDecade.sortByKey(true)\n  bestMoviesDecadeSorted\n}",
+      "originalCode" : "def bestMoviesDecade(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))], minimumVotesRequired: Double, meanOfMeansRatingsOfAllMovies: Double) = {\n    val ratingsStatisticsWithWR: RDD[((Int, String, Int), (Int, Double, Double, Double, Double))] = ratingsStats.map((s: ((Int, String, Int), (Int, Double, Double, Double))) => (s._1, (s._2._1, s._2._2, s._2._3, s._2._4, weighted_rating(s._2._2, s._2._1.toDouble, minimumVotesRequired, meanOfMeansRatingsOfAllMovies))))\n    val ratingsStatisticsWithWRDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = ratingsStatisticsWithWR.map((m: (((Int, String, Int), (Int, Double, Double, Double, Double)))) => (m._1._3 / 10 * 10, (m._1._2, m._2)))\n    val groupByDecade: RDD[(Int, Iterable[(String, (Int, Double, Double, Double, Double))])] = ratingsStatisticsWithWRDecade.groupByKey()\n    val bestMoviesDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = groupByDecade.map((j: (Int, Iterable[(String, (Int, Double, Double, Double, Double))])) => (j._1, j._2.reduce((j1, j2) => if (j1._2._5 > j2._2._5) j1 else j2)))\n    val bestMoviesDecadeSorted: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = bestMoviesDecade.sortByKey(true)\n    bestMoviesDecadeSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 130,
+      "originalProgramId" : 6,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def bestMoviesDecade(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))], minimumVotesRequired: Double, meanOfMeansRatingsOfAllMovies: Double) = {\n  val ratingsStatisticsWithWR: RDD[((Int, String, Int), (Int, Double, Double, Double, Double))] = ratingsStats.map { (s: ((Int, String, Int), (Int, Double, Double, Double))) => (s._1, (s._2._1, s._2._2, s._2._3, s._2._4, weighted_rating(s._2._2, s._2._1.toDouble, minimumVotesRequired, meanOfMeansRatingsOfAllMovies))) }\n  val ratingsStatisticsWithWRDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = ratingsStatisticsWithWR.map { (inputParameter: (Tuple3[Int, String, Int], Tuple5[Int, Double, Double, Double, Double])) => {\n    val originalFunction = ((m: ((Int, String, Int), (Int, Double, Double, Double, Double))) => (m._1._3 / 10 * 10, (m._1._2, m._2)))(_)\n    val originalValue = originalFunction(inputParameter)\n    (Int.MaxValue, originalValue._2)\n  } }\n  val groupByDecade: RDD[(Int, Iterable[(String, (Int, Double, Double, Double, Double))])] = ratingsStatisticsWithWRDecade.groupByKey()\n  val bestMoviesDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = groupByDecade.map { (j: (Int, Iterable[(String, (Int, Double, Double, Double, Double))])) => (j._1, j._2.reduce((j1, j2) => if (j1._2._5 > j2._2._5) j1 else j2)) }\n  val bestMoviesDecadeSorted: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = bestMoviesDecade.sortByKey(true)\n  bestMoviesDecadeSorted\n}",
+      "originalCode" : "def bestMoviesDecade(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))], minimumVotesRequired: Double, meanOfMeansRatingsOfAllMovies: Double) = {\n    val ratingsStatisticsWithWR: RDD[((Int, String, Int), (Int, Double, Double, Double, Double))] = ratingsStats.map((s: ((Int, String, Int), (Int, Double, Double, Double))) => (s._1, (s._2._1, s._2._2, s._2._3, s._2._4, weighted_rating(s._2._2, s._2._1.toDouble, minimumVotesRequired, meanOfMeansRatingsOfAllMovies))))\n    val ratingsStatisticsWithWRDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = ratingsStatisticsWithWR.map((m: (((Int, String, Int), (Int, Double, Double, Double, Double)))) => (m._1._3 / 10 * 10, (m._1._2, m._2)))\n    val groupByDecade: RDD[(Int, Iterable[(String, (Int, Double, Double, Double, Double))])] = ratingsStatisticsWithWRDecade.groupByKey()\n    val bestMoviesDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = groupByDecade.map((j: (Int, Iterable[(String, (Int, Double, Double, Double, Double))])) => (j._1, j._2.reduce((j1, j2) => if (j1._2._5 > j2._2._5) j1 else j2)))\n    val bestMoviesDecadeSorted: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = bestMoviesDecade.sortByKey(true)\n    bestMoviesDecadeSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 131,
+      "originalProgramId" : 6,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def bestMoviesDecade(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))], minimumVotesRequired: Double, meanOfMeansRatingsOfAllMovies: Double) = {\n  val ratingsStatisticsWithWR: RDD[((Int, String, Int), (Int, Double, Double, Double, Double))] = ratingsStats.map { (s: ((Int, String, Int), (Int, Double, Double, Double))) => (s._1, (s._2._1, s._2._2, s._2._3, s._2._4, weighted_rating(s._2._2, s._2._1.toDouble, minimumVotesRequired, meanOfMeansRatingsOfAllMovies))) }\n  val ratingsStatisticsWithWRDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = ratingsStatisticsWithWR.map { (inputParameter: (Tuple3[Int, String, Int], Tuple5[Int, Double, Double, Double, Double])) => {\n    val originalFunction = ((m: ((Int, String, Int), (Int, Double, Double, Double, Double))) => (m._1._3 / 10 * 10, (m._1._2, m._2)))(_)\n    val originalValue = originalFunction(inputParameter)\n    (Int.MinValue, originalValue._2)\n  } }\n  val groupByDecade: RDD[(Int, Iterable[(String, (Int, Double, Double, Double, Double))])] = ratingsStatisticsWithWRDecade.groupByKey()\n  val bestMoviesDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = groupByDecade.map { (j: (Int, Iterable[(String, (Int, Double, Double, Double, Double))])) => (j._1, j._2.reduce((j1, j2) => if (j1._2._5 > j2._2._5) j1 else j2)) }\n  val bestMoviesDecadeSorted: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = bestMoviesDecade.sortByKey(true)\n  bestMoviesDecadeSorted\n}",
+      "originalCode" : "def bestMoviesDecade(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))], minimumVotesRequired: Double, meanOfMeansRatingsOfAllMovies: Double) = {\n    val ratingsStatisticsWithWR: RDD[((Int, String, Int), (Int, Double, Double, Double, Double))] = ratingsStats.map((s: ((Int, String, Int), (Int, Double, Double, Double))) => (s._1, (s._2._1, s._2._2, s._2._3, s._2._4, weighted_rating(s._2._2, s._2._1.toDouble, minimumVotesRequired, meanOfMeansRatingsOfAllMovies))))\n    val ratingsStatisticsWithWRDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = ratingsStatisticsWithWR.map((m: (((Int, String, Int), (Int, Double, Double, Double, Double)))) => (m._1._3 / 10 * 10, (m._1._2, m._2)))\n    val groupByDecade: RDD[(Int, Iterable[(String, (Int, Double, Double, Double, Double))])] = ratingsStatisticsWithWRDecade.groupByKey()\n    val bestMoviesDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = groupByDecade.map((j: (Int, Iterable[(String, (Int, Double, Double, Double, Double))])) => (j._1, j._2.reduce((j1, j2) => if (j1._2._5 > j2._2._5) j1 else j2)))\n    val bestMoviesDecadeSorted: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = bestMoviesDecade.sortByKey(true)\n    bestMoviesDecadeSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 132,
+      "originalProgramId" : 6,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def bestMoviesDecade(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))], minimumVotesRequired: Double, meanOfMeansRatingsOfAllMovies: Double) = {\n  val ratingsStatisticsWithWR: RDD[((Int, String, Int), (Int, Double, Double, Double, Double))] = ratingsStats.map { (s: ((Int, String, Int), (Int, Double, Double, Double))) => (s._1, (s._2._1, s._2._2, s._2._3, s._2._4, weighted_rating(s._2._2, s._2._1.toDouble, minimumVotesRequired, meanOfMeansRatingsOfAllMovies))) }\n  val ratingsStatisticsWithWRDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = ratingsStatisticsWithWR.map { (inputParameter: (Tuple3[Int, String, Int], Tuple5[Int, Double, Double, Double, Double])) => {\n    val originalFunction = ((m: ((Int, String, Int), (Int, Double, Double, Double, Double))) => (m._1._3 / 10 * 10, (m._1._2, m._2)))(_)\n    val originalValue = originalFunction(inputParameter)\n    (-originalValue._1, originalValue._2)\n  } }\n  val groupByDecade: RDD[(Int, Iterable[(String, (Int, Double, Double, Double, Double))])] = ratingsStatisticsWithWRDecade.groupByKey()\n  val bestMoviesDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = groupByDecade.map { (j: (Int, Iterable[(String, (Int, Double, Double, Double, Double))])) => (j._1, j._2.reduce((j1, j2) => if (j1._2._5 > j2._2._5) j1 else j2)) }\n  val bestMoviesDecadeSorted: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = bestMoviesDecade.sortByKey(true)\n  bestMoviesDecadeSorted\n}",
+      "originalCode" : "def bestMoviesDecade(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))], minimumVotesRequired: Double, meanOfMeansRatingsOfAllMovies: Double) = {\n    val ratingsStatisticsWithWR: RDD[((Int, String, Int), (Int, Double, Double, Double, Double))] = ratingsStats.map((s: ((Int, String, Int), (Int, Double, Double, Double))) => (s._1, (s._2._1, s._2._2, s._2._3, s._2._4, weighted_rating(s._2._2, s._2._1.toDouble, minimumVotesRequired, meanOfMeansRatingsOfAllMovies))))\n    val ratingsStatisticsWithWRDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = ratingsStatisticsWithWR.map((m: (((Int, String, Int), (Int, Double, Double, Double, Double)))) => (m._1._3 / 10 * 10, (m._1._2, m._2)))\n    val groupByDecade: RDD[(Int, Iterable[(String, (Int, Double, Double, Double, Double))])] = ratingsStatisticsWithWRDecade.groupByKey()\n    val bestMoviesDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = groupByDecade.map((j: (Int, Iterable[(String, (Int, Double, Double, Double, Double))])) => (j._1, j._2.reduce((j1, j2) => if (j1._2._5 > j2._2._5) j1 else j2)))\n    val bestMoviesDecadeSorted: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = bestMoviesDecade.sortByKey(true)\n    bestMoviesDecadeSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 133,
+      "originalProgramId" : 6,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def bestMoviesDecade(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))], minimumVotesRequired: Double, meanOfMeansRatingsOfAllMovies: Double) = {\n  val ratingsStatisticsWithWR: RDD[((Int, String, Int), (Int, Double, Double, Double, Double))] = ratingsStats.map { (s: ((Int, String, Int), (Int, Double, Double, Double))) => (s._1, (s._2._1, s._2._2, s._2._3, s._2._4, weighted_rating(s._2._2, s._2._1.toDouble, minimumVotesRequired, meanOfMeansRatingsOfAllMovies))) }\n  val ratingsStatisticsWithWRDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = ratingsStatisticsWithWR.map { (inputParameter: (Tuple3[Int, String, Int], Tuple5[Int, Double, Double, Double, Double])) => {\n    val originalFunction = ((m: ((Int, String, Int), (Int, Double, Double, Double, Double))) => (m._1._3 / 10 * 10, (m._1._2, m._2)))(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, (\"\", originalValue._2._2))\n  } }\n  val groupByDecade: RDD[(Int, Iterable[(String, (Int, Double, Double, Double, Double))])] = ratingsStatisticsWithWRDecade.groupByKey()\n  val bestMoviesDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = groupByDecade.map { (j: (Int, Iterable[(String, (Int, Double, Double, Double, Double))])) => (j._1, j._2.reduce((j1, j2) => if (j1._2._5 > j2._2._5) j1 else j2)) }\n  val bestMoviesDecadeSorted: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = bestMoviesDecade.sortByKey(true)\n  bestMoviesDecadeSorted\n}",
+      "originalCode" : "def bestMoviesDecade(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))], minimumVotesRequired: Double, meanOfMeansRatingsOfAllMovies: Double) = {\n    val ratingsStatisticsWithWR: RDD[((Int, String, Int), (Int, Double, Double, Double, Double))] = ratingsStats.map((s: ((Int, String, Int), (Int, Double, Double, Double))) => (s._1, (s._2._1, s._2._2, s._2._3, s._2._4, weighted_rating(s._2._2, s._2._1.toDouble, minimumVotesRequired, meanOfMeansRatingsOfAllMovies))))\n    val ratingsStatisticsWithWRDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = ratingsStatisticsWithWR.map((m: (((Int, String, Int), (Int, Double, Double, Double, Double)))) => (m._1._3 / 10 * 10, (m._1._2, m._2)))\n    val groupByDecade: RDD[(Int, Iterable[(String, (Int, Double, Double, Double, Double))])] = ratingsStatisticsWithWRDecade.groupByKey()\n    val bestMoviesDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = groupByDecade.map((j: (Int, Iterable[(String, (Int, Double, Double, Double, Double))])) => (j._1, j._2.reduce((j1, j2) => if (j1._2._5 > j2._2._5) j1 else j2)))\n    val bestMoviesDecadeSorted: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = bestMoviesDecade.sortByKey(true)\n    bestMoviesDecadeSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 134,
+      "originalProgramId" : 6,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def bestMoviesDecade(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))], minimumVotesRequired: Double, meanOfMeansRatingsOfAllMovies: Double) = {\n  val ratingsStatisticsWithWR: RDD[((Int, String, Int), (Int, Double, Double, Double, Double))] = ratingsStats.map { (s: ((Int, String, Int), (Int, Double, Double, Double))) => (s._1, (s._2._1, s._2._2, s._2._3, s._2._4, weighted_rating(s._2._2, s._2._1.toDouble, minimumVotesRequired, meanOfMeansRatingsOfAllMovies))) }\n  val ratingsStatisticsWithWRDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = ratingsStatisticsWithWR.map { (m: ((Int, String, Int), (Int, Double, Double, Double, Double))) => (m._1._3 / 10 * 10, (m._1._2, m._2)) }\n  val groupByDecade: RDD[(Int, Iterable[(String, (Int, Double, Double, Double, Double))])] = ratingsStatisticsWithWRDecade.groupByKey()\n  val bestMoviesDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = groupByDecade.map { (inputParameter: (Int, Iterable[(String, Tuple5[Int, Double, Double, Double, Double])])) => {\n    val originalFunction = ((j: (Int, Iterable[(String, (Int, Double, Double, Double, Double))])) => (j._1, j._2.reduce((j1, j2) => if (j1._2._5 > j2._2._5) j1 else j2)))(_)\n    val originalValue = originalFunction(inputParameter)\n    (0, originalValue._2)\n  } }\n  val bestMoviesDecadeSorted: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = bestMoviesDecade.sortByKey(true)\n  bestMoviesDecadeSorted\n}",
+      "originalCode" : "def bestMoviesDecade(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))], minimumVotesRequired: Double, meanOfMeansRatingsOfAllMovies: Double) = {\n    val ratingsStatisticsWithWR: RDD[((Int, String, Int), (Int, Double, Double, Double, Double))] = ratingsStats.map((s: ((Int, String, Int), (Int, Double, Double, Double))) => (s._1, (s._2._1, s._2._2, s._2._3, s._2._4, weighted_rating(s._2._2, s._2._1.toDouble, minimumVotesRequired, meanOfMeansRatingsOfAllMovies))))\n    val ratingsStatisticsWithWRDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = ratingsStatisticsWithWR.map((m: (((Int, String, Int), (Int, Double, Double, Double, Double)))) => (m._1._3 / 10 * 10, (m._1._2, m._2)))\n    val groupByDecade: RDD[(Int, Iterable[(String, (Int, Double, Double, Double, Double))])] = ratingsStatisticsWithWRDecade.groupByKey()\n    val bestMoviesDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = groupByDecade.map((j: (Int, Iterable[(String, (Int, Double, Double, Double, Double))])) => (j._1, j._2.reduce((j1, j2) => if (j1._2._5 > j2._2._5) j1 else j2)))\n    val bestMoviesDecadeSorted: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = bestMoviesDecade.sortByKey(true)\n    bestMoviesDecadeSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 135,
+      "originalProgramId" : 6,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def bestMoviesDecade(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))], minimumVotesRequired: Double, meanOfMeansRatingsOfAllMovies: Double) = {\n  val ratingsStatisticsWithWR: RDD[((Int, String, Int), (Int, Double, Double, Double, Double))] = ratingsStats.map { (s: ((Int, String, Int), (Int, Double, Double, Double))) => (s._1, (s._2._1, s._2._2, s._2._3, s._2._4, weighted_rating(s._2._2, s._2._1.toDouble, minimumVotesRequired, meanOfMeansRatingsOfAllMovies))) }\n  val ratingsStatisticsWithWRDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = ratingsStatisticsWithWR.map { (m: ((Int, String, Int), (Int, Double, Double, Double, Double))) => (m._1._3 / 10 * 10, (m._1._2, m._2)) }\n  val groupByDecade: RDD[(Int, Iterable[(String, (Int, Double, Double, Double, Double))])] = ratingsStatisticsWithWRDecade.groupByKey()\n  val bestMoviesDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = groupByDecade.map { (inputParameter: (Int, Iterable[(String, Tuple5[Int, Double, Double, Double, Double])])) => {\n    val originalFunction = ((j: (Int, Iterable[(String, (Int, Double, Double, Double, Double))])) => (j._1, j._2.reduce((j1, j2) => if (j1._2._5 > j2._2._5) j1 else j2)))(_)\n    val originalValue = originalFunction(inputParameter)\n    (1, originalValue._2)\n  } }\n  val bestMoviesDecadeSorted: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = bestMoviesDecade.sortByKey(true)\n  bestMoviesDecadeSorted\n}",
+      "originalCode" : "def bestMoviesDecade(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))], minimumVotesRequired: Double, meanOfMeansRatingsOfAllMovies: Double) = {\n    val ratingsStatisticsWithWR: RDD[((Int, String, Int), (Int, Double, Double, Double, Double))] = ratingsStats.map((s: ((Int, String, Int), (Int, Double, Double, Double))) => (s._1, (s._2._1, s._2._2, s._2._3, s._2._4, weighted_rating(s._2._2, s._2._1.toDouble, minimumVotesRequired, meanOfMeansRatingsOfAllMovies))))\n    val ratingsStatisticsWithWRDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = ratingsStatisticsWithWR.map((m: (((Int, String, Int), (Int, Double, Double, Double, Double)))) => (m._1._3 / 10 * 10, (m._1._2, m._2)))\n    val groupByDecade: RDD[(Int, Iterable[(String, (Int, Double, Double, Double, Double))])] = ratingsStatisticsWithWRDecade.groupByKey()\n    val bestMoviesDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = groupByDecade.map((j: (Int, Iterable[(String, (Int, Double, Double, Double, Double))])) => (j._1, j._2.reduce((j1, j2) => if (j1._2._5 > j2._2._5) j1 else j2)))\n    val bestMoviesDecadeSorted: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = bestMoviesDecade.sortByKey(true)\n    bestMoviesDecadeSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 136,
+      "originalProgramId" : 6,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def bestMoviesDecade(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))], minimumVotesRequired: Double, meanOfMeansRatingsOfAllMovies: Double) = {\n  val ratingsStatisticsWithWR: RDD[((Int, String, Int), (Int, Double, Double, Double, Double))] = ratingsStats.map { (s: ((Int, String, Int), (Int, Double, Double, Double))) => (s._1, (s._2._1, s._2._2, s._2._3, s._2._4, weighted_rating(s._2._2, s._2._1.toDouble, minimumVotesRequired, meanOfMeansRatingsOfAllMovies))) }\n  val ratingsStatisticsWithWRDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = ratingsStatisticsWithWR.map { (m: ((Int, String, Int), (Int, Double, Double, Double, Double))) => (m._1._3 / 10 * 10, (m._1._2, m._2)) }\n  val groupByDecade: RDD[(Int, Iterable[(String, (Int, Double, Double, Double, Double))])] = ratingsStatisticsWithWRDecade.groupByKey()\n  val bestMoviesDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = groupByDecade.map { (inputParameter: (Int, Iterable[(String, Tuple5[Int, Double, Double, Double, Double])])) => {\n    val originalFunction = ((j: (Int, Iterable[(String, (Int, Double, Double, Double, Double))])) => (j._1, j._2.reduce((j1, j2) => if (j1._2._5 > j2._2._5) j1 else j2)))(_)\n    val originalValue = originalFunction(inputParameter)\n    (Int.MaxValue, originalValue._2)\n  } }\n  val bestMoviesDecadeSorted: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = bestMoviesDecade.sortByKey(true)\n  bestMoviesDecadeSorted\n}",
+      "originalCode" : "def bestMoviesDecade(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))], minimumVotesRequired: Double, meanOfMeansRatingsOfAllMovies: Double) = {\n    val ratingsStatisticsWithWR: RDD[((Int, String, Int), (Int, Double, Double, Double, Double))] = ratingsStats.map((s: ((Int, String, Int), (Int, Double, Double, Double))) => (s._1, (s._2._1, s._2._2, s._2._3, s._2._4, weighted_rating(s._2._2, s._2._1.toDouble, minimumVotesRequired, meanOfMeansRatingsOfAllMovies))))\n    val ratingsStatisticsWithWRDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = ratingsStatisticsWithWR.map((m: (((Int, String, Int), (Int, Double, Double, Double, Double)))) => (m._1._3 / 10 * 10, (m._1._2, m._2)))\n    val groupByDecade: RDD[(Int, Iterable[(String, (Int, Double, Double, Double, Double))])] = ratingsStatisticsWithWRDecade.groupByKey()\n    val bestMoviesDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = groupByDecade.map((j: (Int, Iterable[(String, (Int, Double, Double, Double, Double))])) => (j._1, j._2.reduce((j1, j2) => if (j1._2._5 > j2._2._5) j1 else j2)))\n    val bestMoviesDecadeSorted: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = bestMoviesDecade.sortByKey(true)\n    bestMoviesDecadeSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 137,
+      "originalProgramId" : 6,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def bestMoviesDecade(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))], minimumVotesRequired: Double, meanOfMeansRatingsOfAllMovies: Double) = {\n  val ratingsStatisticsWithWR: RDD[((Int, String, Int), (Int, Double, Double, Double, Double))] = ratingsStats.map { (s: ((Int, String, Int), (Int, Double, Double, Double))) => (s._1, (s._2._1, s._2._2, s._2._3, s._2._4, weighted_rating(s._2._2, s._2._1.toDouble, minimumVotesRequired, meanOfMeansRatingsOfAllMovies))) }\n  val ratingsStatisticsWithWRDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = ratingsStatisticsWithWR.map { (m: ((Int, String, Int), (Int, Double, Double, Double, Double))) => (m._1._3 / 10 * 10, (m._1._2, m._2)) }\n  val groupByDecade: RDD[(Int, Iterable[(String, (Int, Double, Double, Double, Double))])] = ratingsStatisticsWithWRDecade.groupByKey()\n  val bestMoviesDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = groupByDecade.map { (inputParameter: (Int, Iterable[(String, Tuple5[Int, Double, Double, Double, Double])])) => {\n    val originalFunction = ((j: (Int, Iterable[(String, (Int, Double, Double, Double, Double))])) => (j._1, j._2.reduce((j1, j2) => if (j1._2._5 > j2._2._5) j1 else j2)))(_)\n    val originalValue = originalFunction(inputParameter)\n    (Int.MinValue, originalValue._2)\n  } }\n  val bestMoviesDecadeSorted: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = bestMoviesDecade.sortByKey(true)\n  bestMoviesDecadeSorted\n}",
+      "originalCode" : "def bestMoviesDecade(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))], minimumVotesRequired: Double, meanOfMeansRatingsOfAllMovies: Double) = {\n    val ratingsStatisticsWithWR: RDD[((Int, String, Int), (Int, Double, Double, Double, Double))] = ratingsStats.map((s: ((Int, String, Int), (Int, Double, Double, Double))) => (s._1, (s._2._1, s._2._2, s._2._3, s._2._4, weighted_rating(s._2._2, s._2._1.toDouble, minimumVotesRequired, meanOfMeansRatingsOfAllMovies))))\n    val ratingsStatisticsWithWRDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = ratingsStatisticsWithWR.map((m: (((Int, String, Int), (Int, Double, Double, Double, Double)))) => (m._1._3 / 10 * 10, (m._1._2, m._2)))\n    val groupByDecade: RDD[(Int, Iterable[(String, (Int, Double, Double, Double, Double))])] = ratingsStatisticsWithWRDecade.groupByKey()\n    val bestMoviesDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = groupByDecade.map((j: (Int, Iterable[(String, (Int, Double, Double, Double, Double))])) => (j._1, j._2.reduce((j1, j2) => if (j1._2._5 > j2._2._5) j1 else j2)))\n    val bestMoviesDecadeSorted: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = bestMoviesDecade.sortByKey(true)\n    bestMoviesDecadeSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 138,
+      "originalProgramId" : 6,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def bestMoviesDecade(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))], minimumVotesRequired: Double, meanOfMeansRatingsOfAllMovies: Double) = {\n  val ratingsStatisticsWithWR: RDD[((Int, String, Int), (Int, Double, Double, Double, Double))] = ratingsStats.map { (s: ((Int, String, Int), (Int, Double, Double, Double))) => (s._1, (s._2._1, s._2._2, s._2._3, s._2._4, weighted_rating(s._2._2, s._2._1.toDouble, minimumVotesRequired, meanOfMeansRatingsOfAllMovies))) }\n  val ratingsStatisticsWithWRDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = ratingsStatisticsWithWR.map { (m: ((Int, String, Int), (Int, Double, Double, Double, Double))) => (m._1._3 / 10 * 10, (m._1._2, m._2)) }\n  val groupByDecade: RDD[(Int, Iterable[(String, (Int, Double, Double, Double, Double))])] = ratingsStatisticsWithWRDecade.groupByKey()\n  val bestMoviesDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = groupByDecade.map { (inputParameter: (Int, Iterable[(String, Tuple5[Int, Double, Double, Double, Double])])) => {\n    val originalFunction = ((j: (Int, Iterable[(String, (Int, Double, Double, Double, Double))])) => (j._1, j._2.reduce((j1, j2) => if (j1._2._5 > j2._2._5) j1 else j2)))(_)\n    val originalValue = originalFunction(inputParameter)\n    (-originalValue._1, originalValue._2)\n  } }\n  val bestMoviesDecadeSorted: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = bestMoviesDecade.sortByKey(true)\n  bestMoviesDecadeSorted\n}",
+      "originalCode" : "def bestMoviesDecade(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))], minimumVotesRequired: Double, meanOfMeansRatingsOfAllMovies: Double) = {\n    val ratingsStatisticsWithWR: RDD[((Int, String, Int), (Int, Double, Double, Double, Double))] = ratingsStats.map((s: ((Int, String, Int), (Int, Double, Double, Double))) => (s._1, (s._2._1, s._2._2, s._2._3, s._2._4, weighted_rating(s._2._2, s._2._1.toDouble, minimumVotesRequired, meanOfMeansRatingsOfAllMovies))))\n    val ratingsStatisticsWithWRDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = ratingsStatisticsWithWR.map((m: (((Int, String, Int), (Int, Double, Double, Double, Double)))) => (m._1._3 / 10 * 10, (m._1._2, m._2)))\n    val groupByDecade: RDD[(Int, Iterable[(String, (Int, Double, Double, Double, Double))])] = ratingsStatisticsWithWRDecade.groupByKey()\n    val bestMoviesDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = groupByDecade.map((j: (Int, Iterable[(String, (Int, Double, Double, Double, Double))])) => (j._1, j._2.reduce((j1, j2) => if (j1._2._5 > j2._2._5) j1 else j2)))\n    val bestMoviesDecadeSorted: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = bestMoviesDecade.sortByKey(true)\n    bestMoviesDecadeSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 139,
+      "originalProgramId" : 6,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def bestMoviesDecade(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))], minimumVotesRequired: Double, meanOfMeansRatingsOfAllMovies: Double) = {\n  val ratingsStatisticsWithWR: RDD[((Int, String, Int), (Int, Double, Double, Double, Double))] = ratingsStats.map { (s: ((Int, String, Int), (Int, Double, Double, Double))) => (s._1, (s._2._1, s._2._2, s._2._3, s._2._4, weighted_rating(s._2._2, s._2._1.toDouble, minimumVotesRequired, meanOfMeansRatingsOfAllMovies))) }\n  val ratingsStatisticsWithWRDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = ratingsStatisticsWithWR.map { (m: ((Int, String, Int), (Int, Double, Double, Double, Double))) => (m._1._3 / 10 * 10, (m._1._2, m._2)) }\n  val groupByDecade: RDD[(Int, Iterable[(String, (Int, Double, Double, Double, Double))])] = ratingsStatisticsWithWRDecade.groupByKey()\n  val bestMoviesDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = groupByDecade.map { (inputParameter: (Int, Iterable[(String, Tuple5[Int, Double, Double, Double, Double])])) => {\n    val originalFunction = ((j: (Int, Iterable[(String, (Int, Double, Double, Double, Double))])) => (j._1, j._2.reduce((j1, j2) => if (j1._2._5 > j2._2._5) j1 else j2)))(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, (\"\", originalValue._2._2))\n  } }\n  val bestMoviesDecadeSorted: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = bestMoviesDecade.sortByKey(true)\n  bestMoviesDecadeSorted\n}",
+      "originalCode" : "def bestMoviesDecade(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))], minimumVotesRequired: Double, meanOfMeansRatingsOfAllMovies: Double) = {\n    val ratingsStatisticsWithWR: RDD[((Int, String, Int), (Int, Double, Double, Double, Double))] = ratingsStats.map((s: ((Int, String, Int), (Int, Double, Double, Double))) => (s._1, (s._2._1, s._2._2, s._2._3, s._2._4, weighted_rating(s._2._2, s._2._1.toDouble, minimumVotesRequired, meanOfMeansRatingsOfAllMovies))))\n    val ratingsStatisticsWithWRDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = ratingsStatisticsWithWR.map((m: (((Int, String, Int), (Int, Double, Double, Double, Double)))) => (m._1._3 / 10 * 10, (m._1._2, m._2)))\n    val groupByDecade: RDD[(Int, Iterable[(String, (Int, Double, Double, Double, Double))])] = ratingsStatisticsWithWRDecade.groupByKey()\n    val bestMoviesDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = groupByDecade.map((j: (Int, Iterable[(String, (Int, Double, Double, Double, Double))])) => (j._1, j._2.reduce((j1, j2) => if (j1._2._5 > j2._2._5) j1 else j2)))\n    val bestMoviesDecadeSorted: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = bestMoviesDecade.sortByKey(true)\n    bestMoviesDecadeSorted\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 140,
+      "originalProgramId" : 6,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def bestMoviesDecade(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))], minimumVotesRequired: Double, meanOfMeansRatingsOfAllMovies: Double) = {\n  val ratingsStatisticsWithWR: RDD[((Int, String, Int), (Int, Double, Double, Double, Double))] = ratingsStats.map { (s: ((Int, String, Int), (Int, Double, Double, Double))) => (s._1, (s._2._1, s._2._2, s._2._3, s._2._4, weighted_rating(s._2._2, s._2._1.toDouble, minimumVotesRequired, meanOfMeansRatingsOfAllMovies))) }.distinct()\n  val ratingsStatisticsWithWRDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = ratingsStatisticsWithWR.map { (m: ((Int, String, Int), (Int, Double, Double, Double, Double))) => (m._1._3 / 10 * 10, (m._1._2, m._2)) }\n  val groupByDecade: RDD[(Int, Iterable[(String, (Int, Double, Double, Double, Double))])] = ratingsStatisticsWithWRDecade.groupByKey()\n  val bestMoviesDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = groupByDecade.map { (j: (Int, Iterable[(String, (Int, Double, Double, Double, Double))])) => (j._1, j._2.reduce((j1, j2) => if (j1._2._5 > j2._2._5) j1 else j2)) }\n  val bestMoviesDecadeSorted: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = bestMoviesDecade.sortByKey(true)\n  bestMoviesDecadeSorted\n}",
+      "originalCode" : "def bestMoviesDecade(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))], minimumVotesRequired: Double, meanOfMeansRatingsOfAllMovies: Double) = {\n    val ratingsStatisticsWithWR: RDD[((Int, String, Int), (Int, Double, Double, Double, Double))] = ratingsStats.map((s: ((Int, String, Int), (Int, Double, Double, Double))) => (s._1, (s._2._1, s._2._2, s._2._3, s._2._4, weighted_rating(s._2._2, s._2._1.toDouble, minimumVotesRequired, meanOfMeansRatingsOfAllMovies))))\n    val ratingsStatisticsWithWRDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = ratingsStatisticsWithWR.map((m: (((Int, String, Int), (Int, Double, Double, Double, Double)))) => (m._1._3 / 10 * 10, (m._1._2, m._2)))\n    val groupByDecade: RDD[(Int, Iterable[(String, (Int, Double, Double, Double, Double))])] = ratingsStatisticsWithWRDecade.groupByKey()\n    val bestMoviesDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = groupByDecade.map((j: (Int, Iterable[(String, (Int, Double, Double, Double, Double))])) => (j._1, j._2.reduce((j1, j2) => if (j1._2._5 > j2._2._5) j1 else j2)))\n    val bestMoviesDecadeSorted: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = bestMoviesDecade.sortByKey(true)\n    bestMoviesDecadeSorted\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 141,
+      "originalProgramId" : 6,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def bestMoviesDecade(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))], minimumVotesRequired: Double, meanOfMeansRatingsOfAllMovies: Double) = {\n  val ratingsStatisticsWithWR: RDD[((Int, String, Int), (Int, Double, Double, Double, Double))] = ratingsStats.map { (s: ((Int, String, Int), (Int, Double, Double, Double))) => (s._1, (s._2._1, s._2._2, s._2._3, s._2._4, weighted_rating(s._2._2, s._2._1.toDouble, minimumVotesRequired, meanOfMeansRatingsOfAllMovies))) }\n  val ratingsStatisticsWithWRDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = ratingsStatisticsWithWR.map { (m: ((Int, String, Int), (Int, Double, Double, Double, Double))) => (m._1._3 / 10 * 10, (m._1._2, m._2)) }.distinct()\n  val groupByDecade: RDD[(Int, Iterable[(String, (Int, Double, Double, Double, Double))])] = ratingsStatisticsWithWRDecade.groupByKey()\n  val bestMoviesDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = groupByDecade.map { (j: (Int, Iterable[(String, (Int, Double, Double, Double, Double))])) => (j._1, j._2.reduce((j1, j2) => if (j1._2._5 > j2._2._5) j1 else j2)) }\n  val bestMoviesDecadeSorted: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = bestMoviesDecade.sortByKey(true)\n  bestMoviesDecadeSorted\n}",
+      "originalCode" : "def bestMoviesDecade(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))], minimumVotesRequired: Double, meanOfMeansRatingsOfAllMovies: Double) = {\n    val ratingsStatisticsWithWR: RDD[((Int, String, Int), (Int, Double, Double, Double, Double))] = ratingsStats.map((s: ((Int, String, Int), (Int, Double, Double, Double))) => (s._1, (s._2._1, s._2._2, s._2._3, s._2._4, weighted_rating(s._2._2, s._2._1.toDouble, minimumVotesRequired, meanOfMeansRatingsOfAllMovies))))\n    val ratingsStatisticsWithWRDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = ratingsStatisticsWithWR.map((m: (((Int, String, Int), (Int, Double, Double, Double, Double)))) => (m._1._3 / 10 * 10, (m._1._2, m._2)))\n    val groupByDecade: RDD[(Int, Iterable[(String, (Int, Double, Double, Double, Double))])] = ratingsStatisticsWithWRDecade.groupByKey()\n    val bestMoviesDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = groupByDecade.map((j: (Int, Iterable[(String, (Int, Double, Double, Double, Double))])) => (j._1, j._2.reduce((j1, j2) => if (j1._2._5 > j2._2._5) j1 else j2)))\n    val bestMoviesDecadeSorted: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = bestMoviesDecade.sortByKey(true)\n    bestMoviesDecadeSorted\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 142,
+      "originalProgramId" : 6,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def bestMoviesDecade(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))], minimumVotesRequired: Double, meanOfMeansRatingsOfAllMovies: Double) = {\n  val ratingsStatisticsWithWR: RDD[((Int, String, Int), (Int, Double, Double, Double, Double))] = ratingsStats.map { (s: ((Int, String, Int), (Int, Double, Double, Double))) => (s._1, (s._2._1, s._2._2, s._2._3, s._2._4, weighted_rating(s._2._2, s._2._1.toDouble, minimumVotesRequired, meanOfMeansRatingsOfAllMovies))) }\n  val ratingsStatisticsWithWRDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = ratingsStatisticsWithWR.map { (m: ((Int, String, Int), (Int, Double, Double, Double, Double))) => (m._1._3 / 10 * 10, (m._1._2, m._2)) }\n  val groupByDecade: RDD[(Int, Iterable[(String, (Int, Double, Double, Double, Double))])] = ratingsStatisticsWithWRDecade.groupByKey().distinct()\n  val bestMoviesDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = groupByDecade.map { (j: (Int, Iterable[(String, (Int, Double, Double, Double, Double))])) => (j._1, j._2.reduce((j1, j2) => if (j1._2._5 > j2._2._5) j1 else j2)) }\n  val bestMoviesDecadeSorted: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = bestMoviesDecade.sortByKey(true)\n  bestMoviesDecadeSorted\n}",
+      "originalCode" : "def bestMoviesDecade(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))], minimumVotesRequired: Double, meanOfMeansRatingsOfAllMovies: Double) = {\n    val ratingsStatisticsWithWR: RDD[((Int, String, Int), (Int, Double, Double, Double, Double))] = ratingsStats.map((s: ((Int, String, Int), (Int, Double, Double, Double))) => (s._1, (s._2._1, s._2._2, s._2._3, s._2._4, weighted_rating(s._2._2, s._2._1.toDouble, minimumVotesRequired, meanOfMeansRatingsOfAllMovies))))\n    val ratingsStatisticsWithWRDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = ratingsStatisticsWithWR.map((m: (((Int, String, Int), (Int, Double, Double, Double, Double)))) => (m._1._3 / 10 * 10, (m._1._2, m._2)))\n    val groupByDecade: RDD[(Int, Iterable[(String, (Int, Double, Double, Double, Double))])] = ratingsStatisticsWithWRDecade.groupByKey()\n    val bestMoviesDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = groupByDecade.map((j: (Int, Iterable[(String, (Int, Double, Double, Double, Double))])) => (j._1, j._2.reduce((j1, j2) => if (j1._2._5 > j2._2._5) j1 else j2)))\n    val bestMoviesDecadeSorted: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = bestMoviesDecade.sortByKey(true)\n    bestMoviesDecadeSorted\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 143,
+      "originalProgramId" : 6,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def bestMoviesDecade(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))], minimumVotesRequired: Double, meanOfMeansRatingsOfAllMovies: Double) = {\n  val ratingsStatisticsWithWR: RDD[((Int, String, Int), (Int, Double, Double, Double, Double))] = ratingsStats.map { (s: ((Int, String, Int), (Int, Double, Double, Double))) => (s._1, (s._2._1, s._2._2, s._2._3, s._2._4, weighted_rating(s._2._2, s._2._1.toDouble, minimumVotesRequired, meanOfMeansRatingsOfAllMovies))) }\n  val ratingsStatisticsWithWRDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = ratingsStatisticsWithWR.map { (m: ((Int, String, Int), (Int, Double, Double, Double, Double))) => (m._1._3 / 10 * 10, (m._1._2, m._2)) }\n  val groupByDecade: RDD[(Int, Iterable[(String, (Int, Double, Double, Double, Double))])] = ratingsStatisticsWithWRDecade.groupByKey()\n  val bestMoviesDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = groupByDecade.map { (j: (Int, Iterable[(String, (Int, Double, Double, Double, Double))])) => (j._1, j._2.reduce((j1, j2) => if (j1._2._5 > j2._2._5) j1 else j2)) }.distinct()\n  val bestMoviesDecadeSorted: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = bestMoviesDecade.sortByKey(true)\n  bestMoviesDecadeSorted\n}",
+      "originalCode" : "def bestMoviesDecade(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))], minimumVotesRequired: Double, meanOfMeansRatingsOfAllMovies: Double) = {\n    val ratingsStatisticsWithWR: RDD[((Int, String, Int), (Int, Double, Double, Double, Double))] = ratingsStats.map((s: ((Int, String, Int), (Int, Double, Double, Double))) => (s._1, (s._2._1, s._2._2, s._2._3, s._2._4, weighted_rating(s._2._2, s._2._1.toDouble, minimumVotesRequired, meanOfMeansRatingsOfAllMovies))))\n    val ratingsStatisticsWithWRDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = ratingsStatisticsWithWR.map((m: (((Int, String, Int), (Int, Double, Double, Double, Double)))) => (m._1._3 / 10 * 10, (m._1._2, m._2)))\n    val groupByDecade: RDD[(Int, Iterable[(String, (Int, Double, Double, Double, Double))])] = ratingsStatisticsWithWRDecade.groupByKey()\n    val bestMoviesDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = groupByDecade.map((j: (Int, Iterable[(String, (Int, Double, Double, Double, Double))])) => (j._1, j._2.reduce((j1, j2) => if (j1._2._5 > j2._2._5) j1 else j2)))\n    val bestMoviesDecadeSorted: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = bestMoviesDecade.sortByKey(true)\n    bestMoviesDecadeSorted\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 144,
+      "originalProgramId" : 6,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def bestMoviesDecade(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))], minimumVotesRequired: Double, meanOfMeansRatingsOfAllMovies: Double) = {\n  val ratingsStatisticsWithWR: RDD[((Int, String, Int), (Int, Double, Double, Double, Double))] = ratingsStats.map { (s: ((Int, String, Int), (Int, Double, Double, Double))) => (s._1, (s._2._1, s._2._2, s._2._3, s._2._4, weighted_rating(s._2._2, s._2._1.toDouble, minimumVotesRequired, meanOfMeansRatingsOfAllMovies))) }\n  val ratingsStatisticsWithWRDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = ratingsStatisticsWithWR.map { (m: ((Int, String, Int), (Int, Double, Double, Double, Double))) => (m._1._3 / 10 * 10, (m._1._2, m._2)) }\n  val groupByDecade: RDD[(Int, Iterable[(String, (Int, Double, Double, Double, Double))])] = ratingsStatisticsWithWRDecade.groupByKey()\n  val bestMoviesDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = groupByDecade.map { (j: (Int, Iterable[(String, (Int, Double, Double, Double, Double))])) => (j._1, j._2.reduce((j1, j2) => if (j1._2._5 > j2._2._5) j1 else j2)) }\n  val bestMoviesDecadeSorted: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = bestMoviesDecade.sortByKey(true).distinct()\n  bestMoviesDecadeSorted\n}",
+      "originalCode" : "def bestMoviesDecade(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))], minimumVotesRequired: Double, meanOfMeansRatingsOfAllMovies: Double) = {\n    val ratingsStatisticsWithWR: RDD[((Int, String, Int), (Int, Double, Double, Double, Double))] = ratingsStats.map((s: ((Int, String, Int), (Int, Double, Double, Double))) => (s._1, (s._2._1, s._2._2, s._2._3, s._2._4, weighted_rating(s._2._2, s._2._1.toDouble, minimumVotesRequired, meanOfMeansRatingsOfAllMovies))))\n    val ratingsStatisticsWithWRDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = ratingsStatisticsWithWR.map((m: (((Int, String, Int), (Int, Double, Double, Double, Double)))) => (m._1._3 / 10 * 10, (m._1._2, m._2)))\n    val groupByDecade: RDD[(Int, Iterable[(String, (Int, Double, Double, Double, Double))])] = ratingsStatisticsWithWRDecade.groupByKey()\n    val bestMoviesDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = groupByDecade.map((j: (Int, Iterable[(String, (Int, Double, Double, Double, Double))])) => (j._1, j._2.reduce((j1, j2) => if (j1._2._5 > j2._2._5) j1 else j2)))\n    val bestMoviesDecadeSorted: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = bestMoviesDecade.sortByKey(true)\n    bestMoviesDecadeSorted\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 145,
+      "originalProgramId" : 6,
+      "mutationOperator" : "OTD",
+      "mutationOperatorDescription" : "Order Transformation Deletion",
+      "mutantCode" : "def bestMoviesDecade(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))], minimumVotesRequired: Double, meanOfMeansRatingsOfAllMovies: Double) = {\n  val ratingsStatisticsWithWR: RDD[((Int, String, Int), (Int, Double, Double, Double, Double))] = ratingsStats.map { (s: ((Int, String, Int), (Int, Double, Double, Double))) => (s._1, (s._2._1, s._2._2, s._2._3, s._2._4, weighted_rating(s._2._2, s._2._1.toDouble, minimumVotesRequired, meanOfMeansRatingsOfAllMovies))) }\n  val ratingsStatisticsWithWRDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = ratingsStatisticsWithWR.map { (m: ((Int, String, Int), (Int, Double, Double, Double, Double))) => (m._1._3 / 10 * 10, (m._1._2, m._2)) }\n  val groupByDecade: RDD[(Int, Iterable[(String, (Int, Double, Double, Double, Double))])] = ratingsStatisticsWithWRDecade.groupByKey()\n  val bestMoviesDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = groupByDecade.map { (j: (Int, Iterable[(String, (Int, Double, Double, Double, Double))])) => (j._1, j._2.reduce((j1, j2) => if (j1._2._5 > j2._2._5) j1 else j2)) }\n  val bestMoviesDecadeSorted: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = bestMoviesDecade\n  bestMoviesDecadeSorted\n}",
+      "originalCode" : "def bestMoviesDecade(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))], minimumVotesRequired: Double, meanOfMeansRatingsOfAllMovies: Double) = {\n    val ratingsStatisticsWithWR: RDD[((Int, String, Int), (Int, Double, Double, Double, Double))] = ratingsStats.map((s: ((Int, String, Int), (Int, Double, Double, Double))) => (s._1, (s._2._1, s._2._2, s._2._3, s._2._4, weighted_rating(s._2._2, s._2._1.toDouble, minimumVotesRequired, meanOfMeansRatingsOfAllMovies))))\n    val ratingsStatisticsWithWRDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = ratingsStatisticsWithWR.map((m: (((Int, String, Int), (Int, Double, Double, Double, Double)))) => (m._1._3 / 10 * 10, (m._1._2, m._2)))\n    val groupByDecade: RDD[(Int, Iterable[(String, (Int, Double, Double, Double, Double))])] = ratingsStatisticsWithWRDecade.groupByKey()\n    val bestMoviesDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = groupByDecade.map((j: (Int, Iterable[(String, (Int, Double, Double, Double, Double))])) => (j._1, j._2.reduce((j1, j2) => if (j1._2._5 > j2._2._5) j1 else j2)))\n    val bestMoviesDecadeSorted: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = bestMoviesDecade.sortByKey(true)\n    bestMoviesDecadeSorted\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 146,
+      "originalProgramId" : 6,
+      "mutationOperator" : "OTI",
+      "mutationOperatorDescription" : "Order Transformation Inversion",
+      "mutantCode" : "def bestMoviesDecade(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))], minimumVotesRequired: Double, meanOfMeansRatingsOfAllMovies: Double) = {\n  val ratingsStatisticsWithWR: RDD[((Int, String, Int), (Int, Double, Double, Double, Double))] = ratingsStats.map { (s: ((Int, String, Int), (Int, Double, Double, Double))) => (s._1, (s._2._1, s._2._2, s._2._3, s._2._4, weighted_rating(s._2._2, s._2._1.toDouble, minimumVotesRequired, meanOfMeansRatingsOfAllMovies))) }\n  val ratingsStatisticsWithWRDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = ratingsStatisticsWithWR.map { (m: ((Int, String, Int), (Int, Double, Double, Double, Double))) => (m._1._3 / 10 * 10, (m._1._2, m._2)) }\n  val groupByDecade: RDD[(Int, Iterable[(String, (Int, Double, Double, Double, Double))])] = ratingsStatisticsWithWRDecade.groupByKey()\n  val bestMoviesDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = groupByDecade.map { (j: (Int, Iterable[(String, (Int, Double, Double, Double, Double))])) => (j._1, j._2.reduce((j1, j2) => if (j1._2._5 > j2._2._5) j1 else j2)) }\n  val bestMoviesDecadeSorted: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = bestMoviesDecade.sortByKey(false)\n  bestMoviesDecadeSorted\n}",
+      "originalCode" : "def bestMoviesDecade(ratingsStats: RDD[((Int, String, Int), (Int, Double, Double, Double))], minimumVotesRequired: Double, meanOfMeansRatingsOfAllMovies: Double) = {\n    val ratingsStatisticsWithWR: RDD[((Int, String, Int), (Int, Double, Double, Double, Double))] = ratingsStats.map((s: ((Int, String, Int), (Int, Double, Double, Double))) => (s._1, (s._2._1, s._2._2, s._2._3, s._2._4, weighted_rating(s._2._2, s._2._1.toDouble, minimumVotesRequired, meanOfMeansRatingsOfAllMovies))))\n    val ratingsStatisticsWithWRDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = ratingsStatisticsWithWR.map((m: (((Int, String, Int), (Int, Double, Double, Double, Double)))) => (m._1._3 / 10 * 10, (m._1._2, m._2)))\n    val groupByDecade: RDD[(Int, Iterable[(String, (Int, Double, Double, Double, Double))])] = ratingsStatisticsWithWRDecade.groupByKey()\n    val bestMoviesDecade: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = groupByDecade.map((j: (Int, Iterable[(String, (Int, Double, Double, Double, Double))])) => (j._1, j._2.reduce((j1, j2) => if (j1._2._5 > j2._2._5) j1 else j2)))\n    val bestMoviesDecadeSorted: RDD[(Int, (String, (Int, Double, Double, Double, Double)))] = bestMoviesDecade.sortByKey(true)\n    bestMoviesDecadeSorted\n  }",
+      "status" : "Lived"
+    }
+  ],
+  "removedMutants" : [
+  ],
+  "mutationOperatorsMetrics" : {
+    "totalMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 12,
+      "UTD" : 1,
+      "OTD" : 1,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 1,
+      "DTI" : 5,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalKilledMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 12,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalLivedMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 0,
+      "UTD" : 1,
+      "OTD" : 1,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 1,
+      "DTI" : 1,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalEquivalentMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 0,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 4,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalErrorMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 0,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalRemovedMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 0,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "descriptionPerOperator" : {
+      "FTD" : "Filter Transformation Deletion",
+      "JTR" : "Join Transformation Replacement",
+      "UTR" : "Unary Transformation Replacement",
+      "MTR" : "Mapping Transformation Replacement",
+      "UTD" : "Unary Transformation Deletion",
+      "OTD" : "Order Transformation Deletion",
+      "BTR" : "Binary Transformation Replacement",
+      "STR" : "Set Transformation Replacement",
+      "BTS" : "Binary Transformation Swap",
+      "ATR" : "Aggregation Transformation Replacement",
+      "OTI" : "Order Transformation Inversion",
+      "DTI" : "Distinct Transformation Insertion",
+      "DTD" : "Distinct Transformation Deletion",
+      "NFTP" : "Negation of Filter Transformation Predicate",
+      "UTS" : "Unary Transformation Swap"
+    }
+  },
+  "totalDatasets" : 6,
+  "totalTransformations" : 5,
+  "totalMutants" : 20,
+  "totalKilledMutants" : 12,
+  "totalLivedMutants" : 4,
+  "totalEquivalentMutants" : 4,
+  "totalErrorMutants" : 0,
+  "totalRemovedMutants" : 0,
+  "mutationScore" : 0.75
+}

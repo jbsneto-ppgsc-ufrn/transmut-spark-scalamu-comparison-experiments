@@ -1,0 +1,2738 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<!-- SyntaxHighlighter -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/scripts/shCore.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/scripts/shBrushScala.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/styles/shCoreEclipse.css" rel="stylesheet" type="text/css" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/styles/shThemeEclipse.min.css" rel="stylesheet" type="text/css" />
+<!-- Cytoscape -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/2.5.1/cytoscape.min.js"></script>
+<!-- DataTable -->
+<link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<style>
+#cy {
+  width: 1100px;
+  height: 300px;
+  background-color: white;
+}
+body {
+  padding-top: 5rem;
+}
+.starter-template {
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+.section-title {
+  padding-top: 3.5rem;
+}
+</style>
+<title>TRANSMUT-Spark Mutation Testing Report</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+<a class="navbar-brand" href="../index.html">TRANSMUT-Spark</a>
+<div class="collapse navbar-collapse" id="navbarNav">
+  <ul class="navbar-nav mr-auto">
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Section</a>
+      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <a class="dropdown-item" href="#metrics">Metrics</a>
+        <a class="dropdown-item" href="#code">Code</a>
+        <a class="dropdown-item" href="#dag">DAG</a>
+        <a class="dropdown-item" href="#datasets">Datasets</a>
+        <a class="dropdown-item" href="#transformations">Transformations</a>
+        <a class="dropdown-item" href="#mutants">Mutants</a>
+        <a class="dropdown-item" href="#removedMutants">Removed Mutants</a>
+        <a class="dropdown-item" href="#mutationOperators">Mutation Operators</a>
+      </div>
+    </li>
+  </ul>
+</div>
+</nav>
+<main role"main" class="container">  
+<div class="starter-template">
+  <h2><a href="../index.html" class="text-dark">Mutation Testing Report</a></h2>
+  <h3><a href="../ProgramSources/Program-Source-1.html" class="text-dark">Program Source: MovieLensExploration</a></h3>
+  <h4><a href="#" class="text-dark">Program ID: 2</a></h4>
+  <h4><a href="#" class="text-dark">Program: moviesPerYearCount</a></h4>
+</div>    
+<!-- Metrics -->
+<div class="row" id="metrics">
+<div class="col" >
+<h3 class="section-title">Metrics</h3>
+<hr class="my-4">
+<table class="table table-striped table-hover">
+<thead class="thead-dark"><tr><th scope="col">#</th><th scope="col">Total</th></tr></thead>
+<tbody>
+  <tr><th scope="row">Datasets</th><td>5</td></tr>
+  <tr><th scope="row">Transformations</th><td>4</td></tr>
+  <tr><th scope="row">Mutants</th><td>43</td></tr>
+  <tr><th scope="row">Killed Mutants</th><td>31</td></tr>
+  <tr><th scope="row">Lived Mutants</th><td>8</td></tr>
+  <tr><th scope="row">Equivalent Mutants</th><td>4</td></tr>
+  <tr><th scope="row">Error Mutants</th><td>0</td></tr>
+  <tr><th scope="row">Removed Mutants</th><td>0</td></tr>
+  <tr><th scope="row">Mutation Score</th>
+  <td>
+    <div class="progress">
+      <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 79.49%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><span class="font-weight-bold text-dark">0.79</span></div>
+    </div>
+  </td>
+  </tr>
+ </tbody>
+ <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+    <th scope="row"></th>
+    <td></td>
+    </tr>
+  </tfoot>
+</table>
+     
+<hr class="my-4">
+</div>
+</div>
+<!-- Code -->
+<div class="row" id="code">
+<div class="col">
+<h3 class="section-title">Code</h3>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false;">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))
+    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)
+    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))
+    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+    moviesPerYearInverseSorted
+  }
+</pre>
+<hr class="my-4">
+</div>
+</div>
+<!-- DAG -->
+<div class="row" id="dag">
+<div class="col" >
+<h3 class="section-title">DAG</h3>
+<hr class="my-4">
+<figure class="figure">
+<div id="cy"></div>
+</figure>
+<hr class="my-4">
+</div> 
+</div>
+<!-- Datasets -->
+<div class="row" id="datasets">
+<div class="col" >
+<h3 class="section-title">Datasets</h3>
+<hr class="my-4">
+<table class="table table-striped table-hover">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Reference</th>
+      <th scope="col">Type</th>
+   </tr>
+  </thead>
+  <tbody>
+  <tr>
+  <th scope="row">7</th>
+  <td>movies</td>
+  <td>RDD[Movie]</td>
+</tr>
+<tr>
+  <th scope="row">8</th>
+  <td>yearTuple</td>
+  <td>RDD[(Int, Int)]</td>
+</tr>
+<tr>
+  <th scope="row">9</th>
+  <td>moviesPerYear</td>
+  <td>RDD[(Int, Int)]</td>
+</tr>
+<tr>
+  <th scope="row">10</th>
+  <td>moviesPerYearInverse</td>
+  <td>RDD[(Int, Int)]</td>
+</tr>
+<tr>
+  <th scope="row">11</th>
+  <td>moviesPerYearInverseSorted</td>
+  <td>RDD[(Int, Int)]</td>
+</tr>
+  </tbody>
+  <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+    <th scope="row" colspan="2">Total Datasets</th>
+    <td>5</td>
+    </tr>
+  </tfoot>
+</table>      
+    
+<hr class="my-4">
+</div>
+</div>
+<!-- Transformations -->
+<div class="row" id="transformations">
+<div class="col" >
+<h3 class="section-title" id="transformations">Transformations</h3>
+<hr class="my-4">
+<table class="table table-striped table-hover">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Name</th>
+      <th scope="col">Input Type</th>
+      <th scope="col">Output Type</th>
+   </tr>
+  </thead>
+  <tbody>
+  <tr>
+  <th scope="row">4</th>
+  <td>map</td>
+  <td>RDD[Movie]</td>
+  <td>RDD[(Int, Int)]</td>
+</tr>
+<tr>
+  <th scope="row">5</th>
+  <td>reduceByKey</td>
+  <td>RDD[(Int, Int)]</td>
+  <td>RDD[(Int, Int)]</td>
+</tr>
+<tr>
+  <th scope="row">6</th>
+  <td>map</td>
+  <td>RDD[(Int, Int)]</td>
+  <td>RDD[(Int, Int)]</td>
+</tr>
+<tr>
+  <th scope="row">7</th>
+  <td>sortByKey</td>
+  <td>RDD[(Int, Int)]</td>
+  <td>RDD[(Int, Int)]</td>
+</tr>
+  </tbody>
+  <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+    <th scope="row" colspan="3">Total Transformations</th>
+    <td>4</td>
+    </tr>
+  </tfoot>
+</table>      
+    
+<hr class="my-4">   
+</div>
+</div>
+<!-- Mutants -->
+<div class="row" id="mutants">
+<div class="col">
+<h3 class="section-title">Mutants</h3>
+<hr class="my-4">
+<table class="display table table-striped table-hover" id="mutantsTable">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Mutation Operator</th>
+      <th scope="col">Status</th>
+      <th scope="col">Code</th>
+     </tr>
+  </thead>
+  <tbody>
+    <tr>
+  <th scope="row"><a href="../Mutants/Mutant-16.html" class="text-dark">16</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Swap">UTS</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant16">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-17.html" class="text-dark">17</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Swap">UTS</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant17">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-18.html" class="text-dark">18</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Swap">UTS</a></td>
+  <td>Lived</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant18">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-19.html" class="text-dark">19</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Replacement">UTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant19">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-20.html" class="text-dark">20</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Replacement">UTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant20">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-21.html" class="text-dark">21</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Replacement">UTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant21">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-22.html" class="text-dark">22</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Replacement">UTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant22">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-23.html" class="text-dark">23</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Replacement">UTR</a></td>
+  <td>Lived</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant23">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-24.html" class="text-dark">24</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Replacement">UTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant24">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-25.html" class="text-dark">25</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Deletion">UTD</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant25">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-26.html" class="text-dark">26</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Deletion">UTD</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant26">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-27.html" class="text-dark">27</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Deletion">UTD</a></td>
+  <td>Lived</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant27">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-28.html" class="text-dark">28</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant28">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-29.html" class="text-dark">29</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant29">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-30.html" class="text-dark">30</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant30">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-31.html" class="text-dark">31</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant31">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-32.html" class="text-dark">32</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant32">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-33.html" class="text-dark">33</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant33">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-34.html" class="text-dark">34</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Equivalent</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant34">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-35.html" class="text-dark">35</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant35">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-36.html" class="text-dark">36</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant36">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-37.html" class="text-dark">37</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant37">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-38.html" class="text-dark">38</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant38">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-39.html" class="text-dark">39</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant39">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-40.html" class="text-dark">40</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant40">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-41.html" class="text-dark">41</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant41">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-42.html" class="text-dark">42</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant42">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-43.html" class="text-dark">43</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant43">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-44.html" class="text-dark">44</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant44">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-45.html" class="text-dark">45</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant45">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-46.html" class="text-dark">46</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant46">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-47.html" class="text-dark">47</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant47">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-48.html" class="text-dark">48</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant48">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-49.html" class="text-dark">49</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></td>
+  <td>Equivalent</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant49">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-50.html" class="text-dark">50</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></td>
+  <td>Equivalent</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant50">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-51.html" class="text-dark">51</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></td>
+  <td>Lived</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant51">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-52.html" class="text-dark">52</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant52">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-53.html" class="text-dark">53</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></td>
+  <td>Killed</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant53">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-54.html" class="text-dark">54</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></td>
+  <td>Lived</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant54">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-55.html" class="text-dark">55</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></td>
+  <td>Lived</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant55">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-56.html" class="text-dark">56</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></td>
+  <td>Equivalent</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant56">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-57.html" class="text-dark">57</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Order Transformation Deletion">OTD</a></td>
+  <td>Lived</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant57">Show</button></td>
+</tr>
+<tr>
+  <th scope="row"><a href="../Mutants/Mutant-58.html" class="text-dark">58</a></th>
+  <td><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Order Transformation Inversion">OTI</a></td>
+  <td>Lived</td>
+  <td><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalMutant58">Show</button></td>
+</tr>
+  </tbody>
+  <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+      <th scope="row" colspan="2">Mutation Score</th>
+      <td colspan="2">
+        <div class="progress">
+          <div class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 79.49%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"><span class="font-weight-bold text-dark">0.79</span></div>
+        </div>
+      </td>
+    </tr>
+  </tfoot>
+</table>   
+   
+<hr class="my-4">
+</div>
+</div>
+<!-- Removed Mutants -->
+<div class="row" id="removedMutants">
+<div class="col">
+<h3 class="section-title">Removed Mutants</h3>
+<hr class="my-4">
+<table class="display table table-striped table-hover" id="removedMutantsTable">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Mutation Operator</th>
+      <th scope="col">Reduction Rule</th>
+      <th scope="col">Code</th>
+     </tr>
+  </thead>
+  <tbody>
+    
+  </tbody>
+  <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+      <th scope="row" colspan="2">Total Removed Mutants</th>
+      <td colspan="2">0</td>
+    </tr>
+  </tfoot>
+</table>   
+   
+<hr class="my-4">
+</div>
+</div>
+<!-- Mutation Operators -->
+<div class="row" id="mutationOperators">
+<div class="col">
+<h3 class="section-title">Mutation Operators</h3>
+<hr class="my-4">
+<table class="display table table-striped table-hover" id="programSourcesTable">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Mutation Operator</th>
+      <th scope="col">Mutants</th>
+      <th scope="col">Killed</th>
+      <th scope="col">Lived</th>
+      <th scope="col">Equivalent</th>
+      <th scope="col">Error</th>
+      <th scope="col">Removed</th>
+      </tr>
+  </thead>
+  <tbody>
+    <tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></th>
+  <td>5</td>
+  <td>2</td>
+  <td>2</td>
+  <td>1</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+<tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></th>
+  <td>20</td>
+  <td>19</td>
+  <td>0</td>
+  <td>1</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+<tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Order Transformation Inversion">OTI</a></th>
+  <td>1</td>
+  <td>0</td>
+  <td>1</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+<tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Order Transformation Deletion">OTD</a></th>
+  <td>1</td>
+  <td>0</td>
+  <td>1</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+<tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Replacement">UTR</a></th>
+  <td>6</td>
+  <td>5</td>
+  <td>1</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+<tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></th>
+  <td>4</td>
+  <td>1</td>
+  <td>1</td>
+  <td>2</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+<tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Swap">UTS</a></th>
+  <td>3</td>
+  <td>2</td>
+  <td>1</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+<tr>
+  <th scope="row"><a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Deletion">UTD</a></th>
+  <td>3</td>
+  <td>2</td>
+  <td>1</td>
+  <td>0</td>
+  <td>0</td>
+  <td>0</td>
+</tr>
+  </tbody>
+  <tfoot class="text-light bg-secondary font-weight-bold">
+    <tr>
+      <th scope="row">Total</th>
+      <td>43</td>
+      <td>31</td>
+      <td>8</td>
+      <td>4</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+  </tfoot>
+</table>   
+   
+<hr class="my-4">
+</div>
+</div>
+<!-- Mutant Modals -->
+<div class="modal fade" id="modalMutant16" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel16" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-16.html" class="text-dark">16</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Swap">UTS</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3, 4]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))
+    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)
+    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))
+    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+    moviesPerYearInverseSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3, 4]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }
+  val moviesPerYear: RDD[(Int, Int)] = yearTuple.map { (t: (Int, Int)) => (t._2, t._1) }
+  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.reduceByKey { (a: Int, b: Int) => a + b }
+  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+  moviesPerYearInverseSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant17" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel17" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-17.html" class="text-dark">17</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Swap">UTS</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3, 5]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))
+    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)
+    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))
+    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+    moviesPerYearInverseSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3, 5]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }
+  val moviesPerYear: RDD[(Int, Int)] = yearTuple.sortByKey(false)
+  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }
+  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.reduceByKey { (a: Int, b: Int) => a + b }
+  moviesPerYearInverseSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant18" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel18" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-18.html" class="text-dark">18</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Swap">UTS</a></h5>
+<h5>Status: Lived</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4, 5]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))
+    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)
+    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))
+    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+    moviesPerYearInverseSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4, 5]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }
+  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }
+  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.sortByKey(false)
+  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.map { (t: (Int, Int)) => (t._2, t._1) }
+  moviesPerYearInverseSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant19" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel19" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-19.html" class="text-dark">19</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Replacement">UTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3, 4]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))
+    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)
+    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))
+    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+    moviesPerYearInverseSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }
+  val moviesPerYear: RDD[(Int, Int)] = yearTuple.map { (t: (Int, Int)) => (t._2, t._1) }
+  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }
+  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+  moviesPerYearInverseSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant20" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel20" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-20.html" class="text-dark">20</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Replacement">UTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3, 5]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))
+    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)
+    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))
+    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+    moviesPerYearInverseSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }
+  val moviesPerYear: RDD[(Int, Int)] = yearTuple.sortByKey(false)
+  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }
+  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+  moviesPerYearInverseSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant21" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel21" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-21.html" class="text-dark">21</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Replacement">UTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4, 3]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))
+    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)
+    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))
+    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+    moviesPerYearInverseSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }
+  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }
+  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.reduceByKey { (a: Int, b: Int) => a + b }
+  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+  moviesPerYearInverseSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant22" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel22" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-22.html" class="text-dark">22</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Replacement">UTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4, 5]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))
+    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)
+    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))
+    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+    moviesPerYearInverseSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }
+  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }
+  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.sortByKey(false)
+  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+  moviesPerYearInverseSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant23" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel23" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-23.html" class="text-dark">23</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Replacement">UTR</a></h5>
+<h5>Status: Lived</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5, 3]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))
+    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)
+    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))
+    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+    moviesPerYearInverseSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }
+  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }
+  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }
+  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.reduceByKey { (a: Int, b: Int) => a + b }
+  moviesPerYearInverseSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant24" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel24" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-24.html" class="text-dark">24</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Replacement">UTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5, 4]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))
+    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)
+    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))
+    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+    moviesPerYearInverseSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }
+  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }
+  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }
+  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.map { (t: (Int, Int)) => (t._2, t._1) }
+  moviesPerYearInverseSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant25" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel25" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-25.html" class="text-dark">25</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Deletion">UTD</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))
+    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)
+    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))
+    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+    moviesPerYearInverseSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }
+  val moviesPerYear: RDD[(Int, Int)] = yearTuple
+  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }
+  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+  moviesPerYearInverseSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant26" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel26" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-26.html" class="text-dark">26</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Deletion">UTD</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))
+    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)
+    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))
+    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+    moviesPerYearInverseSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }
+  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }
+  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear
+  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+  moviesPerYearInverseSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant27" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel27" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-27.html" class="text-dark">27</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Unary Transformation Deletion">UTD</a></h5>
+<h5>Status: Lived</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))
+    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)
+    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))
+    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+    moviesPerYearInverseSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }
+  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }
+  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }
+  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse
+  moviesPerYearInverseSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant28" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel28" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-28.html" class="text-dark">28</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))
+    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)
+    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))
+    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+    moviesPerYearInverseSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2, 3, 4, 5, 6]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+  val yearTuple: RDD[(Int, Int)] = movies.map { (inputParameter: Movie) => {
+    val originalFunction = ((m: Movie) => (m.year, 1))(_)
+    val originalValue = originalFunction(inputParameter)
+    (0, originalValue._2)
+  } }
+  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }
+  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }
+  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+  moviesPerYearInverseSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant29" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel29" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-29.html" class="text-dark">29</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))
+    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)
+    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))
+    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+    moviesPerYearInverseSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2, 3, 4, 5, 6]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+  val yearTuple: RDD[(Int, Int)] = movies.map { (inputParameter: Movie) => {
+    val originalFunction = ((m: Movie) => (m.year, 1))(_)
+    val originalValue = originalFunction(inputParameter)
+    (1, originalValue._2)
+  } }
+  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }
+  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }
+  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+  moviesPerYearInverseSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant30" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel30" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-30.html" class="text-dark">30</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))
+    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)
+    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))
+    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+    moviesPerYearInverseSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2, 3, 4, 5, 6]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+  val yearTuple: RDD[(Int, Int)] = movies.map { (inputParameter: Movie) => {
+    val originalFunction = ((m: Movie) => (m.year, 1))(_)
+    val originalValue = originalFunction(inputParameter)
+    (Int.MaxValue, originalValue._2)
+  } }
+  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }
+  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }
+  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+  moviesPerYearInverseSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant31" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel31" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-31.html" class="text-dark">31</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))
+    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)
+    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))
+    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+    moviesPerYearInverseSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2, 3, 4, 5, 6]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+  val yearTuple: RDD[(Int, Int)] = movies.map { (inputParameter: Movie) => {
+    val originalFunction = ((m: Movie) => (m.year, 1))(_)
+    val originalValue = originalFunction(inputParameter)
+    (Int.MinValue, originalValue._2)
+  } }
+  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }
+  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }
+  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+  moviesPerYearInverseSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant32" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel32" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-32.html" class="text-dark">32</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))
+    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)
+    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))
+    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+    moviesPerYearInverseSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2, 3, 4, 5, 6]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+  val yearTuple: RDD[(Int, Int)] = movies.map { (inputParameter: Movie) => {
+    val originalFunction = ((m: Movie) => (m.year, 1))(_)
+    val originalValue = originalFunction(inputParameter)
+    (-originalValue._1, originalValue._2)
+  } }
+  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }
+  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }
+  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+  moviesPerYearInverseSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant33" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel33" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-33.html" class="text-dark">33</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))
+    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)
+    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))
+    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+    moviesPerYearInverseSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2, 3, 4, 5, 6]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+  val yearTuple: RDD[(Int, Int)] = movies.map { (inputParameter: Movie) => {
+    val originalFunction = ((m: Movie) => (m.year, 1))(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, 0)
+  } }
+  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }
+  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }
+  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+  moviesPerYearInverseSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant34" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel34" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-34.html" class="text-dark">34</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Equivalent</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))
+    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)
+    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))
+    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+    moviesPerYearInverseSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2, 3, 4, 5, 6]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+  val yearTuple: RDD[(Int, Int)] = movies.map { (inputParameter: Movie) => {
+    val originalFunction = ((m: Movie) => (m.year, 1))(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, 1)
+  } }
+  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }
+  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }
+  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+  moviesPerYearInverseSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant35" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel35" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-35.html" class="text-dark">35</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))
+    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)
+    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))
+    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+    moviesPerYearInverseSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2, 3, 4, 5, 6]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+  val yearTuple: RDD[(Int, Int)] = movies.map { (inputParameter: Movie) => {
+    val originalFunction = ((m: Movie) => (m.year, 1))(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, Int.MaxValue)
+  } }
+  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }
+  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }
+  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+  moviesPerYearInverseSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant36" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel36" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-36.html" class="text-dark">36</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))
+    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)
+    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))
+    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+    moviesPerYearInverseSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2, 3, 4, 5, 6]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+  val yearTuple: RDD[(Int, Int)] = movies.map { (inputParameter: Movie) => {
+    val originalFunction = ((m: Movie) => (m.year, 1))(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, Int.MinValue)
+  } }
+  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }
+  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }
+  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+  moviesPerYearInverseSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant37" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel37" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-37.html" class="text-dark">37</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))
+    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)
+    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))
+    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+    moviesPerYearInverseSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2, 3, 4, 5, 6]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+  val yearTuple: RDD[(Int, Int)] = movies.map { (inputParameter: Movie) => {
+    val originalFunction = ((m: Movie) => (m.year, 1))(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, -originalValue._2)
+  } }
+  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }
+  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }
+  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+  moviesPerYearInverseSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant38" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel38" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-38.html" class="text-dark">38</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))
+    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)
+    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))
+    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+    moviesPerYearInverseSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4, 5, 6, 7, 8]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }
+  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }
+  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (inputParameter: (Int, Int)) => {
+    val originalFunction = ((t: (Int, Int)) => (t._2, t._1))(_)
+    val originalValue = originalFunction(inputParameter)
+    (0, originalValue._2)
+  } }
+  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+  moviesPerYearInverseSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant39" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel39" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-39.html" class="text-dark">39</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))
+    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)
+    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))
+    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+    moviesPerYearInverseSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4, 5, 6, 7, 8]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }
+  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }
+  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (inputParameter: (Int, Int)) => {
+    val originalFunction = ((t: (Int, Int)) => (t._2, t._1))(_)
+    val originalValue = originalFunction(inputParameter)
+    (1, originalValue._2)
+  } }
+  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+  moviesPerYearInverseSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant40" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel40" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-40.html" class="text-dark">40</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))
+    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)
+    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))
+    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+    moviesPerYearInverseSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4, 5, 6, 7, 8]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }
+  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }
+  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (inputParameter: (Int, Int)) => {
+    val originalFunction = ((t: (Int, Int)) => (t._2, t._1))(_)
+    val originalValue = originalFunction(inputParameter)
+    (Int.MaxValue, originalValue._2)
+  } }
+  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+  moviesPerYearInverseSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant41" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel41" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-41.html" class="text-dark">41</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))
+    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)
+    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))
+    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+    moviesPerYearInverseSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4, 5, 6, 7, 8]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }
+  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }
+  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (inputParameter: (Int, Int)) => {
+    val originalFunction = ((t: (Int, Int)) => (t._2, t._1))(_)
+    val originalValue = originalFunction(inputParameter)
+    (Int.MinValue, originalValue._2)
+  } }
+  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+  moviesPerYearInverseSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant42" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel42" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-42.html" class="text-dark">42</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))
+    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)
+    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))
+    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+    moviesPerYearInverseSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4, 5, 6, 7, 8]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }
+  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }
+  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (inputParameter: (Int, Int)) => {
+    val originalFunction = ((t: (Int, Int)) => (t._2, t._1))(_)
+    val originalValue = originalFunction(inputParameter)
+    (-originalValue._1, originalValue._2)
+  } }
+  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+  moviesPerYearInverseSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant43" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel43" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-43.html" class="text-dark">43</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))
+    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)
+    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))
+    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+    moviesPerYearInverseSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4, 5, 6, 7, 8]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }
+  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }
+  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (inputParameter: (Int, Int)) => {
+    val originalFunction = ((t: (Int, Int)) => (t._2, t._1))(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, 0)
+  } }
+  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+  moviesPerYearInverseSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant44" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel44" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-44.html" class="text-dark">44</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))
+    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)
+    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))
+    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+    moviesPerYearInverseSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4, 5, 6, 7, 8]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }
+  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }
+  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (inputParameter: (Int, Int)) => {
+    val originalFunction = ((t: (Int, Int)) => (t._2, t._1))(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, 1)
+  } }
+  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+  moviesPerYearInverseSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant45" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel45" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-45.html" class="text-dark">45</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))
+    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)
+    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))
+    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+    moviesPerYearInverseSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4, 5, 6, 7, 8]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }
+  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }
+  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (inputParameter: (Int, Int)) => {
+    val originalFunction = ((t: (Int, Int)) => (t._2, t._1))(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, Int.MaxValue)
+  } }
+  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+  moviesPerYearInverseSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant46" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel46" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-46.html" class="text-dark">46</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))
+    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)
+    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))
+    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+    moviesPerYearInverseSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4, 5, 6, 7, 8]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }
+  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }
+  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (inputParameter: (Int, Int)) => {
+    val originalFunction = ((t: (Int, Int)) => (t._2, t._1))(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, Int.MinValue)
+  } }
+  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+  moviesPerYearInverseSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant47" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel47" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-47.html" class="text-dark">47</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Mapping Transformation Replacement">MTR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))
+    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)
+    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))
+    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+    moviesPerYearInverseSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4, 5, 6, 7, 8]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }
+  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }
+  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (inputParameter: (Int, Int)) => {
+    val originalFunction = ((t: (Int, Int)) => (t._2, t._1))(_)
+    val originalValue = originalFunction(inputParameter)
+    (originalValue._1, -originalValue._2)
+  } }
+  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+  moviesPerYearInverseSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant48" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel48" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-48.html" class="text-dark">48</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))
+    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)
+    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))
+    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+    moviesPerYearInverseSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [2]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }.distinct()
+  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }
+  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }
+  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+  moviesPerYearInverseSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant49" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel49" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-49.html" class="text-dark">49</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></h5>
+<h5>Status: Equivalent</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))
+    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)
+    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))
+    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+    moviesPerYearInverseSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }
+  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }.distinct()
+  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }
+  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+  moviesPerYearInverseSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant50" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel50" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-50.html" class="text-dark">50</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></h5>
+<h5>Status: Equivalent</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))
+    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)
+    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))
+    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+    moviesPerYearInverseSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [4]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }
+  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }
+  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }.distinct()
+  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+  moviesPerYearInverseSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant51" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel51" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-51.html" class="text-dark">51</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Distinct Transformation Insertion">DTI</a></h5>
+<h5>Status: Lived</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))
+    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)
+    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))
+    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+    moviesPerYearInverseSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }
+  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }
+  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }
+  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false).distinct()
+  moviesPerYearInverseSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant52" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel52" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-52.html" class="text-dark">52</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))
+    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)
+    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))
+    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+    moviesPerYearInverseSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }
+  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (firstParameter: Int, secondParameter: Int) => firstParameter }
+  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }
+  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+  moviesPerYearInverseSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant53" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel53" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-53.html" class="text-dark">53</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></h5>
+<h5>Status: Killed</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))
+    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)
+    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))
+    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+    moviesPerYearInverseSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }
+  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (firstParameter: Int, secondParameter: Int) => secondParameter }
+  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }
+  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+  moviesPerYearInverseSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant54" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel54" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-54.html" class="text-dark">54</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></h5>
+<h5>Status: Lived</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))
+    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)
+    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))
+    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+    moviesPerYearInverseSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3, 4, 5, 6]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }
+  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (firstParameter: Int, secondParameter: Int) => {
+    val originalFunction = ((a: Int, b: Int) => a + b)(_, _)
+    originalFunction(firstParameter, firstParameter)
+  } }
+  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }
+  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+  moviesPerYearInverseSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant55" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel55" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-55.html" class="text-dark">55</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></h5>
+<h5>Status: Lived</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))
+    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)
+    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))
+    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+    moviesPerYearInverseSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3, 4, 5, 6]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }
+  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (firstParameter: Int, secondParameter: Int) => {
+    val originalFunction = ((a: Int, b: Int) => a + b)(_, _)
+    originalFunction(secondParameter, secondParameter)
+  } }
+  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }
+  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+  moviesPerYearInverseSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant56" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel56" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-56.html" class="text-dark">56</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Aggregation Transformation Replacement">ATR</a></h5>
+<h5>Status: Equivalent</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))
+    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)
+    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))
+    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+    moviesPerYearInverseSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [3, 4, 5, 6]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }
+  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (firstParameter: Int, secondParameter: Int) => {
+    val originalFunction = ((a: Int, b: Int) => a + b)(_, _)
+    originalFunction(secondParameter, firstParameter)
+  } }
+  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }
+  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+  moviesPerYearInverseSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant57" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel57" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-57.html" class="text-dark">57</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Order Transformation Deletion">OTD</a></h5>
+<h5>Status: Lived</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))
+    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)
+    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))
+    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+    moviesPerYearInverseSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }
+  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }
+  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }
+  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse
+  moviesPerYearInverseSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<div class="modal fade" id="modalMutant58" tabindex="-1" role="dialog" aria-labelledby="modalMutantLabel58" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="exampleModalLabel">Mutant ID: <a href="../Mutants/Mutant-58.html" class="text-dark">58</a></h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<h5>Mutation Operator: <a href="#" class="text-dark" data-toggle="tooltip" data-placement="right" title="Order Transformation Inversion">OTI</a></h5>
+<h5>Status: Lived</h5>
+<hr class="my-4">
+<h5>Original Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))
+    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)
+    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))
+    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)
+    moviesPerYearInverseSorted
+  }
+</pre>
+<hr class="my-4">
+<h5>Mutant Code: </h5>
+<hr class="my-4">
+<pre class="brush: scala; toolbar: false; highlight: [5]">
+def moviesPerYearCount(movies: RDD[Movie]) = {
+  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }
+  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }
+  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }
+  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(true)
+  moviesPerYearInverseSorted
+}
+</pre>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Removed Mutant Modals -->
+
+</main>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+<script type="text/javascript">
+ SyntaxHighlighter.all()
+</script>
+<script >
+$(document).ready(function() {
+  $('table.display').DataTable( {
+    fixedHeader: {
+      header: true,
+      footer: true
+    },
+    "lengthMenu": [[5, 10, 20, -1], [5, 10, 20, "All"]]
+  } );
+} );
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+});
+</script>
+
+<script >
+  var cy = cytoscape({
+    container: document.getElementById('cy'), // container to render in
+    elements: [ // list of graph elements to start with
+      { // dataset node 7
+  data: { id: 'dataset_7' , name : 'movies' , dataset : 'true' , inputDataset: 'true'  }
+}, 
+{ // transformation node 4
+  data: { id: 'transformation_4' , name : 'map' , transformation : 'true'  }
+}, 
+{ // edge node 7
+  data: { id: 'edge_7' , source: 'dataset_7', target: 'transformation_4'  }
+}, 
+{ // dataset node 8
+  data: { id: 'dataset_8' , name : 'yearTuple' , dataset : 'true'   }
+}, 
+{ // edge node 8
+  data: { id: 'edge_8'  , target: 'dataset_8', source: 'transformation_4' }
+}, 
+{ // transformation node 5
+  data: { id: 'transformation_5' , name : 'reduceByKey' , transformation : 'true'  }
+}, 
+{ // edge node 9
+  data: { id: 'edge_9' , source: 'dataset_8', target: 'transformation_5'  }
+}, 
+{ // dataset node 9
+  data: { id: 'dataset_9' , name : 'moviesPerYear' , dataset : 'true'   }
+}, 
+{ // edge node 10
+  data: { id: 'edge_10'  , target: 'dataset_9', source: 'transformation_5' }
+}, 
+{ // transformation node 6
+  data: { id: 'transformation_6' , name : 'map' , transformation : 'true'  }
+}, 
+{ // edge node 11
+  data: { id: 'edge_11' , source: 'dataset_9', target: 'transformation_6'  }
+}, 
+{ // dataset node 10
+  data: { id: 'dataset_10' , name : 'moviesPerYearInverse' , dataset : 'true'   }
+}, 
+{ // edge node 12
+  data: { id: 'edge_12'  , target: 'dataset_10', source: 'transformation_6' }
+}, 
+{ // transformation node 7
+  data: { id: 'transformation_7' , name : 'sortByKey' , transformation : 'true'  }
+}, 
+{ // edge node 13
+  data: { id: 'edge_13' , source: 'dataset_10', target: 'transformation_7'  }
+}, 
+{ // dataset node 11
+  data: { id: 'dataset_11' , name : 'moviesPerYearInverseSorted' , dataset : 'true'  , outputDataset: 'true' }
+}, 
+{ // edge node 14
+  data: { id: 'edge_14'  , target: 'dataset_11', source: 'transformation_7' }
+}
+    ],
+   style: [ // the stylesheet for the graph
+   {
+     selector: 'node',
+     style: {
+       'label': 'data(name)'
+     }
+   },
+   {
+     selector: 'edge',
+     style: {
+     'width': 3,
+     'line-color': '#ccc',
+     'target-arrow-color': '#ccc',
+     'target-arrow-shape': 'triangle',
+     }
+   },
+   {
+      selector: '[transformation]',
+      style: {
+        'background-color': 'black',
+        'shape': 'rectangle'
+       }
+   },
+   {
+      selector: '[dataset]',
+      style: {
+        'background-color': 'gray',
+        'shape': 'ellipse'
+      }
+   },
+   {
+      selector: '[inputDataset]',
+      style: {
+        'background-color': 'green',
+        'shape': 'ellipse'
+       }
+   },
+   {
+     selector: '[outputDataset]',
+     style: {
+       'background-color': 'red',
+       'shape': 'ellipse'
+      }
+   },
+   {
+      selector: '[loadTransformation]',
+      style: {
+        'background-color': 'red',
+        'shape': 'rectangle'
+       }
+   }
+  ],
+  layout: {
+    name: 'grid',
+    rows: 1
+  }
+});
+</script>
+    
+</body>
+</html>
+    

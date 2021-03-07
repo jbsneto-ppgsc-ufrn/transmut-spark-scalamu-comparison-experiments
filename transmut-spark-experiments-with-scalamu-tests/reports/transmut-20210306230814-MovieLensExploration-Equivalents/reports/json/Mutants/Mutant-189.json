@@ -1,0 +1,9 @@
+{
+  "id" : 189,
+  "originalProgramId" : 8,
+  "mutationOperator" : "MTR",
+  "mutationOperatorDescription" : "Mapping Transformation Replacement",
+  "mutantCode" : "def tagBestSummarizeGenre(genresTagsCountSorted: RDD[(String, (String, Int))]) = {\n  val genresTagsCountSortedGrouped: RDD[(String, Iterable[(String, Int)])] = genresTagsCountSorted.groupByKey()\n  val genresTagsCountSortedTop5: RDD[(String, List[(String, Int)])] = genresTagsCountSortedGrouped.map { (inputParameter: (String, Iterable[(String, Int)])) => {\n    val originalFunction = ((l: (String, Iterable[(String, Int)])) => (l._1, l._2.toList.sortBy(_._2).reverse.take(5)))(_)\n    val originalValue = originalFunction(inputParameter)\n    (\"\", originalValue._2)\n  } }\n  genresTagsCountSortedTop5\n}",
+  "originalCode" : "def tagBestSummarizeGenre(genresTagsCountSorted: RDD[(String, (String, Int))]) = {\n    val genresTagsCountSortedGrouped: RDD[(String, Iterable[(String, Int)])] = genresTagsCountSorted.groupByKey()\n    val genresTagsCountSortedTop5: RDD[(String, List[(String, Int)])] = genresTagsCountSortedGrouped.map((l: (String, Iterable[(String, Int)])) => (l._1, l._2.toList.sortBy(_._2).reverse.take(5)))\n    genresTagsCountSortedTop5\n  }",
+  "status" : "Killed"
+}

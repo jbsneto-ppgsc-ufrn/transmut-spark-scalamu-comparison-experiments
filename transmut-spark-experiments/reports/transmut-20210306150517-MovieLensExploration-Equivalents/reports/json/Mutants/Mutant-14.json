@@ -1,0 +1,9 @@
+{
+  "id" : 14,
+  "originalProgramId" : 1,
+  "mutationOperator" : "DTI",
+  "mutationOperatorDescription" : "Distinct Transformation Insertion",
+  "mutantCode" : "def parseRDDs(ratingsCSV: RDD[String], moviesCSV: RDD[String], tagsCSV: RDD[String]): (RDD[Rating], RDD[Movie], RDD[Tag]) = {\n  val ratings: RDD[Rating] = ratingsCSV.flatMap(parseRatings)\n  val movies: RDD[Movie] = moviesCSV.flatMap(parseMovies).distinct()\n  val tags: RDD[Tag] = tagsCSV.flatMap(parseTags)\n  (ratings, movies, tags)\n}",
+  "originalCode" : "def parseRDDs(ratingsCSV: RDD[String], moviesCSV: RDD[String], tagsCSV: RDD[String]): (RDD[Rating], RDD[Movie], RDD[Tag]) = {\n    val ratings: RDD[Rating] = ratingsCSV.flatMap(parseRatings)\n    val movies: RDD[Movie] = moviesCSV.flatMap(parseMovies)\n    val tags: RDD[Tag] = tagsCSV.flatMap(parseTags)\n    (ratings, movies, tags)\n  }",
+  "status" : "Killed"
+}

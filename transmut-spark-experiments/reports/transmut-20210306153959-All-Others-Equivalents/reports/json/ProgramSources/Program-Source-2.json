@@ -1,0 +1,721 @@
+{
+  "id" : 2,
+  "source" : "target/transmut-20210306153959/mutated-src/example/DistinctUserVisitsPerPage.scala",
+  "sourceName" : "DistinctUserVisitsPerPage",
+  "programs" : [
+    {
+      "id" : 2,
+      "programSourceId" : 2,
+      "name" : "distinctUserVisitsPerPage",
+      "code" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n    val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n    val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n    distinctSites\n  }",
+      "datasets" : [
+        {
+          "id" : 5,
+          "name" : "input",
+          "datasetType" : "RDD[String]",
+          "inputDataset" : true,
+          "outputDataset" : false
+        },
+        {
+          "id" : 6,
+          "name" : "userVisits",
+          "datasetType" : "RDD[UserVisit]",
+          "inputDataset" : false,
+          "outputDataset" : false
+        },
+        {
+          "id" : 7,
+          "name" : "userAccesses",
+          "datasetType" : "RDD[(String, String)]",
+          "inputDataset" : false,
+          "outputDataset" : false
+        },
+        {
+          "id" : 8,
+          "name" : "mapedUserAccess",
+          "datasetType" : "RDD[(String, Set[String])]",
+          "inputDataset" : false,
+          "outputDataset" : false
+        },
+        {
+          "id" : 9,
+          "name" : "distinctSites",
+          "datasetType" : "RDD[(String, Set[String])]",
+          "inputDataset" : false,
+          "outputDataset" : true
+        }
+      ],
+      "transformations" : [
+        {
+          "id" : 4,
+          "name" : "map",
+          "inputTypes" : [
+            "RDD[String]"
+          ],
+          "outputTypes" : [
+            "RDD[UserVisit]"
+          ],
+          "loadTransformation" : false
+        },
+        {
+          "id" : 5,
+          "name" : "map",
+          "inputTypes" : [
+            "RDD[UserVisit]"
+          ],
+          "outputTypes" : [
+            "RDD[(String, String)]"
+          ],
+          "loadTransformation" : false
+        },
+        {
+          "id" : 6,
+          "name" : "map",
+          "inputTypes" : [
+            "RDD[(String, String)]"
+          ],
+          "outputTypes" : [
+            "RDD[(String, Set[String])]"
+          ],
+          "loadTransformation" : false
+        },
+        {
+          "id" : 7,
+          "name" : "reduceByKey",
+          "inputTypes" : [
+            "RDD[(String, Set[String])]"
+          ],
+          "outputTypes" : [
+            "RDD[(String, Set[String])]"
+          ],
+          "loadTransformation" : false
+        }
+      ],
+      "edges" : [
+        {
+          "id" : 7,
+          "datasetId" : 5,
+          "transformationId" : 4,
+          "direction" : "DatasetToTransformation"
+        },
+        {
+          "id" : 8,
+          "datasetId" : 6,
+          "transformationId" : 4,
+          "direction" : "TransformationToDataset"
+        },
+        {
+          "id" : 9,
+          "datasetId" : 6,
+          "transformationId" : 5,
+          "direction" : "DatasetToTransformation"
+        },
+        {
+          "id" : 10,
+          "datasetId" : 7,
+          "transformationId" : 5,
+          "direction" : "TransformationToDataset"
+        },
+        {
+          "id" : 11,
+          "datasetId" : 7,
+          "transformationId" : 6,
+          "direction" : "DatasetToTransformation"
+        },
+        {
+          "id" : 12,
+          "datasetId" : 8,
+          "transformationId" : 6,
+          "direction" : "TransformationToDataset"
+        },
+        {
+          "id" : 13,
+          "datasetId" : 8,
+          "transformationId" : 7,
+          "direction" : "DatasetToTransformation"
+        },
+        {
+          "id" : 14,
+          "datasetId" : 9,
+          "transformationId" : 7,
+          "direction" : "TransformationToDataset"
+        }
+      ],
+      "mutants" : [
+        {
+          "id" : 17,
+          "originalProgramId" : 2,
+          "mutationOperator" : "UTD",
+          "mutationOperatorDescription" : "Unary Transformation Deletion",
+          "mutantCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n  val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n  val distinctSites: RDD[(String, Set[String])] = mapedUserAccess\n  distinctSites\n}",
+          "originalCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n    val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n    val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n    distinctSites\n  }",
+          "status" : "Killed"
+        },
+        {
+          "id" : 18,
+          "originalProgramId" : 2,
+          "mutationOperator" : "MTR",
+          "mutationOperatorDescription" : "Mapping Transformation Replacement",
+          "mutantCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map { (inputParameter: String) => {\n    val originalFunction = parseUserVisits(_)\n    val originalValue = originalFunction(inputParameter)\n    null.asInstanceOf[UserVisit]\n  } }\n  val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n  val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n  val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n  distinctSites\n}",
+          "originalCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n    val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n    val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n    distinctSites\n  }",
+          "status" : "Killed"
+        },
+        {
+          "id" : 19,
+          "originalProgramId" : 2,
+          "mutationOperator" : "MTR",
+          "mutationOperatorDescription" : "Mapping Transformation Replacement",
+          "mutantCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userAccesses: RDD[(String, String)] = userVisits.map { (inputParameter: UserVisit) => {\n    val originalFunction = mapUserVisitToTuple(_)\n    val originalValue = originalFunction(inputParameter)\n    (\"\", originalValue._2)\n  } }\n  val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n  val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n  distinctSites\n}",
+          "originalCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n    val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n    val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n    distinctSites\n  }",
+          "status" : "Killed"
+        },
+        {
+          "id" : 20,
+          "originalProgramId" : 2,
+          "mutationOperator" : "MTR",
+          "mutationOperatorDescription" : "Mapping Transformation Replacement",
+          "mutantCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userAccesses: RDD[(String, String)] = userVisits.map { (inputParameter: UserVisit) => {\n    val originalFunction = mapUserVisitToTuple(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, \"\")\n  } }\n  val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n  val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n  distinctSites\n}",
+          "originalCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n    val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n    val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n    distinctSites\n  }",
+          "status" : "Killed"
+        },
+        {
+          "id" : 21,
+          "originalProgramId" : 2,
+          "mutationOperator" : "MTR",
+          "mutationOperatorDescription" : "Mapping Transformation Replacement",
+          "mutantCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n  val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map { (inputParameter: (String, String)) => {\n    val originalFunction = mapSourceIPToSet(_)\n    val originalValue = originalFunction(inputParameter)\n    (\"\", originalValue._2)\n  } }\n  val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n  distinctSites\n}",
+          "originalCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n    val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n    val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n    distinctSites\n  }",
+          "status" : "Killed"
+        },
+        {
+          "id" : 22,
+          "originalProgramId" : 2,
+          "mutationOperator" : "MTR",
+          "mutationOperatorDescription" : "Mapping Transformation Replacement",
+          "mutantCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n  val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map { (inputParameter: (String, String)) => {\n    val originalFunction = mapSourceIPToSet(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, Set[String](originalValue._2.head))\n  } }\n  val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n  distinctSites\n}",
+          "originalCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n    val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n    val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n    distinctSites\n  }",
+          "status" : "Equivalent"
+        },
+        {
+          "id" : 23,
+          "originalProgramId" : 2,
+          "mutationOperator" : "MTR",
+          "mutationOperatorDescription" : "Mapping Transformation Replacement",
+          "mutantCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n  val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map { (inputParameter: (String, String)) => {\n    val originalFunction = mapSourceIPToSet(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, originalValue._2.tail)\n  } }\n  val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n  distinctSites\n}",
+          "originalCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n    val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n    val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n    distinctSites\n  }",
+          "status" : "Killed"
+        },
+        {
+          "id" : 24,
+          "originalProgramId" : 2,
+          "mutationOperator" : "MTR",
+          "mutationOperatorDescription" : "Mapping Transformation Replacement",
+          "mutantCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n  val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map { (inputParameter: (String, String)) => {\n    val originalFunction = mapSourceIPToSet(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, Set[String]())\n  } }\n  val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n  distinctSites\n}",
+          "originalCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n    val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n    val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n    distinctSites\n  }",
+          "status" : "Killed"
+        },
+        {
+          "id" : 25,
+          "originalProgramId" : 2,
+          "mutationOperator" : "DTI",
+          "mutationOperatorDescription" : "Distinct Transformation Insertion",
+          "mutantCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits).distinct()\n  val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n  val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n  val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n  distinctSites\n}",
+          "originalCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n    val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n    val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n    distinctSites\n  }",
+          "status" : "Equivalent"
+        },
+        {
+          "id" : 26,
+          "originalProgramId" : 2,
+          "mutationOperator" : "DTI",
+          "mutationOperatorDescription" : "Distinct Transformation Insertion",
+          "mutantCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple).distinct()\n  val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n  val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n  distinctSites\n}",
+          "originalCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n    val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n    val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n    distinctSites\n  }",
+          "status" : "Equivalent"
+        },
+        {
+          "id" : 27,
+          "originalProgramId" : 2,
+          "mutationOperator" : "DTI",
+          "mutationOperatorDescription" : "Distinct Transformation Insertion",
+          "mutantCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n  val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet).distinct()\n  val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n  distinctSites\n}",
+          "originalCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n    val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n    val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n    distinctSites\n  }",
+          "status" : "Equivalent"
+        },
+        {
+          "id" : 28,
+          "originalProgramId" : 2,
+          "mutationOperator" : "DTI",
+          "mutationOperatorDescription" : "Distinct Transformation Insertion",
+          "mutantCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n  val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n  val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion).distinct()\n  distinctSites\n}",
+          "originalCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n    val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n    val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n    distinctSites\n  }",
+          "status" : "Equivalent"
+        },
+        {
+          "id" : 29,
+          "originalProgramId" : 2,
+          "mutationOperator" : "ATR",
+          "mutationOperatorDescription" : "Aggregation Transformation Replacement",
+          "mutantCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n  val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n  val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey { (firstParameter: Set[String], secondParameter: Set[String]) => firstParameter }\n  distinctSites\n}",
+          "originalCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n    val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n    val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n    distinctSites\n  }",
+          "status" : "Killed"
+        },
+        {
+          "id" : 30,
+          "originalProgramId" : 2,
+          "mutationOperator" : "ATR",
+          "mutationOperatorDescription" : "Aggregation Transformation Replacement",
+          "mutantCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n  val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n  val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey { (firstParameter: Set[String], secondParameter: Set[String]) => secondParameter }\n  distinctSites\n}",
+          "originalCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n    val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n    val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n    distinctSites\n  }",
+          "status" : "Killed"
+        },
+        {
+          "id" : 31,
+          "originalProgramId" : 2,
+          "mutationOperator" : "ATR",
+          "mutationOperatorDescription" : "Aggregation Transformation Replacement",
+          "mutantCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n  val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n  val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey { (firstParameter: Set[String], secondParameter: Set[String]) => {\n    val originalFunction = setUnion(_, _)\n    originalFunction(firstParameter, firstParameter)\n  } }\n  distinctSites\n}",
+          "originalCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n    val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n    val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n    distinctSites\n  }",
+          "status" : "Killed"
+        },
+        {
+          "id" : 32,
+          "originalProgramId" : 2,
+          "mutationOperator" : "ATR",
+          "mutationOperatorDescription" : "Aggregation Transformation Replacement",
+          "mutantCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n  val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n  val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey { (firstParameter: Set[String], secondParameter: Set[String]) => {\n    val originalFunction = setUnion(_, _)\n    originalFunction(secondParameter, secondParameter)\n  } }\n  distinctSites\n}",
+          "originalCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n    val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n    val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n    distinctSites\n  }",
+          "status" : "Killed"
+        },
+        {
+          "id" : 33,
+          "originalProgramId" : 2,
+          "mutationOperator" : "ATR",
+          "mutationOperatorDescription" : "Aggregation Transformation Replacement",
+          "mutantCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n  val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n  val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey { (firstParameter: Set[String], secondParameter: Set[String]) => {\n    val originalFunction = setUnion(_, _)\n    originalFunction(secondParameter, firstParameter)\n  } }\n  distinctSites\n}",
+          "originalCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n    val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n    val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n    distinctSites\n  }",
+          "status" : "Equivalent"
+        }
+      ],
+      "removedMutants" : [
+      ],
+      "mutationOperatorsMetrics" : {
+        "totalMutantsPerOperator" : {
+          "FTD" : 0,
+          "JTR" : 0,
+          "UTR" : 0,
+          "MTR" : 7,
+          "UTD" : 1,
+          "OTD" : 0,
+          "BTR" : 0,
+          "STR" : 0,
+          "BTS" : 0,
+          "ATR" : 5,
+          "OTI" : 0,
+          "DTI" : 4,
+          "DTD" : 0,
+          "NFTP" : 0,
+          "UTS" : 0
+        },
+        "totalKilledMutantsPerOperator" : {
+          "FTD" : 0,
+          "JTR" : 0,
+          "UTR" : 0,
+          "MTR" : 6,
+          "UTD" : 1,
+          "OTD" : 0,
+          "BTR" : 0,
+          "STR" : 0,
+          "BTS" : 0,
+          "ATR" : 4,
+          "OTI" : 0,
+          "DTI" : 0,
+          "DTD" : 0,
+          "NFTP" : 0,
+          "UTS" : 0
+        },
+        "totalLivedMutantsPerOperator" : {
+          "FTD" : 0,
+          "JTR" : 0,
+          "UTR" : 0,
+          "MTR" : 0,
+          "UTD" : 0,
+          "OTD" : 0,
+          "BTR" : 0,
+          "STR" : 0,
+          "BTS" : 0,
+          "ATR" : 0,
+          "OTI" : 0,
+          "DTI" : 0,
+          "DTD" : 0,
+          "NFTP" : 0,
+          "UTS" : 0
+        },
+        "totalEquivalentMutantsPerOperator" : {
+          "FTD" : 0,
+          "JTR" : 0,
+          "UTR" : 0,
+          "MTR" : 1,
+          "UTD" : 0,
+          "OTD" : 0,
+          "BTR" : 0,
+          "STR" : 0,
+          "BTS" : 0,
+          "ATR" : 1,
+          "OTI" : 0,
+          "DTI" : 4,
+          "DTD" : 0,
+          "NFTP" : 0,
+          "UTS" : 0
+        },
+        "totalErrorMutantsPerOperator" : {
+          "FTD" : 0,
+          "JTR" : 0,
+          "UTR" : 0,
+          "MTR" : 0,
+          "UTD" : 0,
+          "OTD" : 0,
+          "BTR" : 0,
+          "STR" : 0,
+          "BTS" : 0,
+          "ATR" : 0,
+          "OTI" : 0,
+          "DTI" : 0,
+          "DTD" : 0,
+          "NFTP" : 0,
+          "UTS" : 0
+        },
+        "totalRemovedMutantsPerOperator" : {
+          "FTD" : 0,
+          "JTR" : 0,
+          "UTR" : 0,
+          "MTR" : 0,
+          "UTD" : 0,
+          "OTD" : 0,
+          "BTR" : 0,
+          "STR" : 0,
+          "BTS" : 0,
+          "ATR" : 0,
+          "OTI" : 0,
+          "DTI" : 0,
+          "DTD" : 0,
+          "NFTP" : 0,
+          "UTS" : 0
+        },
+        "descriptionPerOperator" : {
+          "FTD" : "Filter Transformation Deletion",
+          "JTR" : "Join Transformation Replacement",
+          "UTR" : "Unary Transformation Replacement",
+          "MTR" : "Mapping Transformation Replacement",
+          "UTD" : "Unary Transformation Deletion",
+          "OTD" : "Order Transformation Deletion",
+          "BTR" : "Binary Transformation Replacement",
+          "STR" : "Set Transformation Replacement",
+          "BTS" : "Binary Transformation Swap",
+          "ATR" : "Aggregation Transformation Replacement",
+          "OTI" : "Order Transformation Inversion",
+          "DTI" : "Distinct Transformation Insertion",
+          "DTD" : "Distinct Transformation Deletion",
+          "NFTP" : "Negation of Filter Transformation Predicate",
+          "UTS" : "Unary Transformation Swap"
+        }
+      },
+      "totalDatasets" : 5,
+      "totalTransformations" : 4,
+      "totalMutants" : 17,
+      "totalKilledMutants" : 11,
+      "totalLivedMutants" : 0,
+      "totalEquivalentMutants" : 6,
+      "totalErrorMutants" : 0,
+      "totalRemovedMutants" : 0,
+      "mutationScore" : 1.0
+    }
+  ],
+  "mutants" : [
+    {
+      "id" : 17,
+      "originalProgramId" : 2,
+      "mutationOperator" : "UTD",
+      "mutationOperatorDescription" : "Unary Transformation Deletion",
+      "mutantCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n  val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n  val distinctSites: RDD[(String, Set[String])] = mapedUserAccess\n  distinctSites\n}",
+      "originalCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n    val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n    val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n    distinctSites\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 18,
+      "originalProgramId" : 2,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map { (inputParameter: String) => {\n    val originalFunction = parseUserVisits(_)\n    val originalValue = originalFunction(inputParameter)\n    null.asInstanceOf[UserVisit]\n  } }\n  val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n  val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n  val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n  distinctSites\n}",
+      "originalCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n    val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n    val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n    distinctSites\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 19,
+      "originalProgramId" : 2,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userAccesses: RDD[(String, String)] = userVisits.map { (inputParameter: UserVisit) => {\n    val originalFunction = mapUserVisitToTuple(_)\n    val originalValue = originalFunction(inputParameter)\n    (\"\", originalValue._2)\n  } }\n  val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n  val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n  distinctSites\n}",
+      "originalCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n    val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n    val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n    distinctSites\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 20,
+      "originalProgramId" : 2,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userAccesses: RDD[(String, String)] = userVisits.map { (inputParameter: UserVisit) => {\n    val originalFunction = mapUserVisitToTuple(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, \"\")\n  } }\n  val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n  val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n  distinctSites\n}",
+      "originalCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n    val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n    val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n    distinctSites\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 21,
+      "originalProgramId" : 2,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n  val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map { (inputParameter: (String, String)) => {\n    val originalFunction = mapSourceIPToSet(_)\n    val originalValue = originalFunction(inputParameter)\n    (\"\", originalValue._2)\n  } }\n  val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n  distinctSites\n}",
+      "originalCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n    val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n    val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n    distinctSites\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 22,
+      "originalProgramId" : 2,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n  val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map { (inputParameter: (String, String)) => {\n    val originalFunction = mapSourceIPToSet(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, Set[String](originalValue._2.head))\n  } }\n  val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n  distinctSites\n}",
+      "originalCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n    val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n    val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n    distinctSites\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 23,
+      "originalProgramId" : 2,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n  val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map { (inputParameter: (String, String)) => {\n    val originalFunction = mapSourceIPToSet(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, originalValue._2.tail)\n  } }\n  val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n  distinctSites\n}",
+      "originalCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n    val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n    val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n    distinctSites\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 24,
+      "originalProgramId" : 2,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n  val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map { (inputParameter: (String, String)) => {\n    val originalFunction = mapSourceIPToSet(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, Set[String]())\n  } }\n  val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n  distinctSites\n}",
+      "originalCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n    val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n    val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n    distinctSites\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 25,
+      "originalProgramId" : 2,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits).distinct()\n  val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n  val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n  val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n  distinctSites\n}",
+      "originalCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n    val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n    val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n    distinctSites\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 26,
+      "originalProgramId" : 2,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple).distinct()\n  val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n  val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n  distinctSites\n}",
+      "originalCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n    val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n    val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n    distinctSites\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 27,
+      "originalProgramId" : 2,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n  val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet).distinct()\n  val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n  distinctSites\n}",
+      "originalCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n    val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n    val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n    distinctSites\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 28,
+      "originalProgramId" : 2,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n  val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n  val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion).distinct()\n  distinctSites\n}",
+      "originalCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n    val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n    val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n    distinctSites\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 29,
+      "originalProgramId" : 2,
+      "mutationOperator" : "ATR",
+      "mutationOperatorDescription" : "Aggregation Transformation Replacement",
+      "mutantCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n  val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n  val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey { (firstParameter: Set[String], secondParameter: Set[String]) => firstParameter }\n  distinctSites\n}",
+      "originalCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n    val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n    val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n    distinctSites\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 30,
+      "originalProgramId" : 2,
+      "mutationOperator" : "ATR",
+      "mutationOperatorDescription" : "Aggregation Transformation Replacement",
+      "mutantCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n  val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n  val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey { (firstParameter: Set[String], secondParameter: Set[String]) => secondParameter }\n  distinctSites\n}",
+      "originalCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n    val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n    val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n    distinctSites\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 31,
+      "originalProgramId" : 2,
+      "mutationOperator" : "ATR",
+      "mutationOperatorDescription" : "Aggregation Transformation Replacement",
+      "mutantCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n  val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n  val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey { (firstParameter: Set[String], secondParameter: Set[String]) => {\n    val originalFunction = setUnion(_, _)\n    originalFunction(firstParameter, firstParameter)\n  } }\n  distinctSites\n}",
+      "originalCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n    val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n    val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n    distinctSites\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 32,
+      "originalProgramId" : 2,
+      "mutationOperator" : "ATR",
+      "mutationOperatorDescription" : "Aggregation Transformation Replacement",
+      "mutantCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n  val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n  val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey { (firstParameter: Set[String], secondParameter: Set[String]) => {\n    val originalFunction = setUnion(_, _)\n    originalFunction(secondParameter, secondParameter)\n  } }\n  distinctSites\n}",
+      "originalCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n    val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n    val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n    distinctSites\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 33,
+      "originalProgramId" : 2,
+      "mutationOperator" : "ATR",
+      "mutationOperatorDescription" : "Aggregation Transformation Replacement",
+      "mutantCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n  val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n  val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey { (firstParameter: Set[String], secondParameter: Set[String]) => {\n    val originalFunction = setUnion(_, _)\n    originalFunction(secondParameter, firstParameter)\n  } }\n  distinctSites\n}",
+      "originalCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n    val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n    val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n    distinctSites\n  }",
+      "status" : "Equivalent"
+    }
+  ],
+  "removedMutants" : [
+  ],
+  "mutationOperatorsMetrics" : {
+    "totalMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 7,
+      "UTD" : 1,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 5,
+      "OTI" : 0,
+      "DTI" : 4,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalKilledMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 6,
+      "UTD" : 1,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 4,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalLivedMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 0,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalEquivalentMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 1,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 1,
+      "OTI" : 0,
+      "DTI" : 4,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalErrorMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 0,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalRemovedMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 0,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "descriptionPerOperator" : {
+      "FTD" : "Filter Transformation Deletion",
+      "JTR" : "Join Transformation Replacement",
+      "UTR" : "Unary Transformation Replacement",
+      "MTR" : "Mapping Transformation Replacement",
+      "UTD" : "Unary Transformation Deletion",
+      "OTD" : "Order Transformation Deletion",
+      "BTR" : "Binary Transformation Replacement",
+      "STR" : "Set Transformation Replacement",
+      "BTS" : "Binary Transformation Swap",
+      "ATR" : "Aggregation Transformation Replacement",
+      "OTI" : "Order Transformation Inversion",
+      "DTI" : "Distinct Transformation Insertion",
+      "DTD" : "Distinct Transformation Deletion",
+      "NFTP" : "Negation of Filter Transformation Predicate",
+      "UTS" : "Unary Transformation Swap"
+    }
+  },
+  "totalPrograms" : 1,
+  "totalDatasets" : 5,
+  "totalTransformations" : 4,
+  "totalMutants" : 17,
+  "totalKilledMutants" : 11,
+  "totalLivedMutants" : 0,
+  "totalEquivalentMutants" : 6,
+  "totalErrorMutants" : 0,
+  "totalRemovedMutants" : 0,
+  "mutationScore" : 1.0
+}

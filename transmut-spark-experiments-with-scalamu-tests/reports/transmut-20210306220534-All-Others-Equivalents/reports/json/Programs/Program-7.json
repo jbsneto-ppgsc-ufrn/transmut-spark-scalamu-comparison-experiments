@@ -1,0 +1,503 @@
+{
+  "id" : 7,
+  "programSourceId" : 6,
+  "name" : "sameHostProblem",
+  "code" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n    val firstHosts: RDD[String] = firstLogs.map(parseLogs)\n    val secondHosts: RDD[String] = secondLogs.map(parseLogs)\n    val intersection: RDD[String] = firstHosts.intersection(secondHosts)\n    val cleanedHostIntersection: RDD[String] = intersection.filter(host => isNotHeaderHost(host))\n    cleanedHostIntersection\n  }",
+  "datasets" : [
+    {
+      "id" : 43,
+      "name" : "firstLogs",
+      "datasetType" : "RDD[String]",
+      "inputDataset" : true,
+      "outputDataset" : false
+    },
+    {
+      "id" : 44,
+      "name" : "secondLogs",
+      "datasetType" : "RDD[String]",
+      "inputDataset" : true,
+      "outputDataset" : false
+    },
+    {
+      "id" : 45,
+      "name" : "firstHosts",
+      "datasetType" : "RDD[String]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 46,
+      "name" : "secondHosts",
+      "datasetType" : "RDD[String]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 47,
+      "name" : "intersection",
+      "datasetType" : "RDD[String]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 48,
+      "name" : "cleanedHostIntersection",
+      "datasetType" : "RDD[String]",
+      "inputDataset" : false,
+      "outputDataset" : true
+    }
+  ],
+  "transformations" : [
+    {
+      "id" : 36,
+      "name" : "map",
+      "inputTypes" : [
+        "RDD[String]"
+      ],
+      "outputTypes" : [
+        "RDD[String]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 37,
+      "name" : "map",
+      "inputTypes" : [
+        "RDD[String]"
+      ],
+      "outputTypes" : [
+        "RDD[String]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 38,
+      "name" : "intersection",
+      "inputTypes" : [
+        "RDD[String]",
+        "RDD[String]"
+      ],
+      "outputTypes" : [
+        "RDD[String]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 39,
+      "name" : "filter",
+      "inputTypes" : [
+        "RDD[String]"
+      ],
+      "outputTypes" : [
+        "RDD[String]"
+      ],
+      "loadTransformation" : false
+    }
+  ],
+  "edges" : [
+    {
+      "id" : 73,
+      "datasetId" : 43,
+      "transformationId" : 36,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 74,
+      "datasetId" : 45,
+      "transformationId" : 36,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 75,
+      "datasetId" : 44,
+      "transformationId" : 37,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 76,
+      "datasetId" : 46,
+      "transformationId" : 37,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 77,
+      "datasetId" : 45,
+      "transformationId" : 38,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 78,
+      "datasetId" : 46,
+      "transformationId" : 38,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 79,
+      "datasetId" : 47,
+      "transformationId" : 38,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 80,
+      "datasetId" : 47,
+      "transformationId" : 39,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 81,
+      "datasetId" : 48,
+      "transformationId" : 39,
+      "direction" : "TransformationToDataset"
+    }
+  ],
+  "mutants" : [
+    {
+      "id" : 146,
+      "originalProgramId" : 7,
+      "mutationOperator" : "UTS",
+      "mutationOperatorDescription" : "Unary Transformation Swap",
+      "mutantCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n  val firstHosts: RDD[String] = firstLogs.map(parseLogs)\n  val secondHosts: RDD[String] = secondLogs.map(parseLogs)\n  val intersection: RDD[String] = firstHosts.intersection(secondHosts)\n  val cleanedHostIntersection: RDD[String] = intersection.filter(host => isNotHeaderHost(host))\n  cleanedHostIntersection\n}",
+      "originalCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n    val firstHosts: RDD[String] = firstLogs.map(parseLogs)\n    val secondHosts: RDD[String] = secondLogs.map(parseLogs)\n    val intersection: RDD[String] = firstHosts.intersection(secondHosts)\n    val cleanedHostIntersection: RDD[String] = intersection.filter(host => isNotHeaderHost(host))\n    cleanedHostIntersection\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 147,
+      "originalProgramId" : 7,
+      "mutationOperator" : "UTS",
+      "mutationOperatorDescription" : "Unary Transformation Swap",
+      "mutantCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n  val firstHosts: RDD[String] = firstLogs.filter(host => isNotHeaderHost(host))\n  val secondHosts: RDD[String] = secondLogs.map(parseLogs)\n  val intersection: RDD[String] = firstHosts.intersection(secondHosts)\n  val cleanedHostIntersection: RDD[String] = intersection.map(parseLogs)\n  cleanedHostIntersection\n}",
+      "originalCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n    val firstHosts: RDD[String] = firstLogs.map(parseLogs)\n    val secondHosts: RDD[String] = secondLogs.map(parseLogs)\n    val intersection: RDD[String] = firstHosts.intersection(secondHosts)\n    val cleanedHostIntersection: RDD[String] = intersection.filter(host => isNotHeaderHost(host))\n    cleanedHostIntersection\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 148,
+      "originalProgramId" : 7,
+      "mutationOperator" : "UTS",
+      "mutationOperatorDescription" : "Unary Transformation Swap",
+      "mutantCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n  val firstHosts: RDD[String] = firstLogs.map(parseLogs)\n  val secondHosts: RDD[String] = secondLogs.filter(host => isNotHeaderHost(host))\n  val intersection: RDD[String] = firstHosts.intersection(secondHosts)\n  val cleanedHostIntersection: RDD[String] = intersection.map(parseLogs)\n  cleanedHostIntersection\n}",
+      "originalCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n    val firstHosts: RDD[String] = firstLogs.map(parseLogs)\n    val secondHosts: RDD[String] = secondLogs.map(parseLogs)\n    val intersection: RDD[String] = firstHosts.intersection(secondHosts)\n    val cleanedHostIntersection: RDD[String] = intersection.filter(host => isNotHeaderHost(host))\n    cleanedHostIntersection\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 149,
+      "originalProgramId" : 7,
+      "mutationOperator" : "UTR",
+      "mutationOperatorDescription" : "Unary Transformation Replacement",
+      "mutantCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n  val firstHosts: RDD[String] = firstLogs.map(parseLogs)\n  val secondHosts: RDD[String] = secondLogs.map(parseLogs)\n  val intersection: RDD[String] = firstHosts.intersection(secondHosts)\n  val cleanedHostIntersection: RDD[String] = intersection.filter(host => isNotHeaderHost(host))\n  cleanedHostIntersection\n}",
+      "originalCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n    val firstHosts: RDD[String] = firstLogs.map(parseLogs)\n    val secondHosts: RDD[String] = secondLogs.map(parseLogs)\n    val intersection: RDD[String] = firstHosts.intersection(secondHosts)\n    val cleanedHostIntersection: RDD[String] = intersection.filter(host => isNotHeaderHost(host))\n    cleanedHostIntersection\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 150,
+      "originalProgramId" : 7,
+      "mutationOperator" : "UTR",
+      "mutationOperatorDescription" : "Unary Transformation Replacement",
+      "mutantCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n  val firstHosts: RDD[String] = firstLogs.filter(host => isNotHeaderHost(host))\n  val secondHosts: RDD[String] = secondLogs.map(parseLogs)\n  val intersection: RDD[String] = firstHosts.intersection(secondHosts)\n  val cleanedHostIntersection: RDD[String] = intersection.filter(host => isNotHeaderHost(host))\n  cleanedHostIntersection\n}",
+      "originalCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n    val firstHosts: RDD[String] = firstLogs.map(parseLogs)\n    val secondHosts: RDD[String] = secondLogs.map(parseLogs)\n    val intersection: RDD[String] = firstHosts.intersection(secondHosts)\n    val cleanedHostIntersection: RDD[String] = intersection.filter(host => isNotHeaderHost(host))\n    cleanedHostIntersection\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 151,
+      "originalProgramId" : 7,
+      "mutationOperator" : "UTR",
+      "mutationOperatorDescription" : "Unary Transformation Replacement",
+      "mutantCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n  val firstHosts: RDD[String] = firstLogs.map(parseLogs)\n  val secondHosts: RDD[String] = secondLogs.map(parseLogs)\n  val intersection: RDD[String] = firstHosts.intersection(secondHosts)\n  val cleanedHostIntersection: RDD[String] = intersection.filter(host => isNotHeaderHost(host))\n  cleanedHostIntersection\n}",
+      "originalCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n    val firstHosts: RDD[String] = firstLogs.map(parseLogs)\n    val secondHosts: RDD[String] = secondLogs.map(parseLogs)\n    val intersection: RDD[String] = firstHosts.intersection(secondHosts)\n    val cleanedHostIntersection: RDD[String] = intersection.filter(host => isNotHeaderHost(host))\n    cleanedHostIntersection\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 152,
+      "originalProgramId" : 7,
+      "mutationOperator" : "UTR",
+      "mutationOperatorDescription" : "Unary Transformation Replacement",
+      "mutantCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n  val firstHosts: RDD[String] = firstLogs.map(parseLogs)\n  val secondHosts: RDD[String] = secondLogs.filter(host => isNotHeaderHost(host))\n  val intersection: RDD[String] = firstHosts.intersection(secondHosts)\n  val cleanedHostIntersection: RDD[String] = intersection.filter(host => isNotHeaderHost(host))\n  cleanedHostIntersection\n}",
+      "originalCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n    val firstHosts: RDD[String] = firstLogs.map(parseLogs)\n    val secondHosts: RDD[String] = secondLogs.map(parseLogs)\n    val intersection: RDD[String] = firstHosts.intersection(secondHosts)\n    val cleanedHostIntersection: RDD[String] = intersection.filter(host => isNotHeaderHost(host))\n    cleanedHostIntersection\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 153,
+      "originalProgramId" : 7,
+      "mutationOperator" : "UTR",
+      "mutationOperatorDescription" : "Unary Transformation Replacement",
+      "mutantCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n  val firstHosts: RDD[String] = firstLogs.map(parseLogs)\n  val secondHosts: RDD[String] = secondLogs.map(parseLogs)\n  val intersection: RDD[String] = firstHosts.intersection(secondHosts)\n  val cleanedHostIntersection: RDD[String] = intersection.map(parseLogs)\n  cleanedHostIntersection\n}",
+      "originalCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n    val firstHosts: RDD[String] = firstLogs.map(parseLogs)\n    val secondHosts: RDD[String] = secondLogs.map(parseLogs)\n    val intersection: RDD[String] = firstHosts.intersection(secondHosts)\n    val cleanedHostIntersection: RDD[String] = intersection.filter(host => isNotHeaderHost(host))\n    cleanedHostIntersection\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 154,
+      "originalProgramId" : 7,
+      "mutationOperator" : "UTR",
+      "mutationOperatorDescription" : "Unary Transformation Replacement",
+      "mutantCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n  val firstHosts: RDD[String] = firstLogs.map(parseLogs)\n  val secondHosts: RDD[String] = secondLogs.map(parseLogs)\n  val intersection: RDD[String] = firstHosts.intersection(secondHosts)\n  val cleanedHostIntersection: RDD[String] = intersection.map(parseLogs)\n  cleanedHostIntersection\n}",
+      "originalCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n    val firstHosts: RDD[String] = firstLogs.map(parseLogs)\n    val secondHosts: RDD[String] = secondLogs.map(parseLogs)\n    val intersection: RDD[String] = firstHosts.intersection(secondHosts)\n    val cleanedHostIntersection: RDD[String] = intersection.filter(host => isNotHeaderHost(host))\n    cleanedHostIntersection\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 155,
+      "originalProgramId" : 7,
+      "mutationOperator" : "UTD",
+      "mutationOperatorDescription" : "Unary Transformation Deletion",
+      "mutantCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n  val firstHosts: RDD[String] = firstLogs\n  val secondHosts: RDD[String] = secondLogs.map(parseLogs)\n  val intersection: RDD[String] = firstHosts.intersection(secondHosts)\n  val cleanedHostIntersection: RDD[String] = intersection.filter(host => isNotHeaderHost(host))\n  cleanedHostIntersection\n}",
+      "originalCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n    val firstHosts: RDD[String] = firstLogs.map(parseLogs)\n    val secondHosts: RDD[String] = secondLogs.map(parseLogs)\n    val intersection: RDD[String] = firstHosts.intersection(secondHosts)\n    val cleanedHostIntersection: RDD[String] = intersection.filter(host => isNotHeaderHost(host))\n    cleanedHostIntersection\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 156,
+      "originalProgramId" : 7,
+      "mutationOperator" : "UTD",
+      "mutationOperatorDescription" : "Unary Transformation Deletion",
+      "mutantCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n  val firstHosts: RDD[String] = firstLogs.map(parseLogs)\n  val secondHosts: RDD[String] = secondLogs\n  val intersection: RDD[String] = firstHosts.intersection(secondHosts)\n  val cleanedHostIntersection: RDD[String] = intersection.filter(host => isNotHeaderHost(host))\n  cleanedHostIntersection\n}",
+      "originalCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n    val firstHosts: RDD[String] = firstLogs.map(parseLogs)\n    val secondHosts: RDD[String] = secondLogs.map(parseLogs)\n    val intersection: RDD[String] = firstHosts.intersection(secondHosts)\n    val cleanedHostIntersection: RDD[String] = intersection.filter(host => isNotHeaderHost(host))\n    cleanedHostIntersection\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 157,
+      "originalProgramId" : 7,
+      "mutationOperator" : "UTD",
+      "mutationOperatorDescription" : "Unary Transformation Deletion",
+      "mutantCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n  val firstHosts: RDD[String] = firstLogs.map(parseLogs)\n  val secondHosts: RDD[String] = secondLogs.map(parseLogs)\n  val intersection: RDD[String] = firstHosts.intersection(secondHosts)\n  val cleanedHostIntersection: RDD[String] = intersection\n  cleanedHostIntersection\n}",
+      "originalCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n    val firstHosts: RDD[String] = firstLogs.map(parseLogs)\n    val secondHosts: RDD[String] = secondLogs.map(parseLogs)\n    val intersection: RDD[String] = firstHosts.intersection(secondHosts)\n    val cleanedHostIntersection: RDD[String] = intersection.filter(host => isNotHeaderHost(host))\n    cleanedHostIntersection\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 158,
+      "originalProgramId" : 7,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n  val firstHosts: RDD[String] = firstLogs.map { (inputParameter: String) => {\n    val originalFunction = parseLogs(_)\n    val originalValue = originalFunction(inputParameter)\n    \"\"\n  } }\n  val secondHosts: RDD[String] = secondLogs.map(parseLogs)\n  val intersection: RDD[String] = firstHosts.intersection(secondHosts)\n  val cleanedHostIntersection: RDD[String] = intersection.filter(host => isNotHeaderHost(host))\n  cleanedHostIntersection\n}",
+      "originalCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n    val firstHosts: RDD[String] = firstLogs.map(parseLogs)\n    val secondHosts: RDD[String] = secondLogs.map(parseLogs)\n    val intersection: RDD[String] = firstHosts.intersection(secondHosts)\n    val cleanedHostIntersection: RDD[String] = intersection.filter(host => isNotHeaderHost(host))\n    cleanedHostIntersection\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 159,
+      "originalProgramId" : 7,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n  val firstHosts: RDD[String] = firstLogs.map(parseLogs)\n  val secondHosts: RDD[String] = secondLogs.map { (inputParameter: String) => {\n    val originalFunction = parseLogs(_)\n    val originalValue = originalFunction(inputParameter)\n    \"\"\n  } }\n  val intersection: RDD[String] = firstHosts.intersection(secondHosts)\n  val cleanedHostIntersection: RDD[String] = intersection.filter(host => isNotHeaderHost(host))\n  cleanedHostIntersection\n}",
+      "originalCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n    val firstHosts: RDD[String] = firstLogs.map(parseLogs)\n    val secondHosts: RDD[String] = secondLogs.map(parseLogs)\n    val intersection: RDD[String] = firstHosts.intersection(secondHosts)\n    val cleanedHostIntersection: RDD[String] = intersection.filter(host => isNotHeaderHost(host))\n    cleanedHostIntersection\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 160,
+      "originalProgramId" : 7,
+      "mutationOperator" : "FTD",
+      "mutationOperatorDescription" : "Filter Transformation Deletion",
+      "mutantCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n  val firstHosts: RDD[String] = firstLogs.map(parseLogs)\n  val secondHosts: RDD[String] = secondLogs.map(parseLogs)\n  val intersection: RDD[String] = firstHosts.intersection(secondHosts)\n  val cleanedHostIntersection: RDD[String] = intersection\n  cleanedHostIntersection\n}",
+      "originalCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n    val firstHosts: RDD[String] = firstLogs.map(parseLogs)\n    val secondHosts: RDD[String] = secondLogs.map(parseLogs)\n    val intersection: RDD[String] = firstHosts.intersection(secondHosts)\n    val cleanedHostIntersection: RDD[String] = intersection.filter(host => isNotHeaderHost(host))\n    cleanedHostIntersection\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 161,
+      "originalProgramId" : 7,
+      "mutationOperator" : "STR",
+      "mutationOperatorDescription" : "Set Transformation Replacement",
+      "mutantCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n  val firstHosts: RDD[String] = firstLogs.map(parseLogs)\n  val secondHosts: RDD[String] = secondLogs.map(parseLogs)\n  val intersection: RDD[String] = firstHosts.union(secondHosts)\n  val cleanedHostIntersection: RDD[String] = intersection.filter(host => isNotHeaderHost(host))\n  cleanedHostIntersection\n}",
+      "originalCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n    val firstHosts: RDD[String] = firstLogs.map(parseLogs)\n    val secondHosts: RDD[String] = secondLogs.map(parseLogs)\n    val intersection: RDD[String] = firstHosts.intersection(secondHosts)\n    val cleanedHostIntersection: RDD[String] = intersection.filter(host => isNotHeaderHost(host))\n    cleanedHostIntersection\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 162,
+      "originalProgramId" : 7,
+      "mutationOperator" : "STR",
+      "mutationOperatorDescription" : "Set Transformation Replacement",
+      "mutantCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n  val firstHosts: RDD[String] = firstLogs.map(parseLogs)\n  val secondHosts: RDD[String] = secondLogs.map(parseLogs)\n  val intersection: RDD[String] = firstHosts.subtract(secondHosts)\n  val cleanedHostIntersection: RDD[String] = intersection.filter(host => isNotHeaderHost(host))\n  cleanedHostIntersection\n}",
+      "originalCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n    val firstHosts: RDD[String] = firstLogs.map(parseLogs)\n    val secondHosts: RDD[String] = secondLogs.map(parseLogs)\n    val intersection: RDD[String] = firstHosts.intersection(secondHosts)\n    val cleanedHostIntersection: RDD[String] = intersection.filter(host => isNotHeaderHost(host))\n    cleanedHostIntersection\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 163,
+      "originalProgramId" : 7,
+      "mutationOperator" : "STR",
+      "mutationOperatorDescription" : "Set Transformation Replacement",
+      "mutantCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n  val firstHosts: RDD[String] = firstLogs.map(parseLogs)\n  val secondHosts: RDD[String] = secondLogs.map(parseLogs)\n  val intersection: RDD[String] = firstHosts\n  val cleanedHostIntersection: RDD[String] = intersection.filter(host => isNotHeaderHost(host))\n  cleanedHostIntersection\n}",
+      "originalCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n    val firstHosts: RDD[String] = firstLogs.map(parseLogs)\n    val secondHosts: RDD[String] = secondLogs.map(parseLogs)\n    val intersection: RDD[String] = firstHosts.intersection(secondHosts)\n    val cleanedHostIntersection: RDD[String] = intersection.filter(host => isNotHeaderHost(host))\n    cleanedHostIntersection\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 164,
+      "originalProgramId" : 7,
+      "mutationOperator" : "STR",
+      "mutationOperatorDescription" : "Set Transformation Replacement",
+      "mutantCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n  val firstHosts: RDD[String] = firstLogs.map(parseLogs)\n  val secondHosts: RDD[String] = secondLogs.map(parseLogs)\n  val intersection: RDD[String] = secondHosts\n  val cleanedHostIntersection: RDD[String] = intersection.filter(host => isNotHeaderHost(host))\n  cleanedHostIntersection\n}",
+      "originalCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n    val firstHosts: RDD[String] = firstLogs.map(parseLogs)\n    val secondHosts: RDD[String] = secondLogs.map(parseLogs)\n    val intersection: RDD[String] = firstHosts.intersection(secondHosts)\n    val cleanedHostIntersection: RDD[String] = intersection.filter(host => isNotHeaderHost(host))\n    cleanedHostIntersection\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 165,
+      "originalProgramId" : 7,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n  val firstHosts: RDD[String] = firstLogs.map(parseLogs).distinct()\n  val secondHosts: RDD[String] = secondLogs.map(parseLogs)\n  val intersection: RDD[String] = firstHosts.intersection(secondHosts)\n  val cleanedHostIntersection: RDD[String] = intersection.filter(host => isNotHeaderHost(host))\n  cleanedHostIntersection\n}",
+      "originalCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n    val firstHosts: RDD[String] = firstLogs.map(parseLogs)\n    val secondHosts: RDD[String] = secondLogs.map(parseLogs)\n    val intersection: RDD[String] = firstHosts.intersection(secondHosts)\n    val cleanedHostIntersection: RDD[String] = intersection.filter(host => isNotHeaderHost(host))\n    cleanedHostIntersection\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 166,
+      "originalProgramId" : 7,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n  val firstHosts: RDD[String] = firstLogs.map(parseLogs)\n  val secondHosts: RDD[String] = secondLogs.map(parseLogs).distinct()\n  val intersection: RDD[String] = firstHosts.intersection(secondHosts)\n  val cleanedHostIntersection: RDD[String] = intersection.filter(host => isNotHeaderHost(host))\n  cleanedHostIntersection\n}",
+      "originalCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n    val firstHosts: RDD[String] = firstLogs.map(parseLogs)\n    val secondHosts: RDD[String] = secondLogs.map(parseLogs)\n    val intersection: RDD[String] = firstHosts.intersection(secondHosts)\n    val cleanedHostIntersection: RDD[String] = intersection.filter(host => isNotHeaderHost(host))\n    cleanedHostIntersection\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 167,
+      "originalProgramId" : 7,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n  val firstHosts: RDD[String] = firstLogs.map(parseLogs)\n  val secondHosts: RDD[String] = secondLogs.map(parseLogs)\n  val intersection: RDD[String] = firstHosts.intersection(secondHosts).distinct()\n  val cleanedHostIntersection: RDD[String] = intersection.filter(host => isNotHeaderHost(host))\n  cleanedHostIntersection\n}",
+      "originalCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n    val firstHosts: RDD[String] = firstLogs.map(parseLogs)\n    val secondHosts: RDD[String] = secondLogs.map(parseLogs)\n    val intersection: RDD[String] = firstHosts.intersection(secondHosts)\n    val cleanedHostIntersection: RDD[String] = intersection.filter(host => isNotHeaderHost(host))\n    cleanedHostIntersection\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 168,
+      "originalProgramId" : 7,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n  val firstHosts: RDD[String] = firstLogs.map(parseLogs)\n  val secondHosts: RDD[String] = secondLogs.map(parseLogs)\n  val intersection: RDD[String] = firstHosts.intersection(secondHosts)\n  val cleanedHostIntersection: RDD[String] = intersection.filter(host => isNotHeaderHost(host)).distinct()\n  cleanedHostIntersection\n}",
+      "originalCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n    val firstHosts: RDD[String] = firstLogs.map(parseLogs)\n    val secondHosts: RDD[String] = secondLogs.map(parseLogs)\n    val intersection: RDD[String] = firstHosts.intersection(secondHosts)\n    val cleanedHostIntersection: RDD[String] = intersection.filter(host => isNotHeaderHost(host))\n    cleanedHostIntersection\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 169,
+      "originalProgramId" : 7,
+      "mutationOperator" : "NFTP",
+      "mutationOperatorDescription" : "Negation of Filter Transformation Predicate",
+      "mutantCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n  val firstHosts: RDD[String] = firstLogs.map(parseLogs)\n  val secondHosts: RDD[String] = secondLogs.map(parseLogs)\n  val intersection: RDD[String] = firstHosts.intersection(secondHosts)\n  val cleanedHostIntersection: RDD[String] = intersection.filter { (inputParameter: String) => {\n    val originalFunction = (host => isNotHeaderHost(host))(_)\n    val originalValue = originalFunction(inputParameter)\n    !originalValue\n  } }\n  cleanedHostIntersection\n}",
+      "originalCode" : "def sameHostProblem(firstLogs: RDD[String], secondLogs: RDD[String]): RDD[String] = {\n    val firstHosts: RDD[String] = firstLogs.map(parseLogs)\n    val secondHosts: RDD[String] = secondLogs.map(parseLogs)\n    val intersection: RDD[String] = firstHosts.intersection(secondHosts)\n    val cleanedHostIntersection: RDD[String] = intersection.filter(host => isNotHeaderHost(host))\n    cleanedHostIntersection\n  }",
+      "status" : "Killed"
+    }
+  ],
+  "removedMutants" : [
+  ],
+  "mutationOperatorsMetrics" : {
+    "totalMutantsPerOperator" : {
+      "FTD" : 1,
+      "JTR" : 0,
+      "UTR" : 6,
+      "MTR" : 2,
+      "UTD" : 3,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 4,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 4,
+      "DTD" : 0,
+      "NFTP" : 1,
+      "UTS" : 3
+    },
+    "totalKilledMutantsPerOperator" : {
+      "FTD" : 1,
+      "JTR" : 0,
+      "UTR" : 2,
+      "MTR" : 0,
+      "UTD" : 1,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 4,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 0,
+      "NFTP" : 1,
+      "UTS" : 0
+    },
+    "totalLivedMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 2,
+      "MTR" : 2,
+      "UTD" : 2,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 2
+    },
+    "totalEquivalentMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 2,
+      "MTR" : 0,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 4,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 1
+    },
+    "totalErrorMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 0,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalRemovedMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 0,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "descriptionPerOperator" : {
+      "FTD" : "Filter Transformation Deletion",
+      "JTR" : "Join Transformation Replacement",
+      "UTR" : "Unary Transformation Replacement",
+      "MTR" : "Mapping Transformation Replacement",
+      "UTD" : "Unary Transformation Deletion",
+      "OTD" : "Order Transformation Deletion",
+      "BTR" : "Binary Transformation Replacement",
+      "STR" : "Set Transformation Replacement",
+      "BTS" : "Binary Transformation Swap",
+      "ATR" : "Aggregation Transformation Replacement",
+      "OTI" : "Order Transformation Inversion",
+      "DTI" : "Distinct Transformation Insertion",
+      "DTD" : "Distinct Transformation Deletion",
+      "NFTP" : "Negation of Filter Transformation Predicate",
+      "UTS" : "Unary Transformation Swap"
+    }
+  },
+  "totalDatasets" : 6,
+  "totalTransformations" : 4,
+  "totalMutants" : 24,
+  "totalKilledMutants" : 9,
+  "totalLivedMutants" : 8,
+  "totalEquivalentMutants" : 7,
+  "totalErrorMutants" : 0,
+  "totalRemovedMutants" : 0,
+  "mutationScore" : 0.5294118
+}

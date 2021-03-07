@@ -1,0 +1,9 @@
+{
+  "id" : 19,
+  "originalProgramId" : 2,
+  "mutationOperator" : "MTR",
+  "mutationOperatorDescription" : "Mapping Transformation Replacement",
+  "mutantCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userAccesses: RDD[(String, String)] = userVisits.map { (inputParameter: UserVisit) => {\n    val originalFunction = mapUserVisitToTuple(_)\n    val originalValue = originalFunction(inputParameter)\n    (\"\", originalValue._2)\n  } }\n  val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n  val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n  distinctSites\n}",
+  "originalCode" : "def distinctUserVisitsPerPage(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userAccesses: RDD[(String, String)] = userVisits.map(mapUserVisitToTuple)\n    val mapedUserAccess: RDD[(String, Set[String])] = userAccesses.map(mapSourceIPToSet)\n    val distinctSites: RDD[(String, Set[String])] = mapedUserAccess.reduceByKey(setUnion)\n    distinctSites\n  }",
+  "status" : "Killed"
+}

@@ -1,0 +1,9 @@
+{
+  "id" : 81,
+  "originalProgramId" : 4,
+  "mutationOperator" : "DTI",
+  "mutationOperatorDescription" : "Distinct Transformation Insertion",
+  "mutantCode" : "def moviesRatingsAverage(inputRDD: RDD[String], movieNames: Broadcast[Map[Int, String]]) = {\n  val ratings: RDD[(Int, (Double, Double))] = inputRDD.flatMap(parseRatings)\n  val ratingsSum: RDD[(Int, (Double, Double))] = ratings.reduceByKey(aggregateDoubleTuple)\n  val ratingsAverage: RDD[(Int, Double)] = ratingsSum.mapValues(mapDoubleTupleDivide)\n  val ratingsAverageSorted: RDD[(Int, Double)] = ratingsAverage.sortByKey(false).distinct()\n  val resultsCVS: RDD[String] = ratingsAverageSorted.map { (x: (Int, Double)) => mapRatingsAverageToCSV(x, movieNames) }\n  resultsCVS\n}",
+  "originalCode" : "def moviesRatingsAverage(inputRDD: RDD[String], movieNames: Broadcast[Map[Int, String]]) = {\n\n    val ratings: RDD[(Int, (Double, Double))] = inputRDD.flatMap(parseRatings)\n\n    val ratingsSum: RDD[(Int, (Double, Double))] = ratings.reduceByKey(aggregateDoubleTuple)\n\n    val ratingsAverage: RDD[(Int, Double)] = ratingsSum.mapValues(mapDoubleTupleDivide)\n\n    val ratingsAverageSorted: RDD[(Int, Double)] = ratingsAverage.sortByKey(false)\n\n    val resultsCVS: RDD[String] = ratingsAverageSorted.map((x: (Int, Double)) => mapRatingsAverageToCSV(x, movieNames))\n\n    resultsCVS\n  }",
+  "status" : "Killed"
+}

@@ -1,0 +1,9 @@
+{
+  "id" : 23,
+  "originalProgramId" : 2,
+  "mutationOperator" : "UTR",
+  "mutationOperatorDescription" : "Unary Transformation Replacement",
+  "mutantCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n  val yearTuple: RDD[(Int, Int)] = movies.map { (m: Movie) => (m.year, 1) }\n  val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey { (a: Int, b: Int) => a + b }\n  val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map { (t: (Int, Int)) => (t._2, t._1) }\n  val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.reduceByKey { (a: Int, b: Int) => a + b }\n  moviesPerYearInverseSorted\n}",
+  "originalCode" : "def moviesPerYearCount(movies: RDD[Movie]) = {\n    val yearTuple: RDD[(Int, Int)] = movies.map((m: Movie) => (m.year, 1))\n    val moviesPerYear: RDD[(Int, Int)] = yearTuple.reduceByKey((a: Int, b: Int) => a + b)\n    val moviesPerYearInverse: RDD[(Int, Int)] = moviesPerYear.map((t: (Int, Int)) => (t._2, t._1))\n    val moviesPerYearInverseSorted: RDD[(Int, Int)] = moviesPerYearInverse.sortByKey(false)\n    moviesPerYearInverseSorted\n  }",
+  "status" : "Lived"
+}

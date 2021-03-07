@@ -1,0 +1,591 @@
+{
+  "id" : 9,
+  "programSourceId" : 7,
+  "name" : "countNGrams",
+  "code" : "def countNGrams(input: RDD[String]) = {\n    \n    val sentences = input.flatMap(tokenize)\n\n    val ngrams = sentences.flatMap((s: String) => nGrams(s))\n\n    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))\n\n    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))\n\n    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)\n\n    ngramsCount\n  }",
+  "datasets" : [
+    {
+      "id" : 54,
+      "name" : "input",
+      "datasetType" : "RDD[String]",
+      "inputDataset" : true,
+      "outputDataset" : false
+    },
+    {
+      "id" : 55,
+      "name" : "sentences",
+      "datasetType" : "RDD[String]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 56,
+      "name" : "ngrams",
+      "datasetType" : "RDD[List[String]]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 57,
+      "name" : "ngramsFiltered",
+      "datasetType" : "RDD[List[String]]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 58,
+      "name" : "ngramsPairs",
+      "datasetType" : "RDD[(List[String], Int)]",
+      "inputDataset" : false,
+      "outputDataset" : false
+    },
+    {
+      "id" : 59,
+      "name" : "ngramsCount",
+      "datasetType" : "RDD[(List[String], Int)]",
+      "inputDataset" : false,
+      "outputDataset" : true
+    }
+  ],
+  "transformations" : [
+    {
+      "id" : 43,
+      "name" : "flatMap",
+      "inputTypes" : [
+        "RDD[String]"
+      ],
+      "outputTypes" : [
+        "RDD[String]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 44,
+      "name" : "flatMap",
+      "inputTypes" : [
+        "RDD[String]"
+      ],
+      "outputTypes" : [
+        "RDD[List[String]]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 45,
+      "name" : "filter",
+      "inputTypes" : [
+        "RDD[List[String]]"
+      ],
+      "outputTypes" : [
+        "RDD[List[String]]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 46,
+      "name" : "map",
+      "inputTypes" : [
+        "RDD[List[String]]"
+      ],
+      "outputTypes" : [
+        "RDD[(List[String], Int)]"
+      ],
+      "loadTransformation" : false
+    },
+    {
+      "id" : 47,
+      "name" : "reduceByKey",
+      "inputTypes" : [
+        "RDD[(List[String], Int)]"
+      ],
+      "outputTypes" : [
+        "RDD[(List[String], Int)]"
+      ],
+      "loadTransformation" : false
+    }
+  ],
+  "edges" : [
+    {
+      "id" : 89,
+      "datasetId" : 54,
+      "transformationId" : 43,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 90,
+      "datasetId" : 55,
+      "transformationId" : 43,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 91,
+      "datasetId" : 55,
+      "transformationId" : 44,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 92,
+      "datasetId" : 56,
+      "transformationId" : 44,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 93,
+      "datasetId" : 56,
+      "transformationId" : 45,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 94,
+      "datasetId" : 57,
+      "transformationId" : 45,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 95,
+      "datasetId" : 57,
+      "transformationId" : 46,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 96,
+      "datasetId" : 58,
+      "transformationId" : 46,
+      "direction" : "TransformationToDataset"
+    },
+    {
+      "id" : 97,
+      "datasetId" : 58,
+      "transformationId" : 47,
+      "direction" : "DatasetToTransformation"
+    },
+    {
+      "id" : 98,
+      "datasetId" : 59,
+      "transformationId" : 47,
+      "direction" : "TransformationToDataset"
+    }
+  ],
+  "mutants" : [
+    {
+      "id" : 184,
+      "originalProgramId" : 9,
+      "mutationOperator" : "UTD",
+      "mutationOperatorDescription" : "Unary Transformation Deletion",
+      "mutantCode" : "def countNGrams(input: RDD[String]) = {\n  val sentences = input\n  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }\n  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }\n  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }\n  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }\n  ngramsCount\n}",
+      "originalCode" : "def countNGrams(input: RDD[String]) = {\n    \n    val sentences = input.flatMap(tokenize)\n\n    val ngrams = sentences.flatMap((s: String) => nGrams(s))\n\n    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))\n\n    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))\n\n    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)\n\n    ngramsCount\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 185,
+      "originalProgramId" : 9,
+      "mutationOperator" : "UTD",
+      "mutationOperatorDescription" : "Unary Transformation Deletion",
+      "mutantCode" : "def countNGrams(input: RDD[String]) = {\n  val sentences = input.flatMap(tokenize)\n  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }\n  val ngramsFiltered = ngrams\n  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }\n  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }\n  ngramsCount\n}",
+      "originalCode" : "def countNGrams(input: RDD[String]) = {\n    \n    val sentences = input.flatMap(tokenize)\n\n    val ngrams = sentences.flatMap((s: String) => nGrams(s))\n\n    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))\n\n    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))\n\n    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)\n\n    ngramsCount\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 186,
+      "originalProgramId" : 9,
+      "mutationOperator" : "UTD",
+      "mutationOperatorDescription" : "Unary Transformation Deletion",
+      "mutantCode" : "def countNGrams(input: RDD[String]) = {\n  val sentences = input.flatMap(tokenize)\n  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }\n  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }\n  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }\n  val ngramsCount = ngramsPairs\n  ngramsCount\n}",
+      "originalCode" : "def countNGrams(input: RDD[String]) = {\n    \n    val sentences = input.flatMap(tokenize)\n\n    val ngrams = sentences.flatMap((s: String) => nGrams(s))\n\n    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))\n\n    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))\n\n    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)\n\n    ngramsCount\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 187,
+      "originalProgramId" : 9,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def countNGrams(input: RDD[String]) = {\n  val sentences = input.flatMap { (inputParameter: String) => {\n    val originalFunction = tokenize(_)\n    val originalValue = originalFunction(inputParameter)\n    originalValue.headOption\n  } }\n  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }\n  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }\n  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }\n  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }\n  ngramsCount\n}",
+      "originalCode" : "def countNGrams(input: RDD[String]) = {\n    \n    val sentences = input.flatMap(tokenize)\n\n    val ngrams = sentences.flatMap((s: String) => nGrams(s))\n\n    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))\n\n    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))\n\n    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)\n\n    ngramsCount\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 188,
+      "originalProgramId" : 9,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def countNGrams(input: RDD[String]) = {\n  val sentences = input.flatMap { (inputParameter: String) => {\n    val originalFunction = tokenize(_)\n    val originalValue = originalFunction(inputParameter)\n    originalValue.toList.tail\n  } }\n  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }\n  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }\n  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }\n  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }\n  ngramsCount\n}",
+      "originalCode" : "def countNGrams(input: RDD[String]) = {\n    \n    val sentences = input.flatMap(tokenize)\n\n    val ngrams = sentences.flatMap((s: String) => nGrams(s))\n\n    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))\n\n    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))\n\n    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)\n\n    ngramsCount\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 189,
+      "originalProgramId" : 9,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def countNGrams(input: RDD[String]) = {\n  val sentences = input.flatMap { (inputParameter: String) => {\n    val originalFunction = tokenize(_)\n    val originalValue = originalFunction(inputParameter)\n    originalValue.toList.reverse\n  } }\n  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }\n  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }\n  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }\n  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }\n  ngramsCount\n}",
+      "originalCode" : "def countNGrams(input: RDD[String]) = {\n    \n    val sentences = input.flatMap(tokenize)\n\n    val ngrams = sentences.flatMap((s: String) => nGrams(s))\n\n    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))\n\n    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))\n\n    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)\n\n    ngramsCount\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 190,
+      "originalProgramId" : 9,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def countNGrams(input: RDD[String]) = {\n  val sentences = input.flatMap { (inputParameter: String) => {\n    val originalFunction = tokenize(_)\n    val originalValue = originalFunction(inputParameter)\n    List[String]()\n  } }\n  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }\n  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }\n  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }\n  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }\n  ngramsCount\n}",
+      "originalCode" : "def countNGrams(input: RDD[String]) = {\n    \n    val sentences = input.flatMap(tokenize)\n\n    val ngrams = sentences.flatMap((s: String) => nGrams(s))\n\n    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))\n\n    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))\n\n    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)\n\n    ngramsCount\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 191,
+      "originalProgramId" : 9,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def countNGrams(input: RDD[String]) = {\n  val sentences = input.flatMap(tokenize)\n  val ngrams = sentences.flatMap { (inputParameter: String) => {\n    val originalFunction = ((s: String) => nGrams(s))(_)\n    val originalValue = originalFunction(inputParameter)\n    originalValue.headOption\n  } }\n  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }\n  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }\n  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }\n  ngramsCount\n}",
+      "originalCode" : "def countNGrams(input: RDD[String]) = {\n    \n    val sentences = input.flatMap(tokenize)\n\n    val ngrams = sentences.flatMap((s: String) => nGrams(s))\n\n    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))\n\n    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))\n\n    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)\n\n    ngramsCount\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 192,
+      "originalProgramId" : 9,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def countNGrams(input: RDD[String]) = {\n  val sentences = input.flatMap(tokenize)\n  val ngrams = sentences.flatMap { (inputParameter: String) => {\n    val originalFunction = ((s: String) => nGrams(s))(_)\n    val originalValue = originalFunction(inputParameter)\n    originalValue.toList.tail\n  } }\n  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }\n  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }\n  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }\n  ngramsCount\n}",
+      "originalCode" : "def countNGrams(input: RDD[String]) = {\n    \n    val sentences = input.flatMap(tokenize)\n\n    val ngrams = sentences.flatMap((s: String) => nGrams(s))\n\n    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))\n\n    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))\n\n    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)\n\n    ngramsCount\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 193,
+      "originalProgramId" : 9,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def countNGrams(input: RDD[String]) = {\n  val sentences = input.flatMap(tokenize)\n  val ngrams = sentences.flatMap { (inputParameter: String) => {\n    val originalFunction = ((s: String) => nGrams(s))(_)\n    val originalValue = originalFunction(inputParameter)\n    originalValue.toList.reverse\n  } }\n  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }\n  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }\n  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }\n  ngramsCount\n}",
+      "originalCode" : "def countNGrams(input: RDD[String]) = {\n    \n    val sentences = input.flatMap(tokenize)\n\n    val ngrams = sentences.flatMap((s: String) => nGrams(s))\n\n    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))\n\n    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))\n\n    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)\n\n    ngramsCount\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 194,
+      "originalProgramId" : 9,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def countNGrams(input: RDD[String]) = {\n  val sentences = input.flatMap(tokenize)\n  val ngrams = sentences.flatMap { (inputParameter: String) => {\n    val originalFunction = ((s: String) => nGrams(s))(_)\n    val originalValue = originalFunction(inputParameter)\n    List[List[String]]()\n  } }\n  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }\n  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }\n  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }\n  ngramsCount\n}",
+      "originalCode" : "def countNGrams(input: RDD[String]) = {\n    \n    val sentences = input.flatMap(tokenize)\n\n    val ngrams = sentences.flatMap((s: String) => nGrams(s))\n\n    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))\n\n    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))\n\n    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)\n\n    ngramsCount\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 195,
+      "originalProgramId" : 9,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def countNGrams(input: RDD[String]) = {\n  val sentences = input.flatMap(tokenize)\n  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }\n  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }\n  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (inputParameter: List[String]) => {\n    val originalFunction = ((ngram: List[String]) => (ngram, 1))(_)\n    val originalValue = originalFunction(inputParameter)\n    (List[String](originalValue._1.head), originalValue._2)\n  } }\n  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }\n  ngramsCount\n}",
+      "originalCode" : "def countNGrams(input: RDD[String]) = {\n    \n    val sentences = input.flatMap(tokenize)\n\n    val ngrams = sentences.flatMap((s: String) => nGrams(s))\n\n    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))\n\n    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))\n\n    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)\n\n    ngramsCount\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 196,
+      "originalProgramId" : 9,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def countNGrams(input: RDD[String]) = {\n  val sentences = input.flatMap(tokenize)\n  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }\n  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }\n  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (inputParameter: List[String]) => {\n    val originalFunction = ((ngram: List[String]) => (ngram, 1))(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1.tail, originalValue._2)\n  } }\n  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }\n  ngramsCount\n}",
+      "originalCode" : "def countNGrams(input: RDD[String]) = {\n    \n    val sentences = input.flatMap(tokenize)\n\n    val ngrams = sentences.flatMap((s: String) => nGrams(s))\n\n    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))\n\n    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))\n\n    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)\n\n    ngramsCount\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 197,
+      "originalProgramId" : 9,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def countNGrams(input: RDD[String]) = {\n  val sentences = input.flatMap(tokenize)\n  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }\n  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }\n  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (inputParameter: List[String]) => {\n    val originalFunction = ((ngram: List[String]) => (ngram, 1))(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1.reverse, originalValue._2)\n  } }\n  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }\n  ngramsCount\n}",
+      "originalCode" : "def countNGrams(input: RDD[String]) = {\n    \n    val sentences = input.flatMap(tokenize)\n\n    val ngrams = sentences.flatMap((s: String) => nGrams(s))\n\n    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))\n\n    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))\n\n    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)\n\n    ngramsCount\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 198,
+      "originalProgramId" : 9,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def countNGrams(input: RDD[String]) = {\n  val sentences = input.flatMap(tokenize)\n  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }\n  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }\n  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (inputParameter: List[String]) => {\n    val originalFunction = ((ngram: List[String]) => (ngram, 1))(_)\n    val originalValue = originalFunction(inputParameter)\n    (List[String](), originalValue._2)\n  } }\n  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }\n  ngramsCount\n}",
+      "originalCode" : "def countNGrams(input: RDD[String]) = {\n    \n    val sentences = input.flatMap(tokenize)\n\n    val ngrams = sentences.flatMap((s: String) => nGrams(s))\n\n    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))\n\n    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))\n\n    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)\n\n    ngramsCount\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 199,
+      "originalProgramId" : 9,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def countNGrams(input: RDD[String]) = {\n  val sentences = input.flatMap(tokenize)\n  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }\n  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }\n  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (inputParameter: List[String]) => {\n    val originalFunction = ((ngram: List[String]) => (ngram, 1))(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, 0)\n  } }\n  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }\n  ngramsCount\n}",
+      "originalCode" : "def countNGrams(input: RDD[String]) = {\n    \n    val sentences = input.flatMap(tokenize)\n\n    val ngrams = sentences.flatMap((s: String) => nGrams(s))\n\n    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))\n\n    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))\n\n    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)\n\n    ngramsCount\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 200,
+      "originalProgramId" : 9,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def countNGrams(input: RDD[String]) = {\n  val sentences = input.flatMap(tokenize)\n  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }\n  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }\n  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (inputParameter: List[String]) => {\n    val originalFunction = ((ngram: List[String]) => (ngram, 1))(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, 1)\n  } }\n  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }\n  ngramsCount\n}",
+      "originalCode" : "def countNGrams(input: RDD[String]) = {\n    \n    val sentences = input.flatMap(tokenize)\n\n    val ngrams = sentences.flatMap((s: String) => nGrams(s))\n\n    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))\n\n    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))\n\n    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)\n\n    ngramsCount\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 201,
+      "originalProgramId" : 9,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def countNGrams(input: RDD[String]) = {\n  val sentences = input.flatMap(tokenize)\n  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }\n  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }\n  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (inputParameter: List[String]) => {\n    val originalFunction = ((ngram: List[String]) => (ngram, 1))(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, Int.MaxValue)\n  } }\n  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }\n  ngramsCount\n}",
+      "originalCode" : "def countNGrams(input: RDD[String]) = {\n    \n    val sentences = input.flatMap(tokenize)\n\n    val ngrams = sentences.flatMap((s: String) => nGrams(s))\n\n    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))\n\n    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))\n\n    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)\n\n    ngramsCount\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 202,
+      "originalProgramId" : 9,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def countNGrams(input: RDD[String]) = {\n  val sentences = input.flatMap(tokenize)\n  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }\n  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }\n  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (inputParameter: List[String]) => {\n    val originalFunction = ((ngram: List[String]) => (ngram, 1))(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, Int.MinValue)\n  } }\n  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }\n  ngramsCount\n}",
+      "originalCode" : "def countNGrams(input: RDD[String]) = {\n    \n    val sentences = input.flatMap(tokenize)\n\n    val ngrams = sentences.flatMap((s: String) => nGrams(s))\n\n    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))\n\n    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))\n\n    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)\n\n    ngramsCount\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 203,
+      "originalProgramId" : 9,
+      "mutationOperator" : "MTR",
+      "mutationOperatorDescription" : "Mapping Transformation Replacement",
+      "mutantCode" : "def countNGrams(input: RDD[String]) = {\n  val sentences = input.flatMap(tokenize)\n  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }\n  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }\n  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (inputParameter: List[String]) => {\n    val originalFunction = ((ngram: List[String]) => (ngram, 1))(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, -originalValue._2)\n  } }\n  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }\n  ngramsCount\n}",
+      "originalCode" : "def countNGrams(input: RDD[String]) = {\n    \n    val sentences = input.flatMap(tokenize)\n\n    val ngrams = sentences.flatMap((s: String) => nGrams(s))\n\n    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))\n\n    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))\n\n    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)\n\n    ngramsCount\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 204,
+      "originalProgramId" : 9,
+      "mutationOperator" : "FTD",
+      "mutationOperatorDescription" : "Filter Transformation Deletion",
+      "mutantCode" : "def countNGrams(input: RDD[String]) = {\n  val sentences = input.flatMap(tokenize)\n  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }\n  val ngramsFiltered = ngrams\n  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }\n  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }\n  ngramsCount\n}",
+      "originalCode" : "def countNGrams(input: RDD[String]) = {\n    \n    val sentences = input.flatMap(tokenize)\n\n    val ngrams = sentences.flatMap((s: String) => nGrams(s))\n\n    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))\n\n    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))\n\n    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)\n\n    ngramsCount\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 205,
+      "originalProgramId" : 9,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def countNGrams(input: RDD[String]) = {\n  val sentences = input.flatMap(tokenize).distinct()\n  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }\n  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }\n  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }\n  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }\n  ngramsCount\n}",
+      "originalCode" : "def countNGrams(input: RDD[String]) = {\n    \n    val sentences = input.flatMap(tokenize)\n\n    val ngrams = sentences.flatMap((s: String) => nGrams(s))\n\n    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))\n\n    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))\n\n    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)\n\n    ngramsCount\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 206,
+      "originalProgramId" : 9,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def countNGrams(input: RDD[String]) = {\n  val sentences = input.flatMap(tokenize)\n  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }.distinct()\n  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }\n  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }\n  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }\n  ngramsCount\n}",
+      "originalCode" : "def countNGrams(input: RDD[String]) = {\n    \n    val sentences = input.flatMap(tokenize)\n\n    val ngrams = sentences.flatMap((s: String) => nGrams(s))\n\n    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))\n\n    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))\n\n    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)\n\n    ngramsCount\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 207,
+      "originalProgramId" : 9,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def countNGrams(input: RDD[String]) = {\n  val sentences = input.flatMap(tokenize)\n  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }\n  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }.distinct()\n  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }\n  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }\n  ngramsCount\n}",
+      "originalCode" : "def countNGrams(input: RDD[String]) = {\n    \n    val sentences = input.flatMap(tokenize)\n\n    val ngrams = sentences.flatMap((s: String) => nGrams(s))\n\n    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))\n\n    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))\n\n    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)\n\n    ngramsCount\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 208,
+      "originalProgramId" : 9,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def countNGrams(input: RDD[String]) = {\n  val sentences = input.flatMap(tokenize)\n  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }\n  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }\n  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }.distinct()\n  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }\n  ngramsCount\n}",
+      "originalCode" : "def countNGrams(input: RDD[String]) = {\n    \n    val sentences = input.flatMap(tokenize)\n\n    val ngrams = sentences.flatMap((s: String) => nGrams(s))\n\n    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))\n\n    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))\n\n    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)\n\n    ngramsCount\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 209,
+      "originalProgramId" : 9,
+      "mutationOperator" : "DTI",
+      "mutationOperatorDescription" : "Distinct Transformation Insertion",
+      "mutantCode" : "def countNGrams(input: RDD[String]) = {\n  val sentences = input.flatMap(tokenize)\n  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }\n  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }\n  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }\n  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }.distinct()\n  ngramsCount\n}",
+      "originalCode" : "def countNGrams(input: RDD[String]) = {\n    \n    val sentences = input.flatMap(tokenize)\n\n    val ngrams = sentences.flatMap((s: String) => nGrams(s))\n\n    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))\n\n    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))\n\n    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)\n\n    ngramsCount\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 210,
+      "originalProgramId" : 9,
+      "mutationOperator" : "ATR",
+      "mutationOperatorDescription" : "Aggregation Transformation Replacement",
+      "mutantCode" : "def countNGrams(input: RDD[String]) = {\n  val sentences = input.flatMap(tokenize)\n  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }\n  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }\n  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }\n  val ngramsCount = ngramsPairs.reduceByKey { (firstParameter: Int, secondParameter: Int) => firstParameter }\n  ngramsCount\n}",
+      "originalCode" : "def countNGrams(input: RDD[String]) = {\n    \n    val sentences = input.flatMap(tokenize)\n\n    val ngrams = sentences.flatMap((s: String) => nGrams(s))\n\n    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))\n\n    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))\n\n    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)\n\n    ngramsCount\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 211,
+      "originalProgramId" : 9,
+      "mutationOperator" : "ATR",
+      "mutationOperatorDescription" : "Aggregation Transformation Replacement",
+      "mutantCode" : "def countNGrams(input: RDD[String]) = {\n  val sentences = input.flatMap(tokenize)\n  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }\n  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }\n  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }\n  val ngramsCount = ngramsPairs.reduceByKey { (firstParameter: Int, secondParameter: Int) => secondParameter }\n  ngramsCount\n}",
+      "originalCode" : "def countNGrams(input: RDD[String]) = {\n    \n    val sentences = input.flatMap(tokenize)\n\n    val ngrams = sentences.flatMap((s: String) => nGrams(s))\n\n    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))\n\n    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))\n\n    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)\n\n    ngramsCount\n  }",
+      "status" : "Killed"
+    },
+    {
+      "id" : 212,
+      "originalProgramId" : 9,
+      "mutationOperator" : "ATR",
+      "mutationOperatorDescription" : "Aggregation Transformation Replacement",
+      "mutantCode" : "def countNGrams(input: RDD[String]) = {\n  val sentences = input.flatMap(tokenize)\n  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }\n  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }\n  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }\n  val ngramsCount = ngramsPairs.reduceByKey { (firstParameter: Int, secondParameter: Int) => {\n    val originalFunction = ((x: Int, y: Int) => x + y)(_, _)\n    originalFunction(firstParameter, firstParameter)\n  } }\n  ngramsCount\n}",
+      "originalCode" : "def countNGrams(input: RDD[String]) = {\n    \n    val sentences = input.flatMap(tokenize)\n\n    val ngrams = sentences.flatMap((s: String) => nGrams(s))\n\n    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))\n\n    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))\n\n    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)\n\n    ngramsCount\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 213,
+      "originalProgramId" : 9,
+      "mutationOperator" : "ATR",
+      "mutationOperatorDescription" : "Aggregation Transformation Replacement",
+      "mutantCode" : "def countNGrams(input: RDD[String]) = {\n  val sentences = input.flatMap(tokenize)\n  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }\n  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }\n  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }\n  val ngramsCount = ngramsPairs.reduceByKey { (firstParameter: Int, secondParameter: Int) => {\n    val originalFunction = ((x: Int, y: Int) => x + y)(_, _)\n    originalFunction(secondParameter, secondParameter)\n  } }\n  ngramsCount\n}",
+      "originalCode" : "def countNGrams(input: RDD[String]) = {\n    \n    val sentences = input.flatMap(tokenize)\n\n    val ngrams = sentences.flatMap((s: String) => nGrams(s))\n\n    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))\n\n    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))\n\n    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)\n\n    ngramsCount\n  }",
+      "status" : "Lived"
+    },
+    {
+      "id" : 214,
+      "originalProgramId" : 9,
+      "mutationOperator" : "ATR",
+      "mutationOperatorDescription" : "Aggregation Transformation Replacement",
+      "mutantCode" : "def countNGrams(input: RDD[String]) = {\n  val sentences = input.flatMap(tokenize)\n  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }\n  val ngramsFiltered = ngrams.filter { (ngram: List[String]) => filterEmpty(ngram) }\n  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }\n  val ngramsCount = ngramsPairs.reduceByKey { (firstParameter: Int, secondParameter: Int) => {\n    val originalFunction = ((x: Int, y: Int) => x + y)(_, _)\n    originalFunction(secondParameter, firstParameter)\n  } }\n  ngramsCount\n}",
+      "originalCode" : "def countNGrams(input: RDD[String]) = {\n    \n    val sentences = input.flatMap(tokenize)\n\n    val ngrams = sentences.flatMap((s: String) => nGrams(s))\n\n    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))\n\n    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))\n\n    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)\n\n    ngramsCount\n  }",
+      "status" : "Equivalent"
+    },
+    {
+      "id" : 215,
+      "originalProgramId" : 9,
+      "mutationOperator" : "NFTP",
+      "mutationOperatorDescription" : "Negation of Filter Transformation Predicate",
+      "mutantCode" : "def countNGrams(input: RDD[String]) = {\n  val sentences = input.flatMap(tokenize)\n  val ngrams = sentences.flatMap { (s: String) => nGrams(s) }\n  val ngramsFiltered = ngrams.filter { (inputParameter: List[String]) => {\n    val originalFunction = ((ngram: List[String]) => filterEmpty(ngram))(_)\n    val originalValue = originalFunction(inputParameter)\n    !originalValue\n  } }\n  val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map { (ngram: List[String]) => (ngram, 1) }\n  val ngramsCount = ngramsPairs.reduceByKey { (x: Int, y: Int) => x + y }\n  ngramsCount\n}",
+      "originalCode" : "def countNGrams(input: RDD[String]) = {\n    \n    val sentences = input.flatMap(tokenize)\n\n    val ngrams = sentences.flatMap((s: String) => nGrams(s))\n\n    val ngramsFiltered = ngrams.filter((ngram: List[String]) => filterEmpty(ngram))\n\n    val ngramsPairs: RDD[(List[String], Int)] = ngramsFiltered.map((ngram: List[String]) => (ngram, 1))\n\n    val ngramsCount = ngramsPairs.reduceByKey((x: Int, y: Int) => x + y)\n\n    ngramsCount\n  }",
+      "status" : "Killed"
+    }
+  ],
+  "removedMutants" : [
+  ],
+  "mutationOperatorsMetrics" : {
+    "totalMutantsPerOperator" : {
+      "FTD" : 1,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 17,
+      "UTD" : 3,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 5,
+      "OTI" : 0,
+      "DTI" : 5,
+      "DTD" : 0,
+      "NFTP" : 1,
+      "UTS" : 0
+    },
+    "totalKilledMutantsPerOperator" : {
+      "FTD" : 1,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 13,
+      "UTD" : 2,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 2,
+      "OTI" : 0,
+      "DTI" : 4,
+      "DTD" : 0,
+      "NFTP" : 1,
+      "UTS" : 0
+    },
+    "totalLivedMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 1,
+      "UTD" : 1,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 2,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalEquivalentMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 3,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 1,
+      "OTI" : 0,
+      "DTI" : 1,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalErrorMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 0,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "totalRemovedMutantsPerOperator" : {
+      "FTD" : 0,
+      "JTR" : 0,
+      "UTR" : 0,
+      "MTR" : 0,
+      "UTD" : 0,
+      "OTD" : 0,
+      "BTR" : 0,
+      "STR" : 0,
+      "BTS" : 0,
+      "ATR" : 0,
+      "OTI" : 0,
+      "DTI" : 0,
+      "DTD" : 0,
+      "NFTP" : 0,
+      "UTS" : 0
+    },
+    "descriptionPerOperator" : {
+      "FTD" : "Filter Transformation Deletion",
+      "JTR" : "Join Transformation Replacement",
+      "UTR" : "Unary Transformation Replacement",
+      "MTR" : "Mapping Transformation Replacement",
+      "UTD" : "Unary Transformation Deletion",
+      "OTD" : "Order Transformation Deletion",
+      "BTR" : "Binary Transformation Replacement",
+      "STR" : "Set Transformation Replacement",
+      "BTS" : "Binary Transformation Swap",
+      "ATR" : "Aggregation Transformation Replacement",
+      "OTI" : "Order Transformation Inversion",
+      "DTI" : "Distinct Transformation Insertion",
+      "DTD" : "Distinct Transformation Deletion",
+      "NFTP" : "Negation of Filter Transformation Predicate",
+      "UTS" : "Unary Transformation Swap"
+    }
+  },
+  "totalDatasets" : 6,
+  "totalTransformations" : 5,
+  "totalMutants" : 32,
+  "totalKilledMutants" : 23,
+  "totalLivedMutants" : 4,
+  "totalEquivalentMutants" : 5,
+  "totalErrorMutants" : 0,
+  "totalRemovedMutants" : 0,
+  "mutationScore" : 0.8518519
+}

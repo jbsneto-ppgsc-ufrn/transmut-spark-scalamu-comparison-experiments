@@ -1,0 +1,9 @@
+{
+  "id" : 10,
+  "originalProgramId" : 1,
+  "mutationOperator" : "DTI",
+  "mutationOperatorDescription" : "Distinct Transformation Insertion",
+  "mutantCode" : "def aggregation(input: RDD[String]) = {\n  val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n  val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple).distinct()\n  val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey { (x: Float, y: Float) => x + y }\n  results\n}",
+  "originalCode" : "def aggregation(input: RDD[String]) = {\n    val userVisits: RDD[UserVisit] = input.map(parseUserVisits)\n    val userVisitsTuples: RDD[(String, Float)] = userVisits.map(mapUserVisitToTuple)\n    val results: RDD[(String, Float)] = userVisitsTuples.reduceByKey((x: Float, y: Float) => x + y)\n    results\n  }",
+  "status" : "Killed"
+}

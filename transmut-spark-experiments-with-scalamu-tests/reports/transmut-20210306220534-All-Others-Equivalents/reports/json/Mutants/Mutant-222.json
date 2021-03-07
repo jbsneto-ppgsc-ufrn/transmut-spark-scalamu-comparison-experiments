@@ -1,0 +1,9 @@
+{
+  "id" : 222,
+  "originalProgramId" : 10,
+  "mutationOperator" : "MTR",
+  "mutationOperatorDescription" : "Mapping Transformation Replacement",
+  "mutantCode" : "def scan(input: RDD[String]): RDD[(String, Int)] = {\n  val rankings = input.map(parseRankings)\n  val filteredRankings: RDD[Ranking] = rankings.filter(filterRankings)\n  val results: RDD[(String, Int)] = filteredRankings.map { (inputParameter: Ranking) => {\n    val originalFunction = mapRankingToTuple(_)\n    val originalValue = originalFunction(inputParameter)\n    (originalValue._1, Int.MinValue)\n  } }\n  results\n}",
+  "originalCode" : "def scan(input: RDD[String]): RDD[(String, Int)] = {\n    val rankings = input.map(parseRankings)\n    val filteredRankings: RDD[Ranking] = rankings.filter(filterRankings)\n    val results: RDD[(String, Int)] = filteredRankings.map(mapRankingToTuple)\n    results\n  }",
+  "status" : "Lived"
+}
